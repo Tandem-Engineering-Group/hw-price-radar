@@ -20,6 +20,7 @@ skus:
         url: "https://www.microcenter.com/product/702314/minisforum-ms-s1-max-next-gen-ai-workstation"
         price_marker: "Save $"
         min_price: 1500
+        max_price: 6000
         storeid: "055"            # pins store context: 055 = Madison Heights MI
         stock_label: "Madison Heights"
         stock_regex: 'MI - Madison Heights \((in stock|out of stock)\)'
@@ -43,6 +44,7 @@ skus:
         url: "https://www.microcenter.com/product/697035/pny-nvidia-rtx-pro-5000-blackwell-single-fan-48gb-gddr7-pcie-50-graphics-card"
         price_marker: "Save $"
         min_price: 3500
+        max_price: 8000
         storeid: "055"            # pins store context: 055 = Madison Heights MI
         stock_label: "Madison Heights"
         stock_regex: 'MI - Madison Heights \((in stock|out of stock)\)'
@@ -51,11 +53,13 @@ skus:
         method: html_regex
         url: "https://www.compsource.com/buy/VCNRTXPRO5000BPB/Pny-Technologies-356/"
         min_price: 3500
+        max_price: 8000
       - retailer: bh
         tier: deterministic
         method: html_regex
         url: "https://www.bhphotovideo.com/c/product/1898513-REG/pny_vcnrtxpro5000b_pb_nvidia_rtx_pro_5000.html"
         min_price: 3500
+        max_price: 8000
       - retailer: newegg-oem
         tier: agentic
         note: "OEM 900-5G153-2250-000 $5,999.99 in stock (confirmed 08/09)"
@@ -99,6 +103,46 @@ skus:
       - retailer: any
         tier: agentic
         note: "no product page yet — weekly agent sweep watching"
+
+  # comparable Strix Halo minis (same Ryzen AI Max+ 395 / 128GB class as MS-S1 MAX)
+  - id: gmktec-evo-x2-128
+    name: "GMKtec EVO-X2 (Ryzen AI Max+ 395, 128GB)"
+    category: strix-halo-mini
+    sources:
+      - retailer: gmktec
+        tier: deterministic
+        method: shopify_json
+        store: "https://www.gmktec.com"
+        handle: ""               # resolver searches the catalog by title
+        match_title: "EVO-X2"
+        match_variant: "128"     # pick the 128GB variant, not the base config
+      - retailer: amazon
+        tier: keepa
+        asin: ""   # TODO: pin ASIN
+
+  - id: beelink-gtr9-pro-128
+    name: "Beelink GTR9 Pro (Ryzen AI Max+ 395, 128GB)"
+    category: strix-halo-mini
+    sources:
+      - retailer: beelink
+        tier: deterministic
+        method: shopify_json
+        store: "https://www.bee-link.com"
+        handle: ""
+        match_title: "GTR9"
+        match_variant: "128"
+      - retailer: amazon
+        tier: keepa
+        asin: ""
+
+  - id: framework-desktop-128
+    name: "Framework Desktop (Ryzen AI Max+ 395, up to 128GB)"
+    category: strix-halo-mini
+    sources:
+      - retailer: framework
+        tier: agentic
+        url: "https://frame.work/desktop"
+        note: "config-dependent — 128GB board from ~$1,999 at launch; check configurator"
 
   # staff-fleet equivalents (Strix Halo class) — light coverage until pilot verdict
   - id: hp-z2-mini-g1a
