@@ -38,6 +38,35 @@ jobs:
           git add data/
           git diff --cached --quiet || git commit -m "data: daily price snapshot [skip ci]"
           git push
+      - name: Teams alert
+        if: github.event_name != 'push'
+        continue-on-error: true   # a Teams outage must not block the Pages deploy
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: |
+          python - <<'EOF'
+          # jarvis-comms pattern: skip silently unless alerts exist AND webhook set.
+          # Card carries observed prices only — never threshold values.
+          import json, os, urllib.request
+          url = os.environ.get("TEAMS_WEBHOOK_URL")
+          alerts = json.load(open("data/alerts.json"))
+          if not url or not alerts:
+              print(f"teams: skipped ({len(alerts)} alert(s), webhook {'set' if url else 'unset'})")
+              raise SystemExit(0)
+          lines = [f"- **{a['sku']}** ${a['price']:,.2f} via {a['source']} — {a['note']}"
+                   for a in alerts]
+          card = {"@type": "MessageCard", "@context": "http://schema.org/extensions",
+                  "themeColor": "FF6B4A", "summary": "hw-price-radar price alert",
+                  "title": f"▲ hw-price-radar — {len(alerts)} price alert(s)",
+                  "text": "\n".join(lines),
+                  "potentialAction": [{"@type": "OpenUri", "name": "Open dashboard",
+                      "targets": [{"os": "default",
+                          "uri": "https://tandem-engineering-group.github.io/hw-price-radar/"}]}]}
+          req = urllib.request.Request(url, data=json.dumps(card).encode(),
+                                       headers={"Content-Type": "application/json"})
+          with urllib.request.urlopen(req, timeout=20) as r:
+              print(f"teams: posted {len(alerts)} alert(s), HTTP {r.status}")
+          EOF
 
   deploy:
     needs: collect
