@@ -113,7 +113,7 @@ skus:
         tier: deterministic
         method: shopify_json
         store: "https://www.gmktec.com"
-        handle: ""               # resolver searches the catalog by title
+        handle: "amd-ryzen™-ai-max-395-evo-x2-ai-mini-pc"   # pinned from 08/09 resolve
         match_title: "EVO-X2"
         match_variant: "128"     # pick the 128GB variant, not the base config
       - retailer: amazon
