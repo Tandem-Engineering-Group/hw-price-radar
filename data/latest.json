@@ -1,5 +1,5 @@
 {
- "as_of": "2026-08-08T16:30:00+00:00",
+ "as_of": "2026-08-09T04:51:41+00:00",
  "skus": {
   "ms-s1-max-128": {
    "name": "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)",
@@ -8,20 +8,14 @@
     {
      "retailer": "minisforum",
      "price": 3639.0,
-     "stock": "in stock",
+     "stock": null,
      "url": "https://store.minisforum.com"
     },
     {
      "retailer": "microcenter",
-     "price": 3699.99,
-     "stock": "out of stock \u2014 Madison Heights",
+     "price": null,
+     "stock": null,
      "url": "https://www.microcenter.com/product/702314/minisforum-ms-s1-max-next-gen-ai-workstation"
-    },
-    {
-     "retailer": "newegg",
-     "price": 3639.0,
-     "stock": "preorder \u2014 ships 08/22",
-     "url": null
     }
    ],
    "best": {
@@ -34,66 +28,40 @@
    "category": "gpu",
    "sources": [
     {
-     "retailer": "microcenter-oem",
-     "price": 5899.99,
-     "stock": "in stock \u2014 Madison Heights",
-     "url": null
+     "retailer": "microcenter-pny",
+     "price": 3000.0,
+     "stock": null,
+     "url": "https://www.microcenter.com/product/697035/pny-nvidia-rtx-pro-5000-blackwell-single-fan-48gb-gddr7-pcie-50-graphics-card"
     },
     {
-     "retailer": "newegg-oem",
-     "price": 5999.99,
-     "stock": "in stock",
-     "url": null
+     "retailer": "compsource",
+     "price": 6446.46,
+     "stock": null,
+     "url": "https://www.compsource.com/buy/VCNRTXPRO5000BPB/Pny-Technologies-356/"
     },
     {
      "retailer": "bh",
-     "price": 6049.0,
+     "price": null,
      "stock": null,
      "url": "https://www.bhphotovideo.com/c/product/1898513-REG/pny_vcnrtxpro5000b_pb_nvidia_rtx_pro_5000.html"
     }
    ],
    "best": {
-    "price": 5899.99,
-    "source": "microcenter-oem"
+    "price": 3000.0,
+    "source": "microcenter-pny"
    }
   },
   "dgx-spark-fe": {
    "name": "NVIDIA DGX Spark Founders Edition (GB10, 128GB/4TB, DGX OS)",
    "category": "gb10-linux",
-   "sources": [
-    {
-     "retailer": "amazon",
-     "price": 4649.99,
-     "stock": "in stock \u2014 Prime next-day",
-     "url": null
-    },
-    {
-     "retailer": "corsair",
-     "price": 5199.99,
-     "stock": "in stock",
-     "url": null
-    }
-   ],
-   "best": {
-    "price": 4649.99,
-    "source": "amazon"
-   }
+   "sources": [],
+   "best": null
   },
   "ascent-gx10": {
    "name": "ASUS Ascent GX10 (GB10, 128GB/2TB, DGX OS)",
    "category": "gb10-linux",
-   "sources": [
-    {
-     "retailer": "amazon",
-     "price": 4549.99,
-     "stock": "in stock",
-     "url": null
-    }
-   ],
-   "best": {
-    "price": 4549.99,
-    "source": "amazon"
-   }
+   "sources": [],
+   "best": null
   },
   "proart-gr1x": {
    "name": "ASUS ProArt GR1X (RTX Spark N1X, Windows 11 ARM)",
@@ -102,10 +70,28 @@
     {
      "retailer": "asus",
      "price": null,
-     "stock": "unlisted",
+     "stock": "LISTED",
      "url": "https://www.asus.com/displays-desktops/mini-pcs/proart-mini-pc-series/proart-gr1x-mini-pc/"
     }
    ],
+   "best": null
+  },
+  "edgemesa-n": {
+   "name": "MSI EdgeMesa N AI+ (RTX Spark N1X, Windows 11 ARM)",
+   "category": "n1x-windows",
+   "sources": [],
+   "best": null
+  },
+  "hp-z2-mini-g1a": {
+   "name": "HP Z2 Mini G1a (Ryzen AI Max PRO, up to 128GB)",
+   "category": "strix-halo-mini",
+   "sources": [],
+   "best": null
+  },
+  "ai-top-atom": {
+   "name": "Gigabyte AI TOP Atom (GB10)",
+   "category": "gb10-linux",
+   "sources": [],
    "best": null
   }
  }
