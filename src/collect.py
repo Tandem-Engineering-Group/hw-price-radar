@@ -50,7 +50,9 @@ def shopify_json(src: dict) -> dict:
         if not handle:
             raise RuntimeError("shopify handle unresolved")
         doc = json.loads(fetch(f"{store}/products/{handle}.json"))
-    v = doc["product"]["variants"][0]
+    vs = doc["product"]["variants"]
+    want = src.get("match_variant", "").lower()
+    v = next((x for x in vs if want in (x.get("title") or "").lower()), vs[0]) if want else vs[0]
     avail = v.get("available")
     stock = None if avail is None else ("in stock" if avail else "out of stock")
     return {"price": float(v["price"]), "stock": stock,
@@ -81,11 +83,11 @@ def html_regex(src: dict) -> dict:
     marker = src.get("price_marker")
     if marker and marker in html:
         window = html[html.index(marker): html.index(marker) + 400]
-    floor, note = src.get("min_price", 100), None
-    prices = [money_to_float(m) for m in MONEY.findall(window)]
-    prices = [p for p in prices if p >= floor]
+    floor, ceil, note = src.get("min_price", 100), src.get("max_price", 10**6), None
+    sane = lambda p: floor <= p <= ceil
+    prices = [p for p in (money_to_float(m) for m in MONEY.findall(window)) if sane(p)]
     if not prices:  # marker window failed — first sane price on the page
-        prices = [money_to_float(m) for m in MONEY.findall(html) if money_to_float(m) >= floor]
+        prices = [p for p in (money_to_float(m) for m in MONEY.findall(html)) if sane(p)]
         note = "page-scan fallback — verify"
     if not prices:
         raise RuntimeError("no price matched")
@@ -153,8 +155,9 @@ def main() -> int:
                 rec["note"] = f"error: {e}"
                 print(f"[skip] {sku['id']:<18} {src['retailer']:<16} {e}")
             rows.append(rec)
+            shown = rec["stock"] or (rec["note"] if rec["price"] is not None else None)
             entry["sources"].append({"retailer": src["retailer"], "price": rec["price"],
-                                     "stock": rec["stock"], "url": src.get("url") or src.get("store")})
+                                     "stock": shown, "url": src.get("url") or src.get("store")})
             if rec["price"] is not None:
                 if entry["best"] is None or rec["price"] < entry["best"]["price"]:
                     entry["best"] = {"price": rec["price"], "source": src["retailer"]}
