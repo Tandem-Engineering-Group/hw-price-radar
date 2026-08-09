@@ -5,6 +5,7 @@ on:
     - cron: "17 13 * * *"   # 13:17 UTC ≈ 9:17am Detroit (EDT)
   workflow_dispatch:
   push:
+    branches: [main]         # branch pushes can't deploy (github-pages env is main-only)
     paths: ["site/**"]       # redeploy dashboard on edits; data commits use [skip ci]
 
 permissions:
