@@ -25,8 +25,11 @@ DRY = "--dry-run" in sys.argv
 MONEY = re.compile(r"\$\s?([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]{2}))")
 
 
-def fetch(url: str, timeout: int = 25) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Language": "en-US"})
+def fetch(url: str, timeout: int = 25, cookie: str | None = None) -> str:
+    headers = {"User-Agent": UA, "Accept-Language": "en-US"}
+    if cookie:
+        headers["Cookie"] = cookie
+    req = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return r.read().decode("utf-8", errors="replace")
 
@@ -69,7 +72,11 @@ def resolve_handle(store: str, needle: str) -> str | None:
 
 
 def html_regex(src: dict) -> dict:
-    html = fetch(src["url"])
+    url, cookie, sid = src["url"], None, src.get("storeid")
+    if sid:  # pin store context (Micro Center defaults to a store by egress IP)
+        url += ("&" if "?" in url else "?") + f"storeID={sid}"
+        cookie = f"storeSelected={sid}"
+    html = fetch(url, cookie=cookie)
     window = html
     marker = src.get("price_marker")
     if marker and marker in html:
@@ -85,7 +92,9 @@ def html_regex(src: dict) -> dict:
     if src.get("stock_regex"):
         m = re.search(src["stock_regex"], html)
         if m:
-            stock = f"{m.group(1)} — Madison Heights" if "Madison" in src["stock_regex"] else m.group(1)
+            stock = m.group(1)
+            if src.get("stock_label"):
+                stock += f" — {src['stock_label']}"
     return {"price": prices[0], "stock": stock, "note": None}
 
 

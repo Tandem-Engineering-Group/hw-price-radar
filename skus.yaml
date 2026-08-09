@@ -20,6 +20,8 @@ skus:
         url: "https://www.microcenter.com/product/702314/minisforum-ms-s1-max-next-gen-ai-workstation"
         price_marker: "Save $"
         min_price: 1500
+        storeid: "055"            # pins store context: 055 = Madison Heights MI
+        stock_label: "Madison Heights"
         stock_regex: 'MI - Madison Heights \((in stock|out of stock)\)'
       - retailer: newegg
         tier: agentic
@@ -41,6 +43,8 @@ skus:
         url: "https://www.microcenter.com/product/697035/pny-nvidia-rtx-pro-5000-blackwell-single-fan-48gb-gddr7-pcie-50-graphics-card"
         price_marker: "Save $"
         min_price: 3000
+        storeid: "055"            # pins store context: 055 = Madison Heights MI
+        stock_label: "Madison Heights"
         stock_regex: 'MI - Madison Heights \((in stock|out of stock)\)'
       - retailer: compsource
         tier: deterministic
