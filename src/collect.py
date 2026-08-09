@@ -9,7 +9,7 @@ or Newegg HTML scraping; threshold values come only from THRESHOLDS_JSON env
 and are never written into committed records.
 """
 from __future__ import annotations
-import json, os, re, sys, time, urllib.parse, urllib.request
+import json, os, re, statistics, sys, time, urllib.parse, urllib.request
 from datetime import date, datetime, timezone
 from pathlib import Path
 
@@ -129,6 +129,55 @@ METHODS = {"shopify_json": shopify_json, "html_regex": html_regex,
            "listing_probe": listing_probe, "keepa": keepa}
 
 
+# ------------------------------------------------------------------- stats --
+def build_stats(hist: list[dict], cfg: dict) -> dict:
+    """Per-SKU buy context from observed history only: floors, 90-day median,
+    least-squares trend + 30-day projection. References from skus.yaml are
+    market facts (launch price, analyst estimate) — never willingness-to-pay,
+    and no such number may be committed (see CLAUDE.md hard rules)."""
+    best: dict[str, dict[str, float]] = {}
+    for r in hist:
+        p = r.get("price")
+        if p is None or "verify" in (r.get("note") or ""):
+            continue  # suspect page-scan prices don't move floors
+        d = best.setdefault(r["sku"], {})
+        if r["date"] not in d or p < d[r["date"]]:
+            d[r["date"]] = p
+    stats: dict[str, dict] = {}
+    horizon = date.today().toordinal()
+    for sku, days in best.items():
+        pts = sorted((date.fromisoformat(k).toordinal(), p) for k, p in days.items())
+        prices = [p for _, p in pts]
+        recent = [(x, p) for x, p in pts if horizon - x <= 90]
+        p90 = [p for _, p in recent] or prices
+        s = {"floor": min(prices), "floor90": round(min(p90), 2),
+             "median90": round(statistics.median(p90), 2)}
+        span = lambda b: b[-1][0] - b[0][0]
+        base = recent if len(recent) >= 2 and span(recent) >= 14 else pts
+        if len(base) >= 2 and span(base) >= 14:  # a trend needs real elapsed time
+            xs, ys = [x for x, _ in base], [p for _, p in base]
+            n = len(xs)
+            mx, my = sum(xs) / n, sum(ys) / n
+            den = sum((x - mx) ** 2 for x in xs)
+            slope = sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / den if den else 0.0
+            lx, ly = base[-1]
+            s["trend_month"] = round(slope * 30, 2)
+            s["proj30"] = {"date": date.fromordinal(lx + 30).isoformat(),
+                           "price": round(max(0.0, ly + slope * 30), 2)}
+        stats[sku] = s
+    for sku in cfg["skus"]:
+        if sku.get("references"):
+            stats.setdefault(sku["id"], {})["references"] = sku["references"]
+    return stats
+
+
+def read_history() -> list[dict]:
+    fp = DATA / "prices.jsonl"
+    if not fp.exists():
+        return []
+    return [json.loads(l) for l in fp.read_text().splitlines() if l.strip()]
+
+
 # -------------------------------------------------------------------- main --
 def main() -> int:
     cfg = yaml.safe_load((ROOT / "skus.yaml").read_text())
@@ -137,7 +186,8 @@ def main() -> int:
                                 "skus": {}}, []
 
     for sku in cfg["skus"]:
-        entry = {"name": sku["name"], "category": sku.get("category"), "sources": [], "best": None}
+        entry = {"name": sku["name"], "short": sku.get("short"),
+                 "category": sku.get("category"), "sources": [], "best": None}
         for src in sku.get("sources", []):
             if src.get("tier") == "agentic":  # no fetch — weekly Cowork sweep owns updates
                 entry["sources"].append({"retailer": src["retailer"], "price": None,
@@ -178,6 +228,7 @@ def main() -> int:
             f.write(json.dumps(r) + "\n")
     (DATA / "latest.json").write_text(json.dumps(latest, indent=1))
     (DATA / "alerts.json").write_text(json.dumps(alerts, indent=1))
+    (DATA / "stats.json").write_text(json.dumps(build_stats(read_history(), cfg), indent=1))
     print(f"wrote {len(rows)} observations, {len(alerts)} alert(s)")
     return 0
 

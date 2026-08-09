@@ -16,8 +16,14 @@ GitHub Actions cron → committed price history → GitHub Pages dashboard.
 - **Agentic tier** — a weekly Claude Cowork scheduled task handles what needs
   judgment (Newegg prices, GR1X/EdgeMesa preorder detection, market news) and
   commits notes to `data/agent-notes/`. Deliberately not in this repo's code.
-- `site/index.html` — single-file dashboard (Chart.js). Stepped "price tape"
-  per SKU, best-price ticker, alert banner, per-retailer rows. Mobile-first.
+- `site/index.html` — single-file dashboard (Chart.js + date-fns adapter, both
+  from cdnjs). Board grouped by category (buy targets / GPU / watching /
+  reference), a full-width market timeline of best observed price per day,
+  stepped "price tape" sparklines with observation dots, gaps for unobserved
+  ranges and a dashed 30-day trend projection, per-card buy context
+  (floor · 90-day median · trend, from `data/stats.json` — history-derived
+  only), best-price ticker colored by 30-day trend, alert banner, per-retailer
+  rows, and a "Field notes" strip fed by `data/agent-notes/*.md`. Mobile-first.
 
 ## Setup (once)
 1. Settings → Pages → Source = **GitHub Actions**. *(done)*
@@ -25,7 +31,7 @@ GitHub Actions cron → committed price history → GitHub Pages dashboard.
    - `KEEPA_API_KEY` — enables Amazon tracking (keepa.com API, paid tiers exist).
    - `THRESHOLDS_JSON` — e.g. `{"ms-s1-max-128": 0000, "rtx-pro-5000-48": 0000}`.
      Numbers live **only** here; committed alerts never include them.
-   - `TEAMS_WEBHOOK_URL` — future: alert cards to a Teams channel.
+   - `TEAMS_WEBHOOK_URL` — posts an alert card to a Teams channel when alerts fire.
 3. Push this scaffold, then Actions → **daily-prices** → *Run workflow* once.
 4. Open the dashboard. Seed history (labeled `manual-seed`) gives the charts
    shape from day one; live rows accumulate on top of it.
