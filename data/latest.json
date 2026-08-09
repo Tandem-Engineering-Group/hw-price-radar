@@ -1,5 +1,5 @@
 {
- "as_of": "2026-08-09T05:13:38+00:00",
+ "as_of": "2026-08-09T05:22:08+00:00",
  "skus": {
   "ms-s1-max-128": {
    "name": "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)",
@@ -13,8 +13,8 @@
     },
     {
      "retailer": "microcenter",
-     "price": null,
-     "stock": null,
+     "price": 3999.99,
+     "stock": "page-scan fallback \u2014 verify",
      "url": "https://www.microcenter.com/product/702314/minisforum-ms-s1-max-next-gen-ai-workstation"
     },
     {
@@ -41,7 +41,7 @@
     },
     {
      "retailer": "microcenter-pny",
-     "price": 8999.99,
+     "price": null,
      "stock": null,
      "url": "https://www.microcenter.com/product/697035/pny-nvidia-rtx-pro-5000-blackwell-single-fan-48gb-gddr7-pcie-50-graphics-card"
     },
@@ -110,6 +110,48 @@
      "price": null,
      "stock": "no product page yet \u2014 weekly agent sweep watching",
      "url": null
+    }
+   ],
+   "best": null
+  },
+  "gmktec-evo-x2-128": {
+   "name": "GMKtec EVO-X2 (Ryzen AI Max+ 395, 128GB)",
+   "category": "strix-halo-mini",
+   "sources": [
+    {
+     "retailer": "gmktec",
+     "price": null,
+     "stock": null,
+     "url": "https://www.gmktec.com"
+    }
+   ],
+   "best": null
+  },
+  "beelink-gtr9-pro-128": {
+   "name": "Beelink GTR9 Pro (Ryzen AI Max+ 395, 128GB)",
+   "category": "strix-halo-mini",
+   "sources": [
+    {
+     "retailer": "beelink",
+     "price": 4349.0,
+     "stock": "handle=beelink-gtr9-pro-amd-ryzen-ai-max-395-processor-openclaw",
+     "url": "https://www.bee-link.com"
+    }
+   ],
+   "best": {
+    "price": 4349.0,
+    "source": "beelink"
+   }
+  },
+  "framework-desktop-128": {
+   "name": "Framework Desktop (Ryzen AI Max+ 395, up to 128GB)",
+   "category": "strix-halo-mini",
+   "sources": [
+    {
+     "retailer": "framework",
+     "price": null,
+     "stock": "config-dependent \u2014 128GB board from ~$1,999 at launch; check configurator",
+     "url": "https://frame.work/desktop"
     }
    ],
    "best": null
