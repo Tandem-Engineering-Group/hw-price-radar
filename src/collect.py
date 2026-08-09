@@ -81,11 +81,12 @@ def html_regex(src: dict) -> dict:
     marker = src.get("price_marker")
     if marker and marker in html:
         window = html[html.index(marker): html.index(marker) + 400]
-    floor = src.get("min_price", 100)
+    floor, note = src.get("min_price", 100), None
     prices = [money_to_float(m) for m in MONEY.findall(window)]
     prices = [p for p in prices if p >= floor]
     if not prices:  # marker window failed — first sane price on the page
         prices = [money_to_float(m) for m in MONEY.findall(html) if money_to_float(m) >= floor]
+        note = "page-scan fallback — verify"
     if not prices:
         raise RuntimeError("no price matched")
     stock = None
@@ -95,7 +96,7 @@ def html_regex(src: dict) -> dict:
             stock = m.group(1)
             if src.get("stock_label"):
                 stock += f" — {src['stock_label']}"
-    return {"price": prices[0], "stock": stock, "note": None}
+    return {"price": prices[0], "stock": stock, "note": note}
 
 
 def listing_probe(src: dict) -> dict:

@@ -42,7 +42,7 @@ skus:
         method: html_regex
         url: "https://www.microcenter.com/product/697035/pny-nvidia-rtx-pro-5000-blackwell-single-fan-48gb-gddr7-pcie-50-graphics-card"
         price_marker: "Save $"
-        min_price: 3000
+        min_price: 3500
         storeid: "055"            # pins store context: 055 = Madison Heights MI
         stock_label: "Madison Heights"
         stock_regex: 'MI - Madison Heights \((in stock|out of stock)\)'
@@ -50,12 +50,12 @@ skus:
         tier: deterministic
         method: html_regex
         url: "https://www.compsource.com/buy/VCNRTXPRO5000BPB/Pny-Technologies-356/"
-        min_price: 3000
+        min_price: 3500
       - retailer: bh
         tier: deterministic
         method: html_regex
         url: "https://www.bhphotovideo.com/c/product/1898513-REG/pny_vcnrtxpro5000b_pb_nvidia_rtx_pro_5000.html"
-        min_price: 3000
+        min_price: 3500
       - retailer: newegg-oem
         tier: agentic
         note: "NVIDIA OEM 900-5G153-2250-000 seen 2026-08-08 at 5999.99"
