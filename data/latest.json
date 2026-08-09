@@ -1,5 +1,5 @@
 {
- "as_of": "2026-08-09T05:22:08+00:00",
+ "as_of": "2026-08-09T05:26:11+00:00",
  "skus": {
   "ms-s1-max-128": {
    "name": "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)",
@@ -41,8 +41,8 @@
     },
     {
      "retailer": "microcenter-pny",
-     "price": null,
-     "stock": null,
+     "price": 4399.99,
+     "stock": "page-scan fallback \u2014 verify",
      "url": "https://www.microcenter.com/product/697035/pny-nvidia-rtx-pro-5000-blackwell-single-fan-48gb-gddr7-pcie-50-graphics-card"
     },
     {
@@ -65,8 +65,8 @@
     }
    ],
    "best": {
-    "price": 6446.46,
-    "source": "compsource"
+    "price": 4399.99,
+    "source": "microcenter-pny"
    }
   },
   "dgx-spark-fe": {
@@ -120,12 +120,15 @@
    "sources": [
     {
      "retailer": "gmktec",
-     "price": null,
-     "stock": null,
+     "price": 3499.99,
+     "stock": "handle=amd-ryzen\u2122-ai-max-395-evo-x2-ai-mini-pc",
      "url": "https://www.gmktec.com"
     }
    ],
-   "best": null
+   "best": {
+    "price": 3499.99,
+    "source": "gmktec"
+   }
   },
   "beelink-gtr9-pro-128": {
    "name": "Beelink GTR9 Pro (Ryzen AI Max+ 395, 128GB)",
@@ -134,7 +137,7 @@
     {
      "retailer": "beelink",
      "price": 4349.0,
-     "stock": "handle=beelink-gtr9-pro-amd-ryzen-ai-max-395-processor-openclaw",
+     "stock": null,
      "url": "https://www.bee-link.com"
     }
    ],
