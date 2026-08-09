@@ -9,7 +9,7 @@ or Newegg HTML scraping; threshold values come only from THRESHOLDS_JSON env
 and are never written into committed records.
 """
 from __future__ import annotations
-import json, os, re, sys, time, urllib.request
+import json, os, re, sys, time, urllib.parse, urllib.request
 from datetime import date, datetime, timezone
 from pathlib import Path
 
@@ -41,15 +41,16 @@ def money_to_float(s: str) -> float:
 # ---------------------------------------------------------------- fetchers --
 def shopify_json(src: dict) -> dict:
     store, handle = src["store"].rstrip("/"), src.get("handle", "")
+    q = lambda h: urllib.parse.quote(h)  # handles may contain non-ASCII (e.g. ™)
     try:
-        doc = json.loads(fetch(f"{store}/products/{handle}.json"))
+        doc = json.loads(fetch(f"{store}/products/{q(handle)}.json"))
     except Exception:
         doc = None
     if doc is None:  # fallback: search the public catalog for the title
         handle = resolve_handle(store, src.get("match_title", ""))
         if not handle:
             raise RuntimeError("shopify handle unresolved")
-        doc = json.loads(fetch(f"{store}/products/{handle}.json"))
+        doc = json.loads(fetch(f"{store}/products/{q(handle)}.json"))
     vs = doc["product"]["variants"]
     want = src.get("match_variant", "").lower()
     v = next((x for x in vs if want in (x.get("title") or "").lower()), vs[0]) if want else vs[0]

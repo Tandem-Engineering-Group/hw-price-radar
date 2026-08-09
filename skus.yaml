@@ -128,7 +128,7 @@ skus:
         tier: deterministic
         method: shopify_json
         store: "https://www.bee-link.com"
-        handle: ""
+        handle: "beelink-gtr9-pro-amd-ryzen-ai-max-395-processor-openclaw"  # pinned from 08/09 resolve
         match_title: "GTR9"
         match_variant: "128"
       - retailer: amazon
