@@ -136,6 +136,10 @@ def main() -> int:
     for sku in cfg["skus"]:
         entry = {"name": sku["name"], "category": sku.get("category"), "sources": [], "best": None}
         for src in sku.get("sources", []):
+            if src.get("tier") == "agentic":  # no fetch — weekly Cowork sweep owns updates
+                entry["sources"].append({"retailer": src["retailer"], "price": None,
+                                         "stock": src.get("note"), "url": src.get("url")})
+                continue
             method = METHODS.get(src.get("method", ""))
             if src.get("tier") not in ("deterministic", "keepa", "watch") or not method:
                 continue
