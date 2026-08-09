@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HW PRICE RADAR — TEG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#0F1720; --panel:#16212C; --line:#263341;
+    --text:#EAF1F6; --dim:#8CA0AF;
+    --amber:#FFB454; --cyan:#7BD8E8; --alert:#FF6B4A;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    --sans:"Archivo",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);
+       font-size:16px;line-height:1.45;padding:0 16px 64px}
+  a{color:var(--cyan);text-decoration:none}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
+  /* header — departures-board block */
+  header{max-width:1080px;margin:0 auto;padding:28px 0 10px;border-bottom:1px solid var(--line)}
+  .brand{font-variation-settings:"wdth" 118,"wght" 780;font-size:clamp(26px,6vw,40px);
+         letter-spacing:.01em;text-transform:uppercase}
+  .brand em{font-style:normal;color:var(--amber)}
+  .asof{font-family:var(--mono);color:var(--dim);font-size:13px;margin-top:6px}
+  .asof b{color:var(--text);font-weight:600}
+
+  /* ticker strip */
+  .ticker{max-width:1080px;margin:14px auto 0;display:flex;gap:8px;overflow-x:auto;
+          padding-bottom:6px;scrollbar-width:none}
+  .ticker::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;font-family:var(--mono);font-size:12.5px;border:1px solid var(--line);
+        border-radius:999px;padding:6px 12px;color:var(--dim);background:var(--panel)}
+  .chip b{color:var(--text);font-weight:600}
+  .chip.up b{color:var(--amber)} .chip.down b{color:var(--cyan)}
+
+  /* alerts */
+  .alerts{max-width:1080px;margin:16px auto 0;border:1px solid var(--alert);
+          border-radius:10px;padding:12px 14px;font-family:var(--mono);font-size:14px;
+          color:var(--alert);display:none}
+  .alerts.on{display:block}
+
+  /* board */
+  .board{max-width:1080px;margin:20px auto 0;display:grid;gap:14px;
+         grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+        padding:16px 16px 12px;transition:border-color .15s}
+  .card:hover{border-color:var(--dim)}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);
+           text-transform:uppercase;margin-bottom:6px}
+  .card h2{margin:0 0 10px;font-size:16.5px;font-weight:600;line-height:1.3}
+  .pricebar{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .price{font-family:var(--mono);font-weight:600;font-size:30px;letter-spacing:-.01em}
+  .price .cur{font-size:15px;color:var(--dim);margin-right:2px}
+  .delta{font-family:var(--mono);font-size:13px;padding:2px 8px;border-radius:6px;border:1px solid var(--line)}
+  .delta.up{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 45%,transparent)}
+  .delta.down{color:var(--cyan);border-color:color-mix(in srgb,var(--cyan) 45%,transparent)}
+  .via{font-family:var(--mono);font-size:12px;color:var(--dim)}
+  .spark{margin:10px 0 6px;height:74px}
+  .spark canvas{width:100%!important;height:74px!important}
+  .srcs{border-top:1px dashed var(--line);margin-top:8px;padding-top:8px;
+        font-family:var(--mono);font-size:13px}
+  .srcrow{display:flex;justify-content:space-between;gap:8px;padding:3px 0;color:var(--dim)}
+  .srcrow .p{color:var(--text)} .srcrow .stock{font-size:11.5px}
+  .watch .price{color:var(--dim);font-size:20px}
+  .watchtag{font-family:var(--mono);font-size:12px;color:var(--amber)}
+  .empty{max-width:680px;margin:60px auto;font-family:var(--mono);color:var(--dim);
+         border:1px dashed var(--line);border-radius:12px;padding:24px}
+  footer{max-width:1080px;margin:34px auto 0;font-family:var(--mono);font-size:12px;color:var(--dim)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">HW&nbsp;PRICE&nbsp;<em>RADAR</em></div>
+  <div class="asof" id="asof">loading…</div>
+</header>
+
+<div class="ticker" id="ticker" aria-label="latest best prices"></div>
+<div class="alerts" id="alerts" role="status"></div>
+<main class="board" id="board"></main>
+<div class="empty" id="empty" hidden>
+  No data yet. Run the <b>daily-prices</b> workflow once (Actions → daily-prices →
+  Run workflow) and refresh. The board reads <span style="color:var(--text)">data/latest.json</span>.
+</div>
+<footer>Deterministic tier: Actions cron, daily. Agentic tier: weekly Cowork sweep →
+data/agent-notes. Sources can and will break; a blank cell means "unfetched," not "gone."</footer>
+
+<script>
+const fmt = n => n==null ? "—" : new Intl.NumberFormat("en-US",{minimumFractionDigits:0,maximumFractionDigits:0}).format(n);
+const FEATURED = ["ms-s1-max-128","rtx-pro-5000-48","proart-gr1x","dgx-spark-fe"];
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+async function jsonl(url){
+  try{
+    const t = await (await fetch(url,{cache:"no-store"})).text();
+    return t.split("\n").filter(Boolean).map(l=>{try{return JSON.parse(l)}catch{return null}}).filter(Boolean);
+  }catch{ return []; }
+}
+
+function bestSeries(rows, sku){
+  const byDate = {};
+  rows.filter(r=>r.sku===sku && r.price!=null)
+      .forEach(r=>{ if(!(r.date in byDate) || r.price < byDate[r.date]) byDate[r.date]=r.price; });
+  return Object.keys(byDate).sort().map(d=>({d, p:byDate[d]}));
+}
+
+function spark(el, series){
+  const up = series.length>1 && series.at(-1).p > series[0].p;
+  new Chart(el,{type:"line",data:{
+    labels:series.map(s=>s.d),
+    datasets:[{data:series.map(s=>s.p),stepped:true,pointRadius:0,borderWidth:2,
+      borderColor: up? css("--amber"): css("--cyan"), tension:0}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,
+      plugins:{legend:{display:false},tooltip:{
+        titleFont:{family:"IBM Plex Mono",size:11},bodyFont:{family:"IBM Plex Mono",size:12},
+        callbacks:{label:c=>" $"+fmt(c.parsed.y)}}},
+      scales:{x:{display:false},
+        y:{grid:{color:css("--line")},border:{display:false},
+           ticks:{color:css("--dim"),font:{family:"IBM Plex Mono",size:10},maxTicksLimit:3,
+                  callback:v=>"$"+fmt(v)}}}}});
+}
+
+(async function(){
+  let latest=null;
+  try{ latest = await (await fetch("data/latest.json",{cache:"no-store"})).json(); }catch{}
+  const hist = await jsonl("data/prices.jsonl");
+  if(!latest || !latest.skus || !Object.keys(latest.skus).length){
+    document.getElementById("empty").hidden=false;
+    document.getElementById("asof").textContent="no snapshot found";
+    return;
+  }
+  document.getElementById("asof").innerHTML =
+    "AS OF <b>"+ new Date(latest.as_of).toLocaleString("en-US",
+      {timeZone:"America/Detroit",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}) +
+    " DETROIT</b> · daily 09:17";
+
+  // alerts
+  try{
+    const al = await (await fetch("data/alerts.json",{cache:"no-store"})).json();
+    if(Array.isArray(al) && al.length){
+      const box=document.getElementById("alerts");
+      box.classList.add("on");
+      box.textContent = "▲ ALERT — " + al.map(a=>`${a.sku} @ $${fmt(a.price)} (${a.source})`).join("  ·  ");
+    }
+  }catch{}
+
+  const ids = Object.keys(latest.skus)
+    .sort((a,b)=>(FEATURED.indexOf(a)+99)-(FEATURED.indexOf(b)+99) || a.localeCompare(b));
+
+  const ticker=document.getElementById("ticker");
+  const board=document.getElementById("board");
+
+  for(const id of ids){
+    const s = latest.skus[id];
+    const series = bestSeries(hist,id);
+    const prev = series.length>1 ? series.at(-2).p : null;
+    const cur  = s.best ? s.best.price : null;
+    const d = (cur!=null && prev!=null) ? cur-prev : null;
+
+    // ticker chip
+    const chip=document.createElement("div");
+    chip.className="chip"+(d>0?" up":d<0?" down":"");
+    chip.innerHTML = `${id} <b>${cur!=null?"$"+fmt(cur):"—"}</b>`;
+    ticker.appendChild(chip);
+
+    // card
+    const watch = cur==null;
+    const card=document.createElement("section");
+    card.className="card"+(watch?" watch":"");
+    card.innerHTML = `
+      <div class="eyebrow">${s.category||""}</div>
+      <h2>${s.name}</h2>
+      <div class="pricebar">
+        <div class="price">${watch? (s.sources.some(x=>x.stock==="LISTED")?"LISTED":"UNLISTED")
+            : `<span class="cur">$</span>${fmt(cur)}`}</div>
+        ${d!=null && d!==0 ? `<span class="delta ${d>0?"up":"down"}">${d>0?"+":"−"}$${fmt(Math.abs(d))}</span>`:""}
+        ${!watch && s.best ? `<span class="via">via ${s.best.source}</span>`:""}
+        ${watch ? `<span class="watchtag">● watching for listing</span>`:""}
+      </div>
+      <div class="spark"><canvas></canvas></div>
+      <div class="srcs">${(s.sources||[]).map(x=>`
+        <div class="srcrow"><span>${x.url?`<a href="${x.url}" rel="noopener">${x.retailer}</a>`:x.retailer}</span>
+        <span><span class="p">${x.price!=null?"$"+fmt(x.price):"—"}</span>
+        <span class="stock">${x.stock||""}</span></span></div>`).join("")}</div>`;
+    board.appendChild(card);
+    if(series.length) spark(card.querySelector("canvas"), series);
+    else card.querySelector(".spark").remove();
+  }
+})();
+</script>
+</body>
+</html>
