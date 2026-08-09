@@ -1,0 +1,19 @@
+name: site-smoke
+
+# One-shot public-URL probe: confirms what the open internet sees at the
+# dashboard URL (this can't be checked from every network).
+on: workflow_dispatch
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe public dashboard
+        run: |
+          base="https://tandem-engineering-group.github.io/hw-price-radar/"
+          for path in "" "data/latest.json" "data/prices.jsonl"; do
+            echo "== ${base}${path}"
+            curl -sSL -o /tmp/body -w "HTTP %{http_code} — %{size_download} bytes — final URL %{url_effective}\n" \
+              "${base}${path}" || true
+            head -c 300 /tmp/body; echo; echo
+          done
