@@ -1,0 +1,66 @@
+{
+ "ms-s1-max-128": {
+  "floor": 2299.0,
+  "floor90": 3639.0,
+  "median90": 3639.0,
+  "trend_month": 125.72,
+  "proj30": {
+   "date": "2026-09-08",
+   "price": 3764.72
+  },
+  "references": {
+   "launch_price": 2299
+  }
+ },
+ "rtx-pro-5000-48": {
+  "floor": 4199.0,
+  "floor90": 5899.99,
+  "median90": 5949.99,
+  "trend_month": 217.55,
+  "proj30": {
+   "date": "2026-09-08",
+   "price": 6217.54
+  },
+  "references": {
+   "launch_price": 4199
+  }
+ },
+ "dgx-spark-fe": {
+  "floor": 3999.0,
+  "floor90": 4649.99,
+  "median90": 4649.99,
+  "trend_month": 65.76,
+  "proj30": {
+   "date": "2026-09-07",
+   "price": 4715.75
+  },
+  "references": {
+   "launch_price": 3999
+  }
+ },
+ "ascent-gx10": {
+  "floor": 4549.99,
+  "floor90": 4549.99,
+  "median90": 4549.99
+ },
+ "beelink-gtr9-pro-128": {
+  "floor": 4349.0,
+  "floor90": 4349.0,
+  "median90": 4349.0
+ },
+ "gmktec-evo-x2-128": {
+  "floor": 3499.99,
+  "floor90": 3499.99,
+  "median90": 3499.99
+ },
+ "proart-gr1x": {
+  "references": {
+   "analyst_est": 2899
+  }
+ },
+ "edgemesa-n": {
+  "references": {
+   "analyst_est": 2899
+  }
+ }
+}

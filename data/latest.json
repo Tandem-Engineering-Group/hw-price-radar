@@ -1,8 +1,9 @@
 {
- "as_of": "2026-08-09T05:26:11+00:00",
+ "as_of": "2026-08-09T06:10:36+00:00",
  "skus": {
   "ms-s1-max-128": {
    "name": "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)",
+   "short": "MS-S1 MAX",
    "category": "strix-halo-mini",
    "sources": [
     {
@@ -31,6 +32,7 @@
   },
   "rtx-pro-5000-48": {
    "name": "NVIDIA RTX PRO 5000 Blackwell 48GB (OEM + PNY retail)",
+   "short": "RTX PRO 5000",
    "category": "gpu",
    "sources": [
     {
@@ -71,6 +73,7 @@
   },
   "dgx-spark-fe": {
    "name": "NVIDIA DGX Spark Founders Edition (GB10, 128GB/4TB, DGX OS)",
+   "short": "DGX Spark",
    "category": "gb10-linux",
    "sources": [
     {
@@ -84,12 +87,14 @@
   },
   "ascent-gx10": {
    "name": "ASUS Ascent GX10 (GB10, 128GB/2TB, DGX OS)",
+   "short": "GX10",
    "category": "gb10-linux",
    "sources": [],
    "best": null
   },
   "proart-gr1x": {
    "name": "ASUS ProArt GR1X (RTX Spark N1X, Windows 11 ARM)",
+   "short": "GR1X",
    "category": "n1x-windows",
    "sources": [
     {
@@ -103,6 +108,7 @@
   },
   "edgemesa-n": {
    "name": "MSI EdgeMesa N AI+ (RTX Spark N1X, Windows 11 ARM)",
+   "short": "EdgeMesa N",
    "category": "n1x-windows",
    "sources": [
     {
@@ -116,12 +122,13 @@
   },
   "gmktec-evo-x2-128": {
    "name": "GMKtec EVO-X2 (Ryzen AI Max+ 395, 128GB)",
+   "short": "EVO-X2",
    "category": "strix-halo-mini",
    "sources": [
     {
      "retailer": "gmktec",
      "price": 3499.99,
-     "stock": "handle=amd-ryzen\u2122-ai-max-395-evo-x2-ai-mini-pc",
+     "stock": null,
      "url": "https://www.gmktec.com"
     }
    ],
@@ -132,6 +139,7 @@
   },
   "beelink-gtr9-pro-128": {
    "name": "Beelink GTR9 Pro (Ryzen AI Max+ 395, 128GB)",
+   "short": "GTR9 Pro",
    "category": "strix-halo-mini",
    "sources": [
     {
@@ -148,6 +156,7 @@
   },
   "framework-desktop-128": {
    "name": "Framework Desktop (Ryzen AI Max+ 395, up to 128GB)",
+   "short": "Framework",
    "category": "strix-halo-mini",
    "sources": [
     {
@@ -161,6 +170,7 @@
   },
   "hp-z2-mini-g1a": {
    "name": "HP Z2 Mini G1a (Ryzen AI Max PRO, up to 128GB)",
+   "short": "Z2 Mini",
    "category": "strix-halo-mini",
    "sources": [
     {
@@ -174,6 +184,7 @@
   },
   "ai-top-atom": {
    "name": "Gigabyte AI TOP Atom (GB10)",
+   "short": "AI TOP Atom",
    "category": "gb10-linux",
    "sources": [
     {
