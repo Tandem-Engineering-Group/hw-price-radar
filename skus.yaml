@@ -1,0 +1,118 @@
+# hw-price-radar watchlist
+# tiers: deterministic (collect.py fetches daily) | keepa (needs KEEPA_API_KEY)
+#        agentic (weekly Cowork task, notes only) | watch (unreleased — detect listing)
+# NOTE: no thresholds or quantities in this file — see CLAUDE.md hard rules.
+
+skus:
+  - id: ms-s1-max-128
+    name: "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)"
+    category: strix-halo-mini
+    sources:
+      - retailer: minisforum
+        tier: deterministic
+        method: shopify_json
+        store: "https://store.minisforum.com"
+        handle: "minisforum-ms-s1-max-mini-pc"   # resolver falls back to catalog search on 404
+        match_title: "MS-S1 MAX"
+      - retailer: microcenter
+        tier: deterministic
+        method: html_regex
+        url: "https://www.microcenter.com/product/702314/minisforum-ms-s1-max-next-gen-ai-workstation"
+        price_marker: "Save $"
+        min_price: 1500
+        storeid: "055"            # pins store context: 055 = Madison Heights MI
+        stock_label: "Madison Heights"
+        stock_regex: 'MI - Madison Heights \((in stock|out of stock)\)'
+      - retailer: newegg
+        tier: agentic
+        note: "preorder listing seen 2026-08-08 at 3639, release 08/22/2026"
+      - retailer: amazon
+        tier: keepa
+        asin: ""   # TODO: pin ASIN when relisted; last seen Feb 2026 at 3039 then OOS
+
+  - id: rtx-pro-5000-48
+    name: "NVIDIA RTX PRO 5000 Blackwell 48GB (OEM + PNY retail)"
+    category: gpu
+    sources:
+      - retailer: microcenter-oem
+        tier: agentic
+        note: "OEM single-fan seen in stock Madison Heights 2026-08-08 at 5899.99 via Google Shopping; pin product URL"
+      - retailer: microcenter-pny
+        tier: deterministic
+        method: html_regex
+        url: "https://www.microcenter.com/product/697035/pny-nvidia-rtx-pro-5000-blackwell-single-fan-48gb-gddr7-pcie-50-graphics-card"
+        price_marker: "Save $"
+        min_price: 3000
+        storeid: "055"            # pins store context: 055 = Madison Heights MI
+        stock_label: "Madison Heights"
+        stock_regex: 'MI - Madison Heights \((in stock|out of stock)\)'
+      - retailer: compsource
+        tier: deterministic
+        method: html_regex
+        url: "https://www.compsource.com/buy/VCNRTXPRO5000BPB/Pny-Technologies-356/"
+        min_price: 3000
+      - retailer: bh
+        tier: deterministic
+        method: html_regex
+        url: "https://www.bhphotovideo.com/c/product/1898513-REG/pny_vcnrtxpro5000b_pb_nvidia_rtx_pro_5000.html"
+        min_price: 3000
+      - retailer: newegg-oem
+        tier: agentic
+        note: "NVIDIA OEM 900-5G153-2250-000 seen 2026-08-08 at 5999.99"
+      - retailer: amazon-pny
+        tier: keepa
+        asin: "B0GLHLSYPC"
+
+  - id: dgx-spark-fe
+    name: "NVIDIA DGX Spark Founders Edition (GB10, 128GB/4TB, DGX OS)"
+    category: gb10-linux
+    sources:
+      - retailer: amazon
+        tier: keepa
+        asin: ""   # TODO: pin ASIN; seen 2026-08-08 at 4649.99
+      - retailer: corsair
+        tier: agentic
+        note: "seen 2026-08-08 at 5199.99 — reference only, over FE market"
+
+  - id: ascent-gx10
+    name: "ASUS Ascent GX10 (GB10, 128GB/2TB, DGX OS)"
+    category: gb10-linux
+    sources:
+      - retailer: amazon
+        tier: keepa
+        asin: ""   # seen 2026-08-08 at 4549.99
+
+  - id: proart-gr1x
+    name: "ASUS ProArt GR1X (RTX Spark N1X, Windows 11 ARM)"
+    category: n1x-windows
+    sources:
+      - retailer: asus
+        tier: watch
+        method: listing_probe
+        url: "https://www.asus.com/displays-desktops/mini-pcs/proart-mini-pc-series/proart-gr1x-mini-pc/"
+        listing_regex: '(pre-?order|add to cart|buy now|notify me)'
+
+  - id: edgemesa-n
+    name: "MSI EdgeMesa N AI+ (RTX Spark N1X, Windows 11 ARM)"
+    category: n1x-windows
+    sources:
+      - retailer: any
+        tier: agentic
+        note: "no product page yet — weekly Cowork sweep owns detection"
+
+  # staff-fleet equivalents (Strix Halo class) — light coverage until pilot verdict
+  - id: hp-z2-mini-g1a
+    name: "HP Z2 Mini G1a (Ryzen AI Max PRO, up to 128GB)"
+    category: strix-halo-mini
+    sources:
+      - retailer: any
+        tier: agentic
+        note: "corporate channel (Insight/Connection/CDW) — quote, don't scrape"
+
+  - id: ai-top-atom
+    name: "Gigabyte AI TOP Atom (GB10)"
+    category: gb10-linux
+    sources:
+      - retailer: newegg
+        tier: agentic
+        note: "seen ~3249 (1TB) earlier 2026, frequently OOS"

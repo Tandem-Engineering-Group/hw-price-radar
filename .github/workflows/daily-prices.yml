@@ -1,0 +1,89 @@
+name: daily-prices
+
+on:
+  schedule:
+    - cron: "17 13 * * *"   # 13:17 UTC ≈ 9:17am Detroit (EDT)
+  workflow_dispatch:
+  push:
+    paths: ["site/**"]       # redeploy dashboard on edits; data commits use [skip ci]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install pyyaml
+      - name: Collect prices
+        if: github.event_name != 'push'
+        env:
+          KEEPA_API_KEY: ${{ secrets.KEEPA_API_KEY }}
+          THRESHOLDS_JSON: ${{ secrets.THRESHOLDS_JSON }}
+        run: python src/collect.py
+      - name: Commit data
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "hw-price-radar[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "data: daily price snapshot [skip ci]"
+          git push
+      - name: Teams alert
+        if: github.event_name != 'push'
+        continue-on-error: true   # a Teams outage must not block the Pages deploy
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: |
+          python - <<'EOF'
+          # jarvis-comms pattern: skip silently unless alerts exist AND webhook set.
+          # Card carries observed prices only — never threshold values.
+          import json, os, urllib.request
+          url = os.environ.get("TEAMS_WEBHOOK_URL")
+          alerts = json.load(open("data/alerts.json"))
+          if not url or not alerts:
+              print(f"teams: skipped ({len(alerts)} alert(s), webhook {'set' if url else 'unset'})")
+              raise SystemExit(0)
+          lines = [f"- **{a['sku']}** ${a['price']:,.2f} via {a['source']} — {a['note']}"
+                   for a in alerts]
+          card = {"@type": "MessageCard", "@context": "http://schema.org/extensions",
+                  "themeColor": "FF6B4A", "summary": "hw-price-radar price alert",
+                  "title": f"▲ hw-price-radar — {len(alerts)} price alert(s)",
+                  "text": "\n".join(lines),
+                  "potentialAction": [{"@type": "OpenUri", "name": "Open dashboard",
+                      "targets": [{"os": "default",
+                          "uri": "https://tandem-engineering-group.github.io/hw-price-radar/"}]}]}
+          req = urllib.request.Request(url, data=json.dumps(card).encode(),
+                                       headers={"Content-Type": "application/json"})
+          with urllib.request.urlopen(req, timeout=20) as r:
+              print(f"teams: posted {len(alerts)} alert(s), HTTP {r.status}")
+          EOF
+
+  deploy:
+    needs: collect
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - run: git pull --ff-only
+      - name: Assemble site
+        run: |
+          mkdir -p _site/data
+          cp -r site/* _site/
+          cp data/*.json* _site/data/ 2>/dev/null || true
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: _site }
+      - id: deployment
+        uses: actions/deploy-pages@v4

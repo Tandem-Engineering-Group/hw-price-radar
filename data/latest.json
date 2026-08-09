@@ -1,0 +1,112 @@
+{
+ "as_of": "2026-08-08T16:30:00+00:00",
+ "skus": {
+  "ms-s1-max-128": {
+   "name": "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)",
+   "category": "strix-halo-mini",
+   "sources": [
+    {
+     "retailer": "minisforum",
+     "price": 3639.0,
+     "stock": "in stock",
+     "url": "https://store.minisforum.com"
+    },
+    {
+     "retailer": "microcenter",
+     "price": 3699.99,
+     "stock": "out of stock \u2014 Madison Heights",
+     "url": "https://www.microcenter.com/product/702314/minisforum-ms-s1-max-next-gen-ai-workstation"
+    },
+    {
+     "retailer": "newegg",
+     "price": 3639.0,
+     "stock": "preorder \u2014 ships 08/22",
+     "url": null
+    }
+   ],
+   "best": {
+    "price": 3639.0,
+    "source": "minisforum"
+   }
+  },
+  "rtx-pro-5000-48": {
+   "name": "NVIDIA RTX PRO 5000 Blackwell 48GB (OEM + PNY retail)",
+   "category": "gpu",
+   "sources": [
+    {
+     "retailer": "microcenter-oem",
+     "price": 5899.99,
+     "stock": "in stock \u2014 Madison Heights",
+     "url": null
+    },
+    {
+     "retailer": "newegg-oem",
+     "price": 5999.99,
+     "stock": "in stock",
+     "url": null
+    },
+    {
+     "retailer": "bh",
+     "price": 6049.0,
+     "stock": null,
+     "url": "https://www.bhphotovideo.com/c/product/1898513-REG/pny_vcnrtxpro5000b_pb_nvidia_rtx_pro_5000.html"
+    }
+   ],
+   "best": {
+    "price": 5899.99,
+    "source": "microcenter-oem"
+   }
+  },
+  "dgx-spark-fe": {
+   "name": "NVIDIA DGX Spark Founders Edition (GB10, 128GB/4TB, DGX OS)",
+   "category": "gb10-linux",
+   "sources": [
+    {
+     "retailer": "amazon",
+     "price": 4649.99,
+     "stock": "in stock \u2014 Prime next-day",
+     "url": null
+    },
+    {
+     "retailer": "corsair",
+     "price": 5199.99,
+     "stock": "in stock",
+     "url": null
+    }
+   ],
+   "best": {
+    "price": 4649.99,
+    "source": "amazon"
+   }
+  },
+  "ascent-gx10": {
+   "name": "ASUS Ascent GX10 (GB10, 128GB/2TB, DGX OS)",
+   "category": "gb10-linux",
+   "sources": [
+    {
+     "retailer": "amazon",
+     "price": 4549.99,
+     "stock": "in stock",
+     "url": null
+    }
+   ],
+   "best": {
+    "price": 4549.99,
+    "source": "amazon"
+   }
+  },
+  "proart-gr1x": {
+   "name": "ASUS ProArt GR1X (RTX Spark N1X, Windows 11 ARM)",
+   "category": "n1x-windows",
+   "sources": [
+    {
+     "retailer": "asus",
+     "price": null,
+     "stock": "unlisted",
+     "url": "https://www.asus.com/displays-desktops/mini-pcs/proart-mini-pc-series/proart-gr1x-mini-pc/"
+    }
+   ],
+   "best": null
+  }
+ }
+}
