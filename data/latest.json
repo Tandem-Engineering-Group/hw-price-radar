@@ -1,5 +1,5 @@
 {
- "as_of": "2026-08-09T04:57:08+00:00",
+ "as_of": "2026-08-09T05:13:38+00:00",
  "skus": {
   "ms-s1-max-128": {
    "name": "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)",
@@ -16,6 +16,12 @@
      "price": null,
      "stock": null,
      "url": "https://www.microcenter.com/product/702314/minisforum-ms-s1-max-next-gen-ai-workstation"
+    },
+    {
+     "retailer": "newegg",
+     "price": null,
+     "stock": "preorder $3,639 \u2014 ships 08/22 (confirmed 08/09)",
+     "url": null
     }
    ],
    "best": {
@@ -27,6 +33,12 @@
    "name": "NVIDIA RTX PRO 5000 Blackwell 48GB (OEM + PNY retail)",
    "category": "gpu",
    "sources": [
+    {
+     "retailer": "microcenter-oem",
+     "price": null,
+     "stock": "$5,899.99 in stock, Madison Heights (08/08) \u2014 pin product URL",
+     "url": null
+    },
     {
      "retailer": "microcenter-pny",
      "price": 8999.99,
@@ -44,6 +56,12 @@
      "price": null,
      "stock": null,
      "url": "https://www.bhphotovideo.com/c/product/1898513-REG/pny_vcnrtxpro5000b_pb_nvidia_rtx_pro_5000.html"
+    },
+    {
+     "retailer": "newegg-oem",
+     "price": null,
+     "stock": "OEM 900-5G153-2250-000 $5,999.99 in stock (confirmed 08/09)",
+     "url": null
     }
    ],
    "best": {
@@ -54,7 +72,14 @@
   "dgx-spark-fe": {
    "name": "NVIDIA DGX Spark Founders Edition (GB10, 128GB/4TB, DGX OS)",
    "category": "gb10-linux",
-   "sources": [],
+   "sources": [
+    {
+     "retailer": "corsair",
+     "price": null,
+     "stock": "$5,199.99 (08/08) \u2014 over FE market",
+     "url": null
+    }
+   ],
    "best": null
   },
   "ascent-gx10": {
@@ -79,19 +104,40 @@
   "edgemesa-n": {
    "name": "MSI EdgeMesa N AI+ (RTX Spark N1X, Windows 11 ARM)",
    "category": "n1x-windows",
-   "sources": [],
+   "sources": [
+    {
+     "retailer": "any",
+     "price": null,
+     "stock": "no product page yet \u2014 weekly agent sweep watching",
+     "url": null
+    }
+   ],
    "best": null
   },
   "hp-z2-mini-g1a": {
    "name": "HP Z2 Mini G1a (Ryzen AI Max PRO, up to 128GB)",
    "category": "strix-halo-mini",
-   "sources": [],
+   "sources": [
+    {
+     "retailer": "any",
+     "price": null,
+     "stock": "corporate channel \u2014 quote via Insight/Connection/CDW",
+     "url": null
+    }
+   ],
    "best": null
   },
   "ai-top-atom": {
    "name": "Gigabyte AI TOP Atom (GB10)",
    "category": "gb10-linux",
-   "sources": [],
+   "sources": [
+    {
+     "retailer": "newegg",
+     "price": null,
+     "stock": "~$3,249 (1TB) earlier 2026 \u2014 frequently OOS",
+     "url": null
+    }
+   ],
    "best": null
   }
  }
