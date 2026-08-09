@@ -1,0 +1,16 @@
+{"date": "2025-09-26", "sku": "ms-s1-max-128", "source": "minisforum", "price": 2299.00, "currency": "USD", "stock": null, "note": "manual-seed: launch price"}
+{"date": "2026-02-15", "sku": "ms-s1-max-128", "source": "newegg", "price": 2959.00, "currency": "USD", "stock": null, "note": "manual-seed: deal floor, sold out by Mar"}
+{"date": "2026-02-15", "sku": "ms-s1-max-128", "source": "amazon", "price": 3039.00, "currency": "USD", "stock": null, "note": "manual-seed"}
+{"date": "2026-08-08", "sku": "ms-s1-max-128", "source": "minisforum", "price": 3639.00, "currency": "USD", "stock": "in stock", "note": "manual-seed"}
+{"date": "2026-08-08", "sku": "ms-s1-max-128", "source": "microcenter", "price": 3699.99, "currency": "USD", "stock": "out of stock — Madison Heights", "note": "manual-seed: Brentwood MO + Sharonville OH only"}
+{"date": "2026-08-08", "sku": "ms-s1-max-128", "source": "newegg", "price": 3639.00, "currency": "USD", "stock": "preorder — ships 08/22", "note": "manual-seed"}
+{"date": "2025-12-10", "sku": "rtx-pro-5000-48", "source": "launch-list", "price": 4199.00, "currency": "USD", "stock": null, "note": "manual-seed: list at launch"}
+{"date": "2026-02-21", "sku": "rtx-pro-5000-48", "source": "compsource", "price": 4267.95, "currency": "USD", "stock": null, "note": "manual-seed: dated page, verify"}
+{"date": "2026-08-08", "sku": "rtx-pro-5000-48", "source": "microcenter-oem", "price": 5899.99, "currency": "USD", "stock": "in stock — Madison Heights", "note": "manual-seed"}
+{"date": "2026-08-08", "sku": "rtx-pro-5000-48", "source": "newegg-oem", "price": 5999.99, "currency": "USD", "stock": "in stock", "note": "manual-seed"}
+{"date": "2026-08-08", "sku": "rtx-pro-5000-48", "source": "bh", "price": 6049.00, "currency": "USD", "stock": null, "note": "manual-seed: inferred from financing"}
+{"date": "2025-10-15", "sku": "dgx-spark-fe", "source": "nvidia", "price": 3999.00, "currency": "USD", "stock": null, "note": "manual-seed: launch"}
+{"date": "2026-08-08", "sku": "dgx-spark-fe", "source": "amazon", "price": 4649.99, "currency": "USD", "stock": "in stock — Prime next-day", "note": "manual-seed"}
+{"date": "2026-08-08", "sku": "dgx-spark-fe", "source": "corsair", "price": 5199.99, "currency": "USD", "stock": "in stock", "note": "manual-seed: over FE market"}
+{"date": "2026-08-08", "sku": "ascent-gx10", "source": "amazon", "price": 4549.99, "currency": "USD", "stock": "in stock", "note": "manual-seed"}
+{"date": "2026-08-08", "sku": "proart-gr1x", "source": "asus", "price": null, "currency": "USD", "stock": "unlisted", "note": "manual-seed: fall 2026, est ~2899"}
