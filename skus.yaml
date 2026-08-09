@@ -5,6 +5,8 @@
 
 skus:
   - id: ms-s1-max-128
+    short: "MS-S1 MAX"
+    references: { launch_price: 2299 }   # market fact, not a buy target
     name: "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)"
     category: strix-halo-mini
     sources:
@@ -32,6 +34,8 @@ skus:
         asin: ""   # TODO: pin ASIN when relisted; last seen Feb 2026 at 3039 then OOS
 
   - id: rtx-pro-5000-48
+    short: "RTX PRO 5000"
+    references: { launch_price: 4199 }   # market fact, not a buy target
     name: "NVIDIA RTX PRO 5000 Blackwell 48GB (OEM + PNY retail)"
     category: gpu
     sources:
@@ -68,6 +72,8 @@ skus:
         asin: "B0GLHLSYPC"
 
   - id: dgx-spark-fe
+    short: "DGX Spark"
+    references: { launch_price: 3999 }   # market fact, not a buy target
     name: "NVIDIA DGX Spark Founders Edition (GB10, 128GB/4TB, DGX OS)"
     category: gb10-linux
     sources:
@@ -79,6 +85,7 @@ skus:
         note: "$5,199.99 (08/08) — over FE market"
 
   - id: ascent-gx10
+    short: "GX10"
     name: "ASUS Ascent GX10 (GB10, 128GB/2TB, DGX OS)"
     category: gb10-linux
     sources:
@@ -87,6 +94,8 @@ skus:
         asin: ""   # seen 2026-08-08 at 4549.99
 
   - id: proart-gr1x
+    short: "GR1X"
+    references: { analyst_est: 2899 }   # market fact, not a buy target
     name: "ASUS ProArt GR1X (RTX Spark N1X, Windows 11 ARM)"
     category: n1x-windows
     sources:
@@ -97,6 +106,8 @@ skus:
         listing_regex: '(pre-?order|add to cart|buy now|notify me)'
 
   - id: edgemesa-n
+    short: "EdgeMesa N"
+    references: { analyst_est: 2899 }   # market fact, not a buy target
     name: "MSI EdgeMesa N AI+ (RTX Spark N1X, Windows 11 ARM)"
     category: n1x-windows
     sources:
@@ -106,6 +117,7 @@ skus:
 
   # comparable Strix Halo minis (same Ryzen AI Max+ 395 / 128GB class as MS-S1 MAX)
   - id: gmktec-evo-x2-128
+    short: "EVO-X2"
     name: "GMKtec EVO-X2 (Ryzen AI Max+ 395, 128GB)"
     category: strix-halo-mini
     sources:
@@ -121,6 +133,7 @@ skus:
         asin: ""   # TODO: pin ASIN
 
   - id: beelink-gtr9-pro-128
+    short: "GTR9 Pro"
     name: "Beelink GTR9 Pro (Ryzen AI Max+ 395, 128GB)"
     category: strix-halo-mini
     sources:
@@ -136,6 +149,7 @@ skus:
         asin: ""
 
   - id: framework-desktop-128
+    short: "Framework"
     name: "Framework Desktop (Ryzen AI Max+ 395, up to 128GB)"
     category: strix-halo-mini
     sources:
@@ -146,6 +160,7 @@ skus:
 
   # staff-fleet equivalents (Strix Halo class) — light coverage until pilot verdict
   - id: hp-z2-mini-g1a
+    short: "Z2 Mini"
     name: "HP Z2 Mini G1a (Ryzen AI Max PRO, up to 128GB)"
     category: strix-halo-mini
     sources:
@@ -154,6 +169,7 @@ skus:
         note: "corporate channel — quote via Insight/Connection/CDW"
 
   - id: ai-top-atom
+    short: "AI TOP Atom"
     name: "Gigabyte AI TOP Atom (GB10)"
     category: gb10-linux
     sources:

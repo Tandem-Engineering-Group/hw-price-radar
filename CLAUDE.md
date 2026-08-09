@@ -35,8 +35,18 @@ Dashboard: https://tandem-engineering-group.github.io/hw-price-radar/
   (`price` null when unlisted/unfetchable; `stock` free text like "in stock — Madison Heights".)
 - `data/latest.json` — full snapshot rebuilt each run: `{as_of, skus:{<id>:{name, category, best:{price,source}, sources:[...]}}}`
 - `data/alerts.json` — rebuilt each run; empty array when nothing fires.
-- Dashboard (`site/index.html`) reads `data/latest.json` + `data/prices.jsonl` at
-  relative path `data/…` (workflow copies `data/` into the Pages artifact).
+- `data/stats.json` — rebuilt each run from prices.jsonl history: per SKU
+  `{floor, floor90, median90, trend_month, proj30:{date,price}, references:{...}}`.
+  Rows whose note contains "verify" are excluded from floors/trends. `references`
+  come from an optional per-SKU `references:` block in skus.yaml (launch_price,
+  analyst_est) — public market facts only, NEVER our willingness-to-pay.
+- `data/agent-notes/*.md` — written by the weekly agentic sweep. The deploy step
+  copies them into the Pages artifact with a generated `index.json` manifest
+  (newest-first); the dashboard renders the newest 3 as a "Field notes" strip.
+- Dashboard (`site/index.html`) reads `data/latest.json` + `data/prices.jsonl` +
+  `data/stats.json` at relative path `data/…` (workflow copies `data/` into the
+  Pages artifact). Charts need Chart.js + chartjs-adapter-date-fns from cdnjs;
+  the page must fully render without them.
 
 ## Backlog for Claude Code (in order)
 1. Run `python src/collect.py --dry-run` locally; confirm the Shopify handle
