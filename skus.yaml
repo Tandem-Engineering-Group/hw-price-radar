@@ -25,7 +25,7 @@ skus:
         stock_regex: 'MI - Madison Heights \((in stock|out of stock)\)'
       - retailer: newegg
         tier: agentic
-        note: "preorder listing seen 2026-08-08 at 3639, release 08/22/2026"
+        note: "preorder $3,639 — ships 08/22 (confirmed 08/09)"
       - retailer: amazon
         tier: keepa
         asin: ""   # TODO: pin ASIN when relisted; last seen Feb 2026 at 3039 then OOS
@@ -36,7 +36,7 @@ skus:
     sources:
       - retailer: microcenter-oem
         tier: agentic
-        note: "OEM single-fan seen in stock Madison Heights 2026-08-08 at 5899.99 via Google Shopping; pin product URL"
+        note: "$5,899.99 in stock, Madison Heights (08/08) — pin product URL"
       - retailer: microcenter-pny
         tier: deterministic
         method: html_regex
@@ -58,7 +58,7 @@ skus:
         min_price: 3500
       - retailer: newegg-oem
         tier: agentic
-        note: "NVIDIA OEM 900-5G153-2250-000 seen 2026-08-08 at 5999.99"
+        note: "OEM 900-5G153-2250-000 $5,999.99 in stock (confirmed 08/09)"
       - retailer: amazon-pny
         tier: keepa
         asin: "B0GLHLSYPC"
@@ -72,7 +72,7 @@ skus:
         asin: ""   # TODO: pin ASIN; seen 2026-08-08 at 4649.99
       - retailer: corsair
         tier: agentic
-        note: "seen 2026-08-08 at 5199.99 — reference only, over FE market"
+        note: "$5,199.99 (08/08) — over FE market"
 
   - id: ascent-gx10
     name: "ASUS Ascent GX10 (GB10, 128GB/2TB, DGX OS)"
@@ -98,7 +98,7 @@ skus:
     sources:
       - retailer: any
         tier: agentic
-        note: "no product page yet — weekly Cowork sweep owns detection"
+        note: "no product page yet — weekly agent sweep watching"
 
   # staff-fleet equivalents (Strix Halo class) — light coverage until pilot verdict
   - id: hp-z2-mini-g1a
@@ -107,7 +107,7 @@ skus:
     sources:
       - retailer: any
         tier: agentic
-        note: "corporate channel (Insight/Connection/CDW) — quote, don't scrape"
+        note: "corporate channel — quote via Insight/Connection/CDW"
 
   - id: ai-top-atom
     name: "Gigabyte AI TOP Atom (GB10)"
@@ -115,4 +115,4 @@ skus:
     sources:
       - retailer: newegg
         tier: agentic
-        note: "seen ~3249 (1TB) earlier 2026, frequently OOS"
+        note: "~$3,249 (1TB) earlier 2026 — frequently OOS"

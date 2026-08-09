@@ -66,6 +66,7 @@
         font-family:var(--mono);font-size:13px}
   .srcrow{display:flex;justify-content:space-between;gap:8px;padding:3px 0;color:var(--dim)}
   .srcrow .p{color:var(--text)} .srcrow .stock{font-size:11.5px}
+  .srcrow>span:last-child{text-align:right;max-width:62%}
   .watch .price{color:var(--dim);font-size:20px}
   .watchtag{font-family:var(--mono);font-size:12px;color:var(--amber)}
   .empty{max-width:680px;margin:60px auto;font-family:var(--mono);color:var(--dim);
@@ -110,7 +111,7 @@ function bestSeries(rows, sku){
 }
 
 function spark(el, series){
-  const up = series.length>1 && series.at(-1).p > series[0].p;
+  const up = series.length>1 && series[series.length-1].p > series[0].p;
   new Chart(el,{type:"line",data:{
     labels:series.map(s=>s.d),
     datasets:[{data:series.map(s=>s.p),stepped:true,pointRadius:0,borderWidth:2,
@@ -149,16 +150,17 @@ function spark(el, series){
     }
   }catch{}
 
+  const rank = id => { const i = FEATURED.indexOf(id); return i === -1 ? 99 : i; };
   const ids = Object.keys(latest.skus)
-    .sort((a,b)=>(FEATURED.indexOf(a)+99)-(FEATURED.indexOf(b)+99) || a.localeCompare(b));
+    .sort((a,b)=> rank(a)-rank(b) || a.localeCompare(b));
 
   const ticker=document.getElementById("ticker");
   const board=document.getElementById("board");
 
-  for(const id of ids){
+  for(const id of ids){ try{
     const s = latest.skus[id];
     const series = bestSeries(hist,id);
-    const prev = series.length>1 ? series.at(-2).p : null;
+    const prev = series.length>1 ? series[series.length-2].p : null;
     const cur  = s.best ? s.best.price : null;
     const d = (cur!=null && prev!=null) ? cur-prev : null;
 
@@ -188,9 +190,11 @@ function spark(el, series){
         <span><span class="p">${x.price!=null?"$"+fmt(x.price):"—"}</span>
         <span class="stock">${x.stock||""}</span></span></div>`).join("")}</div>`;
     board.appendChild(card);
-    if(series.length) spark(card.querySelector("canvas"), series);
-    else card.querySelector(".spark").remove();
-  }
+    const sp = card.querySelector(".spark");
+    if(series.length && typeof Chart !== "undefined"){
+      try{ spark(sp.querySelector("canvas"), series); }catch(e){ sp.remove(); }
+    } else sp.remove();  // no history, or Chart.js CDN blocked — cards still render
+  }catch(e){ console.error(id, e); } }
 })();
 </script>
 </body>
