@@ -84,6 +84,14 @@ jobs:
           mkdir -p _site/data
           cp -r site/* _site/
           cp data/*.json* _site/data/ 2>/dev/null || true
+          # field-notes lane: Pages has no directory listing, so ship a manifest
+          if compgen -G "data/agent-notes/*.md" > /dev/null; then
+            mkdir -p _site/data/agent-notes
+            cp data/agent-notes/*.md _site/data/agent-notes/
+            ls -1 data/agent-notes/ | grep '\.md$' | sort -r \
+              | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read().split()))' \
+              > _site/data/agent-notes/index.json
+          fi
       - uses: actions/upload-pages-artifact@v3
         with: { path: _site }
       - id: deployment
