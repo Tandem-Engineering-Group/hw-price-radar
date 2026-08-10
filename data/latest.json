@@ -1,5 +1,5 @@
 {
- "as_of": "2026-08-09T13:57:59+00:00",
+ "as_of": "2026-08-10T14:32:07+00:00",
  "skus": {
   "ms-s1-max-128": {
    "name": "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)",
@@ -8,7 +8,7 @@
    "sources": [
     {
      "retailer": "minisforum",
-     "price": 3639.0,
+     "price": 3719.0,
      "stock": null,
      "url": "https://store.minisforum.com"
     },
@@ -26,7 +26,7 @@
     }
    ],
    "best": {
-    "price": 3639.0,
+    "price": 3719.0,
     "source": "minisforum"
    }
   },
@@ -49,7 +49,7 @@
     },
     {
      "retailer": "compsource",
-     "price": 6446.46,
+     "price": null,
      "stock": null,
      "url": "https://www.compsource.com/buy/VCNRTXPRO5000BPB/Pny-Technologies-356/"
     },
@@ -66,10 +66,7 @@
      "url": null
     }
    ],
-   "best": {
-    "price": 6446.46,
-    "source": "compsource"
-   }
+   "best": null
   },
   "dgx-spark-fe": {
    "name": "NVIDIA DGX Spark Founders Edition (GB10, 128GB/4TB, DGX OS)",
