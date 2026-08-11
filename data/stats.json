@@ -2,11 +2,11 @@
  "ms-s1-max-128": {
   "floor": 2299.0,
   "floor90": 3639.0,
-  "median90": 3639.0,
-  "trend_month": 128.04,
+  "median90": 3679.0,
+  "trend_month": 129.12,
   "proj30": {
-   "date": "2026-09-09",
-   "price": 3847.04
+   "date": "2026-09-10",
+   "price": 3848.12
   },
   "references": {
    "launch_price": 2299
@@ -15,11 +15,11 @@
  "rtx-pro-5000-48": {
   "floor": 4199.0,
   "floor90": 5899.99,
-  "median90": 5949.99,
-  "trend_month": 217.55,
+  "median90": 5999.99,
+  "trend_month": 237.84,
   "proj30": {
-   "date": "2026-09-08",
-   "price": 6217.54
+   "date": "2026-09-10",
+   "price": 6684.53
   },
   "references": {
    "launch_price": 4199
