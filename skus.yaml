@@ -132,6 +132,22 @@ skus:
         tier: keepa
         asin: ""   # TODO: pin ASIN
 
+  - id: gmktec-evo-x3-128
+    short: "EVO-X3"
+    name: "GMKtec EVO-X3 (128GB)"
+    category: strix-halo-mini
+    sources:
+      - retailer: gmktec
+        tier: deterministic
+        method: shopify_json
+        store: "https://www.gmktec.com"
+        handle: ""               # unpinned: resolver searches the catalog by title
+        match_title: "EVO-X3"    # logs + continues until GMKtec lists it
+        match_variant: "128"
+      - retailer: amazon
+        tier: keepa
+        asin: ""   # TODO: pin ASIN when listed
+
   - id: beelink-gtr9-pro-128
     short: "GTR9 Pro"
     name: "Beelink GTR9 Pro (Ryzen AI Max+ 395, 128GB)"
