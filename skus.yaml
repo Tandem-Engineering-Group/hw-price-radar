@@ -141,8 +141,8 @@ skus:
         tier: deterministic
         method: shopify_json
         store: "https://www.gmktec.com"
-        handle: ""               # unpinned: resolver searches the catalog by title
-        match_title: "EVO-X3"    # logs + continues until GMKtec lists it
+        handle: "gmktec-evo-x3-ai-mini-pc-amd-ryzen-ai-max-395"   # pinned from 08/12 resolve
+        match_title: "EVO-X3"
         match_variant: "128"
       - retailer: amazon
         tier: keepa

@@ -98,6 +98,21 @@
   .srcrow .p{color:var(--text)} .srcrow .stock{font-size:11.5px}
   .srcrow>span:last-child{text-align:right;max-width:62%}
   .watchtag{font-family:var(--mono);font-size:12px;color:var(--amber)}
+
+  /* tabs */
+  .tabs{max-width:1080px;margin:16px auto 0;display:flex;gap:6px;border-bottom:1px solid var(--line)}
+  .tab{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+       color:var(--dim);background:none;border:1px solid var(--line);border-bottom:none;
+       border-radius:8px 8px 0 0;padding:8px 14px;cursor:pointer;margin-bottom:-1px}
+  .tab[aria-selected="true"]{color:var(--ink);background:var(--amber);border-color:var(--amber)}
+  .avgnote{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin:8px 0 0}
+  .avginner{min-width:560px;height:300px}
+  .avginner canvas{width:100%!important;height:300px!important}
+  .legendtable{max-width:1080px;margin:16px auto 0;font-family:var(--mono);font-size:13px}
+  .legendrow{display:flex;justify-content:space-between;gap:10px;padding:7px 0;
+             border-top:1px dashed var(--line);color:var(--dim)}
+  .legendrow .k{color:var(--text)}
+  .legendrow .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px}
   .empty{max-width:680px;margin:60px auto;font-family:var(--mono);color:var(--dim);
          border:1px dashed var(--line);border-radius:12px;padding:24px}
   footer{max-width:1080px;margin:34px auto 0;font-family:var(--mono);font-size:12px;color:var(--dim)}
@@ -113,17 +128,35 @@
 <div class="ticker" id="ticker" aria-label="latest best prices"></div>
 <div class="alerts" id="alerts" role="status"></div>
 
-<section class="panel" id="tlpanel" hidden>
-  <div class="eyebrow">Market timeline — best observed price / day</div>
-  <div class="tlwrap"><div class="tlinner"><canvas id="timeline"></canvas></div></div>
-</section>
+<div class="tabs" role="tablist" aria-label="views">
+  <button class="tab" id="tab-board-btn" role="tab" aria-controls="tab-board" aria-selected="true">Board</button>
+  <button class="tab" id="tab-avg-btn" role="tab" aria-controls="tab-avg" aria-selected="false">Category averages</button>
+</div>
 
-<section class="panel" id="notes" hidden>
-  <div class="eyebrow">Field notes — weekly agent sweep</div>
-  <div id="notelist"></div>
-</section>
+<div id="tab-board" role="tabpanel" aria-labelledby="tab-board-btn">
+  <section class="panel" id="tlpanel" hidden>
+    <div class="eyebrow">Market timeline — best observed price / day</div>
+    <div class="tlwrap"><div class="tlinner"><canvas id="timeline"></canvas></div></div>
+  </section>
 
-<main id="board"></main>
+  <section class="panel" id="notes" hidden>
+    <div class="eyebrow">Field notes — weekly agent sweep</div>
+    <div id="notelist"></div>
+  </section>
+
+  <main id="board"></main>
+</div>
+
+<div id="tab-avg" role="tabpanel" aria-labelledby="tab-avg-btn" hidden>
+  <section class="panel">
+    <div class="eyebrow">Average price per day — by category</div>
+    <div class="tlwrap"><div class="avginner"><canvas id="avgchart"></canvas></div></div>
+    <p class="avgnote" id="avgnote">Mean of each model's last observed price, per day. A model
+      joins its category average on its first observation and holds its last price until the next
+      one, so the line tracks price — not which models happened to be fetched that day.</p>
+  </section>
+  <div class="legendtable" id="avglegend"></div>
+</div>
 <div class="empty" id="empty" hidden>
   No data yet. Run the <b>daily-prices</b> workflow once (Actions → daily-prices →
   Run workflow) and refresh. The board reads <span style="color:var(--text)">data/latest.json</span>.
@@ -161,7 +194,7 @@ function shade(hex, i){ // per-SKU variation within a category color
 
 function bySkuSeries(rows){ // sku -> [{d, p, src}] best price per day, with source
   const m={};
-  rows.forEach(r=>{ if(r.price==null) return;
+  rows.forEach(r=>{ if(r.price==null || /verify/.test(r.note||"")) return;  // suspect scans never plot
     const s = m[r.sku] ??= {};
     if(!(r.date in s) || r.price < s[r.date].p) s[r.date] = {p:r.price, src:r.source};
   });
@@ -259,6 +292,83 @@ async function fieldNotes(){
   if(list.children.length) document.getElementById("notes").hidden=false;
 }
 
+function catAverages(ids, latest, series, todayISO){
+  // Carry each model's last observed price forward so the average tracks price,
+  // not fetch luck. A model enters its category on its first observation.
+  const STALE_DAYS = 45;
+  const start = Object.values(series).flat().map(s=>s.d).sort()[0];
+  if(!start) return {days:[], byCat:{}};
+  const days=[]; for(let c=new Date(start+"T00:00:00Z"), e=new Date(todayISO+"T00:00:00Z"); c<=e; c.setUTCDate(c.getUTCDate()+1))
+    days.push(c.toISOString().slice(0,10));
+  const cur={}, byCat={};
+  for(const cat of CATS) byCat[cat.key]=[];
+  for(const d of days){
+    for(const id of ids){
+      const hit=(series[id]||[]).find(s=>s.d===d);
+      if(hit) cur[id]={p:hit.p, d};
+    }
+    for(const cat of CATS){
+      const vals=ids.filter(id=>latest.skus[id].category===cat.key && cur[id] &&
+        (Date.parse(d)-Date.parse(cur[id].d))/864e5 <= STALE_DAYS).map(id=>cur[id].p);
+      byCat[cat.key].push(vals.length
+        ? {x:d, y:Math.round(vals.reduce((a,b)=>a+b,0)/vals.length), n:vals.length}
+        : {x:d, y:null, n:0});
+    }
+  }
+  return {days, byCat};
+}
+
+function avgChart(avg){
+  const dsets=CATS.filter(c=>avg.byCat[c.key]?.some(p=>p.y!=null)).map(c=>({
+    label:c.title.replace(/^.*— /,""), data:avg.byCat[c.key], borderColor:c.color,
+    backgroundColor:c.color, stepped:true, spanGaps:false, pointRadius:2,
+    pointHoverRadius:4, borderWidth:2}));
+  if(!dsets.length) return null;
+  return new Chart(document.getElementById("avgchart"),{type:"line",data:{datasets:dsets},options:{
+    responsive:true,maintainAspectRatio:false,animation:false,
+    interaction:{mode:"nearest",intersect:false},
+    scales:{x:{type:"time",time:{unit:"month"},grid:{color:css("--line")},
+               ticks:{color:css("--dim"),font:{...MONO,size:10}}},
+            y:{grid:{color:css("--line")},border:{display:false},
+               ticks:{color:css("--dim"),font:{...MONO,size:10},callback:v=>"$"+fmt(v)}}},
+    plugins:{legend:{labels:{color:css("--dim"),font:{...MONO,size:11},boxWidth:9,boxHeight:2}},
+      tooltip:{titleFont:{...MONO,size:11},bodyFont:{...MONO,size:12},
+        callbacks:{label:c=>` ${c.dataset.label} avg $${fmt(c.parsed.y)} (${c.raw.n} model${c.raw.n===1?"":"s"})`}}}}});
+}
+
+function avgLegend(avg, ids, latest, series){
+  const box=document.getElementById("avglegend");
+  for(const cat of CATS){
+    const pts=(avg.byCat[cat.key]||[]).filter(p=>p.y!=null);
+    if(!pts.length) continue;
+    const first=pts[0], last=pts[pts.length-1], chg=last.y-first.y;
+    const models=ids.filter(id=>latest.skus[id].category===cat.key && series[id]?.length)
+                    .map(id=>latest.skus[id].short||id).join(", ");
+    const row=document.createElement("div"); row.className="legendrow";
+    row.innerHTML=`<span><span class="sw" style="background:${cat.color}"></span>
+        <span class="k">${cat.title.replace(/^.*— /,"")}</span>
+        <span style="font-size:11.5px"> — ${models}</span></span>
+      <span>avg <span class="k">$${fmt(last.y)}</span> · ${chg>=0?"+":"−"}$${fmt(Math.abs(chg))} since ${first.x}</span>`;
+    box.appendChild(row);
+  }
+}
+
+function wireTabs(makeAvg){
+  const panes={ "tab-board-btn":"tab-board", "tab-avg-btn":"tab-avg" };
+  let built=false;
+  for(const btnId in panes){
+    document.getElementById(btnId).addEventListener("click", ()=>{
+      for(const b in panes){
+        const on = b===btnId;
+        document.getElementById(b).setAttribute("aria-selected", on);
+        document.getElementById(panes[b]).hidden = !on;
+      }
+      // Chart.js sizes to a visible container — build the average chart on first reveal
+      if(btnId==="tab-avg-btn" && !built){ built=true; try{ makeAvg(); }catch(e){ console.error("avg", e); } }
+    });
+  }
+}
+
 (async function(){
   const latest = await jget("data/latest.json");
   const hist  = await jsonl("data/prices.jsonl");
@@ -319,6 +429,13 @@ async function fieldNotes(){
 
   // market timeline
   if(hasChart()){ try{ marketTimeline(ids, latest, series, todayISO); }catch(e){ console.error("timeline", e); } }
+
+  // category averages tab (chart built lazily — Chart.js needs a visible container)
+  const avg = catAverages(ids, latest, series, todayISO);
+  avgLegend(avg, ids, latest, series);
+  if(!hasChart()) document.getElementById("avgnote").textContent =
+    "Chart library unavailable — per-category current averages are listed below.";
+  wireTabs(()=>{ if(hasChart()) avgChart(avg); });
 
   fieldNotes();
 

@@ -209,7 +209,10 @@ def main() -> int:
             shown = rec["stock"] or (rec["note"] if rec["price"] is not None else None)
             entry["sources"].append({"retailer": src["retailer"], "price": rec["price"],
                                      "stock": shown, "url": src.get("url") or src.get("store")})
-            if rec["price"] is not None:
+            # unverified page-scan prices stay visible on the row but never headline
+            # the card or fire an alert (same exclusion the stats model applies)
+            trusted = rec["price"] is not None and "verify" not in (rec["note"] or "")
+            if trusted:
                 if entry["best"] is None or rec["price"] < entry["best"]["price"]:
                     entry["best"] = {"price": rec["price"], "source": src["retailer"]}
                 t = thresholds.get(sku["id"])
