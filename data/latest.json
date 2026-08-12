@@ -1,5 +1,5 @@
 {
- "as_of": "2026-08-12T14:31:54+00:00",
+ "as_of": "2026-08-12T21:22:56+00:00",
  "skus": {
   "ms-s1-max-128": {
    "name": "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)",
@@ -134,6 +134,23 @@
    ],
    "best": {
     "price": 3499.99,
+    "source": "gmktec"
+   }
+  },
+  "gmktec-evo-x3-128": {
+   "name": "GMKtec EVO-X3 (128GB)",
+   "short": "EVO-X3",
+   "category": "strix-halo-mini",
+   "sources": [
+    {
+     "retailer": "gmktec",
+     "price": 3799.99,
+     "stock": "handle=gmktec-evo-x3-ai-mini-pc-amd-ryzen-ai-max-395",
+     "url": "https://www.gmktec.com"
+    }
+   ],
+   "best": {
+    "price": 3799.99,
     "source": "gmktec"
    }
   },

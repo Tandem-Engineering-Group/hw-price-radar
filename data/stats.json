@@ -53,6 +53,11 @@
   "floor90": 3499.99,
   "median90": 3499.99
  },
+ "gmktec-evo-x3-128": {
+  "floor": 3799.99,
+  "floor90": 3799.99,
+  "median90": 3799.99
+ },
  "proart-gr1x": {
   "references": {
    "analyst_est": 2899
