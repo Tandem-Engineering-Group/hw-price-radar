@@ -11,7 +11,7 @@ jobs:
       - name: Probe public dashboard
         run: |
           base="https://tandem-engineering-group.github.io/hw-price-radar/"
-          for path in "" "data/latest.json" "data/prices.jsonl" "data/stats.json" "bahamas/"; do
+          for path in "" "data/latest.json" "data/prices.jsonl" "data/stats.json" "bahamas/" "lakehouse/"; do
             echo "== ${base}${path}"
             curl -sSL -o /tmp/body -w "HTTP %{http_code} — %{size_download} bytes — final URL %{url_effective}\n" \
               "${base}${path}" || true

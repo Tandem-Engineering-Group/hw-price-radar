@@ -65,5 +65,12 @@ Dashboard: https://tandem-engineering-group.github.io/hw-price-radar/
 - Keep collect.py under ~250 lines; complexity budget is deliberately small.
 - Dashboard is one file (`site/index.html`), Chart.js from cdnjs, no build step.
 - `site/` may also carry standalone sibling pages published at their own URL
-  (currently `site/bahamas/` → `/hw-price-radar/bahamas/`). They are self-contained,
-  share no code or data with the radar, and are out of scope for collect.py.
+  (currently `site/bahamas/` → `/hw-price-radar/bahamas/` and `site/lakehouse/` →
+  `/hw-price-radar/lakehouse/`). They are self-contained, share no code or data with
+  the radar, and are out of scope for collect.py.
+- `lakehouse/` is a self-contained breakout project (personal Michigan cabin planning:
+  SK concept set + a phase-gated lot radar) with its own CLAUDE.md, tests, and
+  workflow (`lot-radar-weekly.yml`). It feeds `site/lakehouse/` only, will migrate to
+  its own repo eventually, and is out of scope for collect.py and the rules above —
+  except the public-repo rule, which extends to it: no budget/willingness-to-pay
+  numbers committed anywhere.
