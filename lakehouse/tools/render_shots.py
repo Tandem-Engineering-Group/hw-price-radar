@@ -1,8 +1,10 @@
 """Generate SK-set concept renders. Two engines:
 
-- sdxl (default): SDXL-Turbo on the Actions runner's CPU — keyless, open weights,
-  anonymous Hugging Face download. ~2-5 min per shot; deps installed by the
-  workflow only when this engine is selected.
+- sdxl (default): open weights on the Actions runner's CPU — keyless, anonymous
+  Hugging Face download. Model is stabilityai/sd-turbo at float32: SDXL-Turbo at
+  bf16 never finished ONE image in 118 min on the 4-vCPU runner (no native bf16
+  → emulated kernels), so small-and-fp32 is the rule here. Deps installed by
+  the workflow only when this engine is selected.
 - gemini: the Gemini image API ("nano banana") — better quality, needs the
   GEMINI_API_KEY Actions secret.
 
@@ -66,21 +68,21 @@ def generate(prompt: str, key: str, aspect: str) -> bytes | None:
     return None
 
 
-_SDXL = {}
+_LOCAL = {}
+LOCAL_MODEL = "stabilityai/sd-turbo"      # small + fp32: the only combo that fits runner CPUs
 
 
 def generate_sdxl(prompt: str, aspect: str) -> bytes | None:
     from io import BytesIO
     import torch
     from diffusers import AutoPipelineForText2Image
-    if "pipe" not in _SDXL:
-        _SDXL["pipe"] = AutoPipelineForText2Image.from_pretrained(
-            "stabilityai/sdxl-turbo", torch_dtype=torch.bfloat16)
-        _SDXL["pipe"].set_progress_bar_config(disable=True)
-    w, h = (832, 464) if aspect == "16:9" else (768, 768)   # turbo-native scale, /8 multiples
+    if "pipe" not in _LOCAL:
+        _LOCAL["pipe"] = AutoPipelineForText2Image.from_pretrained(
+            LOCAL_MODEL, torch_dtype=torch.float32)
+    w, h = (640, 384) if aspect == "16:9" else (512, 512)   # near sd-turbo native, /8 multiples
     try:
-        img = _SDXL["pipe"](prompt=prompt, num_inference_steps=4,
-                            guidance_scale=0.0, width=w, height=h).images[0]
+        img = _LOCAL["pipe"](prompt=prompt, num_inference_steps=2,
+                             guidance_scale=0.0, width=w, height=h).images[0]
     except Exception as e:                # noqa: BLE001 — fail-soft per shot
         print(f"  {type(e).__name__}: {e}", file=sys.stderr)
         return None
@@ -136,6 +138,7 @@ def main() -> int:
         done = 0
         base = cfg["Base"].rstrip(" —")
         for shot in todo:
+            started = time.monotonic()
             print(f"{shot['Id']} — {shot['Scheme']} {shot['Label']}", flush=True)
             if args.engine == "sdxl":
                 # CLIP truncates at 77 tokens: shot specifics go first so they survive
@@ -145,8 +148,10 @@ def main() -> int:
                 time.sleep(2)                 # politeness between API calls
             if raw:
                 path = save(raw, shot["Id"])
-                print(f"  wrote {path.name} ({path.stat().st_size:,} bytes)")
+                print(f"  wrote {path.name} ({path.stat().st_size:,} bytes, "
+                      f"{time.monotonic() - started:.0f}s)", flush=True)
                 done += 1
+                write_manifest(shots)         # after every shot: partial runs still ship
         if todo and not done:
             print("every requested shot failed — check the key/model", file=sys.stderr)
             write_manifest(shots)
