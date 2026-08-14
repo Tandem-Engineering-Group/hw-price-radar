@@ -63,4 +63,7 @@ Dashboard: https://tandem-engineering-group.github.io/hw-price-radar/
 ## Conventions
 - Python 3.12, stdlib + pyyaml only. No headless browsers, no selenium.
 - Keep collect.py under ~250 lines; complexity budget is deliberately small.
-- Site is one file (`site/index.html`), Chart.js from cdnjs, no build step.
+- Dashboard is one file (`site/index.html`), Chart.js from cdnjs, no build step.
+- `site/` may also carry standalone sibling pages published at their own URL
+  (currently `site/bahamas/` → `/hw-price-radar/bahamas/`). They are self-contained,
+  share no code or data with the radar, and are out of scope for collect.py.
