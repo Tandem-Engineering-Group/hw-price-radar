@@ -1,0 +1,32 @@
+[
+ {
+  "file": "sk1-hero.jpg",
+  "scheme": "SK-1",
+  "label": "Hero from the water"
+ },
+ {
+  "file": "sk1-dusk.jpg",
+  "scheme": "SK-1",
+  "label": "Dusk deck + pool"
+ },
+ {
+  "file": "sk2-hero.jpg",
+  "scheme": "SK-2",
+  "label": "Hero at dusk"
+ },
+ {
+  "file": "sk2-pool-axis.jpg",
+  "scheme": "SK-2",
+  "label": "Pool axis"
+ },
+ {
+  "file": "sk3-hero.jpg",
+  "scheme": "SK-3",
+  "label": "Hero side elevation"
+ },
+ {
+  "file": "sk3-under-kick.jpg",
+  "scheme": "SK-3",
+  "label": "Under the kick"
+ }
+]
