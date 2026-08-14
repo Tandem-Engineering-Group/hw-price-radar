@@ -29,7 +29,7 @@ defaults:
 jobs:
   render:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 110
     steps:
       - uses: actions/checkout@v4
       - name: Require GEMINI_API_KEY secret
@@ -40,12 +40,12 @@ jobs:
           [ -n "$KEY" ] || { echo "::error::GEMINI_API_KEY secret not set (repo Settings → Secrets and variables → Actions). Get a key at https://aistudio.google.com/apikey — or dispatch with engine=sdxl, which needs no key"; exit 1; }
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - name: Cache SDXL-Turbo weights
+      - name: Cache model weights
         if: inputs.engine == 'sdxl'
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
-          key: sdxl-turbo-v1
+          key: local-sd-turbo-v1
       - run: pip install pyyaml pillow
       - name: Install SDXL deps (CPU torch)
         if: inputs.engine == 'sdxl'
@@ -53,11 +53,15 @@ jobs:
           pip install torch --index-url https://download.pytorch.org/whl/cpu
           pip install diffusers transformers accelerate safetensors
       - name: Generate renders
+        timeout-minutes: 90
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           HF_HUB_DISABLE_TELEMETRY: "1"
         run: python tools/render_shots.py --engine "${{ inputs.engine }}" --tier "${{ inputs.tier }}"
       - name: Commit renders
+        # always(): a step timeout must not discard already-rendered shots —
+        # the script refreshes the manifest after every image
+        if: always()
         run: |
           git config user.name "lakehouse-renders[bot]"
           git config user.email "actions@users.noreply.github.com"

@@ -146,10 +146,12 @@ listing. Footer: adapter health + LastRun timestamp.
 `config/render-shots.yml` (prompts from `docs/sk-set/lakehouse-render-prompt-pack.md`) +
 `tools/render_shots.py` + `.github/workflows/lakehouse-renders.yml`. Generation runs
 **only in Actions** — this repo's Claude sandbox egress blocks every image API, but
-runners have open internet. Two engines: `sdxl` (default — SDXL-Turbo open weights on
-the runner CPU, keyless, weights cached between runs) and `gemini` (nano banana,
-better quality, opt-in; `GEMINI_API_KEY` from Google AI Studio lives in Actions
-secrets only). Output: `site/lakehouse/renders/*.jpg` + `index.json` manifest; the
+runners have open internet. Two engines: `sdxl` (default — keyless open weights on the
+runner CPU; the model is `stabilityai/sd-turbo` at float32, because SDXL-Turbo at bf16
+couldn't finish one image in 118 min on the 4-vCPU runner — keep local models small
+and fp32) and `gemini` (nano banana, better quality, opt-in; `GEMINI_API_KEY` from
+Google AI Studio lives in Actions secrets only). The commit step runs `if: always()`
+and the script refreshes the manifest per shot, so timeouts still ship partial sets. Output: `site/lakehouse/renders/*.jpg` + `index.json` manifest; the
 portal's render strip populates from the manifest and the page fully renders without
 it. Fail-soft per shot. Hand-dropped renders named `<shot-id>.jpg` in that folder get
 indexed by `python tools/render_shots.py --manifest-only`.
