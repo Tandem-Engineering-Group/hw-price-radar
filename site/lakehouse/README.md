@@ -9,9 +9,9 @@ Sheets:
   SK-2 A + Bar, SK-3 Kicked Ridge) as inline-SVG drafting sheets, plus
   45th-parallel reality checks, 3D-printed-element fabrication routes, and the
   path to Revit.
-- **Concept Renders** — strip of AI concept renders (Gemini image model via the
-  `lakehouse-renders` Action), populated from `renders/index.json`; shows a
-  "pending" note until the first set is committed.
+- **Concept Renders** — strip of AI concept renders (`lakehouse-renders` Action;
+  keyless SDXL-Turbo on the runner by default, Gemini opt-in), populated from
+  `renders/index.json`; shows a "pending" note until the first set is committed.
 - **Lot Radar** — placeholder. Weekly lakefront-lot discovery + SK-fit scoring
   dashboard lands here at its Phase 3 (see `lakehouse/CLAUDE.md`).
 

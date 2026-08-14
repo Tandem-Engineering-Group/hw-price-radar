@@ -138,8 +138,10 @@ listing. Footer: adapter health + LastRun timestamp.
 `config/render-shots.yml` (prompts from `docs/sk-set/lakehouse-render-prompt-pack.md`) +
 `tools/render_shots.py` + `.github/workflows/lakehouse-renders.yml`. Generation runs
 **only in Actions** — this repo's Claude sandbox egress blocks every image API, but
-runners have open internet. `GEMINI_API_KEY` (Google AI Studio) lives in Actions
-secrets only. Output: `site/lakehouse/renders/*.jpg` + `index.json` manifest; the
+runners have open internet. Two engines: `sdxl` (default — SDXL-Turbo open weights on
+the runner CPU, keyless, weights cached between runs) and `gemini` (nano banana,
+better quality, opt-in; `GEMINI_API_KEY` from Google AI Studio lives in Actions
+secrets only). Output: `site/lakehouse/renders/*.jpg` + `index.json` manifest; the
 portal's render strip populates from the manifest and the page fully renders without
 it. Fail-soft per shot. Hand-dropped renders named `<shot-id>.jpg` in that folder get
 indexed by `python tools/render_shots.py --manifest-only`.
