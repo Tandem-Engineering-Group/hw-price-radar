@@ -1,0 +1,20 @@
+# LakeTier drives a scoring bonus. Tier1 = premium clarity/value-retention inland lakes.
+Tier1:
+  - Torch Lake
+  - Elk Lake
+  - Glen Lake
+  - Crystal Lake        # Benzie
+  - Walloon Lake
+  - Lake Charlevoix
+  - Higgins Lake
+  - Burt Lake
+  - Mullett Lake
+Tier2:
+  - Lake Leelanau
+  - Intermediate Lake
+  - Lake Skegemog
+  - Otsego Lake
+  - Lake Missaukee
+  - Long Lake           # Grand Traverse
+  - Duck Lake
+  - Platte Lake

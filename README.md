@@ -10,6 +10,11 @@ GitHub Actions cron → committed price history → GitHub Pages dashboard.
 single-file grid-intelligence portal (`site/bahamas/`). Unrelated to price tracking;
 it shares the Pages site only, not the data pipeline.
 
+**And:** [Lakehouse Planning Portal](https://tandem-engineering-group.github.io/hw-price-radar/lakehouse/) — personal
+northern-Michigan cabin planning breakout (`site/lakehouse/` portal, `lakehouse/`
+project). Also pipeline-unrelated; self-contained and slated to migrate to its own
+repo eventually. See `lakehouse/CLAUDE.md`.
+
 ## How it works
 - `skus.yaml` — the watchlist. Each source is tagged with a tier.
 - `src/collect.py` — deterministic tier. Runs daily at 13:17 UTC (~9:17am Detroit)

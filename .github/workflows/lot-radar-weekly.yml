@@ -1,0 +1,37 @@
+name: lot-radar-weekly
+
+# Lakehouse lot radar — see lakehouse/CLAUDE.md. Dispatch-only until Phase 5;
+# the pipeline step fails by design until Phase 1 implements lot_radar.pipeline.
+on:
+  workflow_dispatch: {}
+  # Phase 5 flips this on. 11:00 UTC = 06:00 ET during EDT (07:00 during EST — acceptable drift).
+  # schedule:
+  #   - cron: "0 11 * * 1"
+
+permissions:
+  contents: write
+  issues: write
+
+defaults:
+  run:
+    working-directory: lakehouse
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+      - run: pytest -q
+      - run: PYTHONPATH=src python -m lot_radar.pipeline --weekly
+      - name: Commit data + site
+        run: |
+          git config user.name "lot-radar-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/ ../site/lakehouse/
+          git diff --cached --quiet || git commit -m "lakehouse: weekly radar $(date -u +%F)"
+          git push
+  # No Pages job here: pushing site/** triggers the host repo's daily-prices deploy,
+  # which publishes all of site/ (including site/lakehouse/).

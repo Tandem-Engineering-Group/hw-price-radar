@@ -1,0 +1,21 @@
+# All tunables live here. scoring.py must never hardcode a threshold.
+Budget:
+  MaxPriceUsd: null          # set when ready; null = no price filter, price scores 0
+Detroit:
+  Lat: 42.3355               # 1 Park Ave (David Whitney)
+  Lon: -83.0508
+DriveTime:
+  RoadFactor: 1.25
+  AvgMph: 58
+Weights:                     # Composite = sum of earned points, cap 100
+  GradeFall:  { Ge8: 30, Ge4: 15, Lt4: 0 }
+  Frontage:   { Ge150: 20, Ge100: 12, Ge75: 6, Lt75: 0 }
+  Acreage:    { Ge1_5: 10, Ge0_75: 6, Lt0_75: 0 }
+  Orientation: { W: 10, SW: 10, NW: 10, S: 6, SE: 2, E: 2, NE: 2, N: 0 }
+  LakeTier:   { Tier1: 15, Tier2: 8, Other: 0 }
+  DriveMins:  { Le180: 10, Le240: 6, Le300: 3, Gt300: 0 }
+  PriceUnderBudget: 5
+PartiRules:
+  Sk1: { GreenGradeFallFt: 8, AmberGradeFallFt: 4 }
+  Sk2: { MaxFlatGradeFallFt: 4, GreenFrontageFt: 120 }
+  Sk3: { GreenFacings: [W, SW, NW], GreenFrontageFt: 100 }

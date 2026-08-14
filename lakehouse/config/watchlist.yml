@@ -1,0 +1,44 @@
+# PLACEHOLDER SEEDS — pipeline exercise only. Coordinates are generic shore-adjacent
+# points, NOT real listings. Replace SourceUrl with real listing URLs to promote a lot;
+# anything still marked Placeholder: true is excluded from the published dashboard.
+Lots:
+  - Placeholder: true
+    SourceUrl: "TODO-paste-listing-url-1"
+    LakeName: Torch Lake
+    County: Antrim
+    Lat: 44.9410
+    Lon: -85.3080
+    PriceUsd: 495000
+    AcreageAc: 1.2
+    FrontageFt: 150
+    ShoreFacing: W
+  - Placeholder: true
+    SourceUrl: "TODO-paste-listing-url-2"
+    LakeName: Higgins Lake
+    County: Roscommon
+    Lat: 44.4790
+    Lon: -84.7580
+    PriceUsd: 325000
+    AcreageAc: 0.8
+    FrontageFt: 100
+    ShoreFacing: NW
+  - Placeholder: true
+    SourceUrl: "TODO-paste-listing-url-3"
+    LakeName: Walloon Lake
+    County: Charlevoix
+    Lat: 45.2650
+    Lon: -84.9720
+    PriceUsd: 610000
+    AcreageAc: 1.8
+    FrontageFt: 175
+    ShoreFacing: SW
+  - Placeholder: true
+    SourceUrl: "TODO-paste-listing-url-4"
+    LakeName: Otsego Lake
+    County: Otsego
+    Lat: 44.9600
+    Lon: -84.6870
+    PriceUsd: 210000
+    AcreageAc: 0.6
+    FrontageFt: 70
+    ShoreFacing: E
