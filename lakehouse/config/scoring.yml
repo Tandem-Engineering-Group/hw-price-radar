@@ -15,6 +15,16 @@ Weights:                     # Composite = sum of earned points, cap 100
   LakeTier:   { Tier1: 15, Tier2: 8, Other: 0 }
   DriveMins:  { Le180: 10, Le240: 6, Le300: 3, Gt300: 0 }
   PriceUnderBudget: 5
+  # Judgment-tier bands (set per lot by the weekly sweep; unset = 0 points):
+  # UtilitiesBand from listing statements only — Full = electric + gas/cable at
+  # road, Partial = electric only, None = stated off-grid. GrowthBand/TaxBand
+  # are county-level judgment (v0) — general area trajectory and non-homestead
+  # millage burden, reviewed weekly, never a promise.
+  Utilities:  { Full: 8, Partial: 4, None: 0 }
+  Growth:     { High: 6, Med: 3, Low: 0 }
+  Tax:        { Low: 6, Med: 3, High: 0 }
+  # Market value: asking price per foot of lake frontage
+  PricePerFrontFt: { Le3000: 8, Le5000: 4, Gt5000: 0 }
 PartiRules:
   Sk1: { GreenGradeFallFt: 8, AmberGradeFallFt: 4 }
   Sk2: { MaxFlatGradeFallFt: 4, GreenFrontageFt: 120 }

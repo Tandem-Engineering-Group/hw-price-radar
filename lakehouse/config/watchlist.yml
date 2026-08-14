@@ -1,44 +1,186 @@
-# PLACEHOLDER SEEDS — pipeline exercise only. Coordinates are generic shore-adjacent
-# points, NOT real listings. Replace SourceUrl with real listing URLs to promote a lot;
-# anything still marked Placeholder: true is excluded from the published dashboard.
+# Weekly top-10 watchlist — REAL public listings, curated by the weekly agentic
+# sweep from web-search results (listing pages themselves are egress-blocked from
+# the sweep environment, so facts come from search snippets and are re-verified
+# weekly; see Notes per lot). Lat/Lon are lake/road-level approximations, never
+# parcel surveys — every lot carries the ApproxLocation flag. FrontageFt is
+# PRIVATE frontage only; shared/association frontage is described in Notes and
+# left null so it never inflates scoring. Bands (Utilities/Growth/Tax) follow
+# config/scoring.yml rules: statement-based utilities, county-level judgment for
+# growth and non-homestead tax burden.
+# Swept: 2026-08-14
 Lots:
-  - Placeholder: true
-    SourceUrl: "TODO-paste-listing-url-1"
+  - SourceUrl: "https://www.landsearch.com/properties/2620-sandy-rdg-lake-leelanau-mi-49653/4143113"
+    Name: "Sandy Ridge Rd Lot 7 — Lake Leelanau"
+    LakeName: Lake Leelanau
+    County: Leelanau
+    Lat: 44.972
+    Lon: -85.712
+    PriceUsd: 649000
+    AcreageAc: 0.35
+    FrontageFt: 110
+    UtilitiesBand: Full
+    Utilities: "Cable, gas, electric at street; approved conventional septic"
+    GrowthBand: High
+    TaxBand: Low
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation]
+    Notes: >-
+      Cleared and prepped, low bluff, hard-sand bottom, cul-de-sac; ~20 min to
+      Traverse City. Price conflict across sources: $649k (LandSearch) vs $700k
+      (Sterling Properties MLS 1929806) — using lower until verified.
+  - SourceUrl: "https://www.trishhartwick.com/crooked-lake/"
+    Name: "Channel Rd estate parcel — Crooked Lake"
+    LakeName: Crooked Lake
+    County: Emmet
+    Lat: 45.415
+    Lon: -84.845
+    PriceUsd: null
+    AcreageAc: 1.5
+    FrontageFt: 250
+    Utilities: "EGLE approval and septic easement in place (electric/gas not stated)"
+    GrowthBand: High
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, PriceOnInquiry]
+    Notes: >-
+      MLS 479964, stated ACTIVE. Cleared, park-like, private protected cove,
+      sandy bottom, views of Oden Island; "one of the last estate-sized parcels"
+      on the lake. Price not published in search results — broker link.
+  - SourceUrl: "https://www.mirealsource.com/7681-nw-torch-lake-kewadin-mi-49648/aspmi80053934_l_MiRealSource"
+    Name: "7681 NW Torch Lake Dr — Torch Lake"
     LakeName: Torch Lake
     County: Antrim
-    Lat: 44.9410
-    Lon: -85.3080
-    PriceUsd: 495000
-    AcreageAc: 1.2
-    FrontageFt: 150
+    Lat: 44.998
+    Lon: -85.335
+    PriceUsd: 2400000
+    AcreageAc: 2.77
+    FrontageFt: 247
+    GrowthBand: Med
+    TaxBand: Low
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, MayHaveStructure]
+    Notes: >-
+      MLS 1930547. Wooded, end-of-road privacy, west shore. Price conflict:
+      $2.4M vs $2.25M (Scofield). Listed as vacant land but description mentions
+      an existing home usable as guest house — verify before treating as raw lot.
+  - SourceUrl: "https://www.watersideproperties.net/23/torch-lake-properties"
+    Name: "Torch Lake Dr vacant parcel, Alden — Torch Lake"
+    LakeName: Torch Lake
+    County: Antrim
+    Lat: 44.883
+    Lon: -85.264
+    PriceUsd: 2600000
+    AcreageAc: 0.9
+    FrontageFt: 102
     ShoreFacing: W
-  - Placeholder: true
-    SourceUrl: "TODO-paste-listing-url-2"
-    LakeName: Higgins Lake
-    County: Roscommon
-    Lat: 44.4790
-    Lon: -84.7580
-    PriceUsd: 325000
-    AcreageAc: 0.8
-    FrontageFt: 100
-    ShoreFacing: NW
-  - Placeholder: true
-    SourceUrl: "TODO-paste-listing-url-3"
-    LakeName: Walloon Lake
+    GrowthBand: Med
+    TaxBand: Low
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, IndexUrlOnly]
+    Notes: >-
+      "Nearly one acre, 102 ft of crystal-clear frontage." Alden side = east
+      shore, so W (sunset) facing is inferred from the address, not stated.
+      No individual listing URL surfaced — broker inventory page linked.
+  - SourceUrl: "https://www.landsearch.com/properties/eagle-point-rd-grayling-mi-49738/4248798"
+    Name: "Eagle Point tip lot — Lake Margrethe"
+    LakeName: Lake Margrethe
+    County: Crawford
+    Lat: 44.657
+    Lon: -84.775
+    PriceUsd: null
+    FrontageFt: 180
+    ShoreFacing: W
+    UtilitiesBand: Partial
+    Utilities: "Natural gas and high-speed internet available (electric not stated)"
+    GrowthBand: Low
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, PriceOnInquiry]
+    Notes: >-
+      MLS 201828162 (RE/MAX Grayling). "Perhaps the last undeveloped lot" on the
+      lake; point lot with stated sunrise AND sunset views (W facing set from
+      the sunset statement). One snippet says "10 lots on Eagle Point Road" —
+      parcel identity needs verification.
+  - SourceUrl: "https://www.brookwalsh.com/shoreline-lake-charlevoix.php"
+    Name: "Shoreline home sites, East Jordan — Lake Charlevoix"
+    LakeName: Lake Charlevoix
     County: Charlevoix
-    Lat: 45.2650
-    Lon: -84.9720
-    PriceUsd: 610000
-    AcreageAc: 1.8
-    FrontageFt: 175
-    ShoreFacing: SW
-  - Placeholder: true
-    SourceUrl: "TODO-paste-listing-url-4"
-    LakeName: Otsego Lake
-    County: Otsego
-    Lat: 44.9600
-    Lon: -84.6870
-    PriceUsd: 210000
-    AcreageAc: 0.6
-    FrontageFt: 70
-    ShoreFacing: E
+    Lat: 45.171
+    Lon: -85.135
+    PriceUsd: null
+    UtilitiesBand: Full
+    Utilities: "Developer home sites (municipal-adjacent); dock slip assigned at purchase"
+    GrowthBand: Med
+    TaxBand: Low
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, SharedFrontage, PriceOnInquiry]
+    Notes: >-
+      Development lots from "under $400,000"; 225+ ft of SHARED sandy-bottom
+      frontage (left out of FrontageFt so it doesn't score as private), assigned
+      dock slips incl. cruiser wells/boat lifts. Min lot 9,500 sqft.
+  - SourceUrl: "https://www.lakehouse.com/000-arbutus-ln-beulah-michigan-49617-p6675591.html"
+    Name: "Arbutus Ln, Buttercup Shores — Crystal Lake"
+    LakeName: Crystal Lake
+    County: Benzie
+    Lat: 44.635
+    Lon: -86.100
+    PriceUsd: 245000
+    AcreageAc: 1.2
+    GrowthBand: Med
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, SharedFrontage]
+    Notes: >-
+      1.2 ac with association privileges on 295 ft of SHARED Crystal Lake
+      frontage (swim/boat/shore use — not private, so FrontageFt left null).
+      Seasonal bay views; minutes to Beulah/Frankfort.
+  - SourceUrl: "https://www.landsearch.com/properties/marion-ctr-charlevoix-mi-49720/2402777"
+    Name: "Marion Center Rd parcel — Charlevoix"
+    County: Charlevoix
+    Lat: 45.283
+    Lon: -85.245
+    PriceUsd: 200000
+    AcreageAc: 1.33
+    GrowthBand: Med
+    TaxBand: Low
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, WaterfrontUnverified]
+    Notes: >-
+      1.33 ac in a 7-parcel development (avg 118 ft frontage, ~450 ft deep).
+      Surfaced under a waterfront query but the frontage may be ROAD frontage —
+      waterfront status unverified, no lake attributed until confirmed.
+  - SourceUrl: "https://www.realestateone.com/MI/Antrim/Williamsburg/LOT-1-Elk-Vista-Court-Williamsburg-MI-49690/1919960-MITAAR"
+    Name: "Lot 1 Elk Vista Court — Elk Lake view"
+    LakeName: Elk Lake
+    County: Antrim
+    Lat: 44.815
+    Lon: -85.390
+    PriceUsd: 225000
+    AcreageAc: 5.06
+    UtilitiesBand: Full
+    Utilities: "Underground natural gas, 400A electric, private well + septic, 1-gig fiber (spring 2026)"
+    GrowthBand: High
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, NotWaterfront]
+    Notes: >-
+      MLS 1919960. NOT waterfront — partial Elk Lake views. Included as a
+      feasibility wildcard: gentle topography stated to support walkouts (SK-1
+      geometry without the frontage), best utility package of the sweep, 6 of 9
+      lots already under contract. 1/9 interest in 6.6-acre preserve.
+  - SourceUrl: "https://www.movoto.com/beulah-mi/lot4-crystal-view-cmns-beulah-mi-49617-842_1932651/"
+    Name: "Lot 4 Crystal View Commons — Crystal Lake bluff view"
+    LakeName: Crystal Lake
+    County: Benzie
+    Lat: 44.640
+    Lon: -86.120
+    PriceUsd: 150000
+    AcreageAc: 3.0
+    GrowthBand: Med
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, NotWaterfront]
+    Notes: >-
+      MLS 1932651. NOT waterfront — bluff site with Crystal Lake view, 3 acres.
+      Private gravel road, buyer installs well + septic, association design
+      approval required. Cheap-land wildcard for a view-driven SK-3.

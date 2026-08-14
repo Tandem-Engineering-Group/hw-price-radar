@@ -6,6 +6,8 @@
 <title>Northern Michigan Lakehouse — Planning Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
   :root{
     --paper:#EFEDE6;
@@ -83,6 +85,27 @@
   .lbl-r{font-size:9px;fill:var(--redline);letter-spacing:.08em;font-weight:500}
   .lbl-w{font-size:9px;fill:#28536b;letter-spacing:.08em}
 
+  /* ---- tabs ---- */
+  .tabs{display:flex;gap:10px;margin:0 0 22px}
+  .tab-btn{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;padding:9px 18px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);cursor:pointer}
+  .tab-btn[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+
+  /* ---- lot map tab ---- */
+  #map{height:420px;border:1px solid var(--ink);background:#E6E3DA;margin-top:10px}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-size:11px;color:var(--graphite);letter-spacing:.05em}
+  .lot-table-wrap{overflow-x:auto;margin-top:14px}
+  table.lots{border-collapse:collapse;width:100%;font-size:12.5px;min-width:680px}
+  .lots th{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--graphite);text-align:left;padding:6px 8px;border-bottom:1px solid var(--ink);white-space:nowrap}
+  .lots td{padding:8px;border-bottom:1px solid var(--hairline);vertical-align:top}
+  .lots a{color:var(--lake)}
+  .num{text-align:right;white-space:nowrap}
+  .dot{display:inline-block;width:11px;height:11px;border:1px solid var(--ink);border-radius:50%;margin-right:2px;vertical-align:-1px}
+  .dot.g{background:#4C8A4F}.dot.a{background:#D9A21B}.dot.r{background:#C2401B}
+  .comp{font-family:"Oswald",system-ui,sans-serif;font-weight:600;font-size:15px}
+  .leaflet-container{font:inherit}
+  .lot-pop b{font-family:"Oswald",system-ui,sans-serif;font-size:14px;letter-spacing:.04em}
+  .lot-pop{font-size:12px;line-height:1.5}
+
   /* ---- render strip ---- */
   .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:10px}
   .rgrid figure{border:1px solid var(--ink);padding:6px 6px 2px;background:var(--paper)}
@@ -98,6 +121,33 @@
 </head>
 <body>
 <div class="set">
+
+  <div class="tabs" role="tablist">
+    <button class="tab-btn" role="tab" aria-selected="true" data-tab="sk">SK Set</button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="map">Lot Map</button>
+  </div>
+
+  <div id="tab-map" hidden>
+    <section class="notes">
+      <div class="notes-inner">
+        <h2>Lot Radar — Weekly Top 10</h2>
+        <p class="rnote" id="lots-asof">LOADING LOT DATA…</p>
+        <div id="map"></div>
+        <div class="legend">
+          <span><i class="dot g"></i> composite ≥ 70</span>
+          <span><i class="dot a"></i> 45–69</span>
+          <span><i class="dot r"></i> &lt; 45</span>
+          <span>SK chips: SK-1 needs grade fall · SK-2 wants flat + wide · SK-3 wants a sunset axis</span>
+        </div>
+        <div class="lot-table-wrap">
+          <table class="lots" id="lot-table"></table>
+        </div>
+        <p class="rnote" style="margin-top:10px">CURATED WEEKLY FROM PUBLIC LISTINGS · PINS ARE APPROXIMATE (LAKE/ROAD LEVEL, NOT PARCEL SURVEYS) · PRICES AS LISTED ON THE VERIFIED DATE · GROWTH/TAX/UTILITY BANDS ARE JUDGMENT CALLS, NOT ADVICE · LINKS GO TO THE LISTING SITE</p>
+      </div>
+    </section>
+  </div>
+
+  <div id="tab-sk">
 
   <!-- ================= COVER ================= -->
   <header class="cover">
@@ -119,7 +169,7 @@
     <div class="notes-inner">
       <h2>Sheet Index</h2>
       <div class="note"><b>01 · SK Set</b><span>Concept partis SK-1 / SK-2 / SK-3, below — same program, three attitudes. Reality checks, printed-piece routes, and the path to Revit follow the sheets.</span></div>
-      <div class="note"><b>02 · Lot Radar</b><span>Weekly lakefront-lot discovery + SK-fit scoring for the northern lower peninsula — <em>in planning, publishes here when live</em>. The radar answers the open question: which parti does the land want? SK-1 needs 8–10 ft of grade fall, SK-2 wants wide flat frontage, SK-3 wants a sunset axis.</span></div>
+      <div class="note"><b>02 · Lot Radar</b><span>Weekly top-10 of real lots for sale, scored for SK fit — <em>live on the LOT MAP tab above</em>. The radar answers the open question: which parti does the land want? SK-1 needs 8–10 ft of grade fall, SK-2 wants wide flat frontage, SK-3 wants a sunset axis.</span></div>
     </div>
   </section>
 
@@ -483,9 +533,95 @@
 
   <p class="foot">SK SET v0.1 · CONCEPT ONLY · PICK A PARTI AND THE NEXT REV GETS PLANS + A FORMA-READY MASSING BRIEF</p>
   <p class="foot">SOURCE + DECK + RENDER PROMPT PACK: <a href="https://github.com/Tandem-Engineering-Group/hw-price-radar/tree/main/lakehouse" style="color:inherit">lakehouse/ IN THE HOST REPO</a></p>
+
+  </div><!-- /tab-sk -->
 </div>
 <script>
 (function(){
+  // ---- tabs ----
+  var btns = document.querySelectorAll('.tab-btn');
+  function showTab(name){
+    btns.forEach(function(b){ b.setAttribute('aria-selected', String(b.dataset.tab === name)); });
+    document.getElementById('tab-sk').hidden = name !== 'sk';
+    document.getElementById('tab-map').hidden = name !== 'map';
+    if (name === 'map' && window._lotMap) window._lotMap.invalidateSize();
+    if (history.replaceState) history.replaceState(null, '', name === 'map' ? '#map' : '#');
+  }
+  btns.forEach(function(b){ b.addEventListener('click', function(){ showTab(b.dataset.tab); }); });
+  if (location.hash === '#map') showTab('map');
+
+  // ---- lot radar ----
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function money(v){ return v == null ? 'inquire' : '$' + Number(v).toLocaleString(); }
+  function band(c){ return c >= 60 ? 'g' : c >= 40 ? 'a' : 'r'; }
+  var BANDCOLOR = { g: '#4C8A4F', a: '#D9A21B', r: '#C2401B' };
+  function chip(v){ return '<i class="dot ' + (v === 'GREEN' ? 'g' : v === 'RED' ? 'r' : 'a') + '" title="' + esc(v) + '"></i>'; }
+
+  function buildTable(lots){
+    var h = '<tr><th>#</th><th>Lot</th><th class="num">Price</th><th class="num">Acres</th>' +
+            '<th class="num">Front ft</th><th>SK 1·2·3</th><th class="num">Score</th><th>Listing</th></tr>';
+    lots.forEach(function(l, i){
+      var s = l.Scores || {};
+      h += '<tr><td>' + (i + 1) + '</td>' +
+        '<td><b>' + esc(l.Name || l.LakeName || 'Lot') + '</b><br><span style="color:var(--graphite)">' +
+          esc((l.LakeName ? l.LakeName + ' · ' : '') + (l.County || '') + ' Co.') + '</span></td>' +
+        '<td class="num">' + money(l.PriceUsd) + '</td>' +
+        '<td class="num">' + (l.AcreageAc != null ? l.AcreageAc : '—') + '</td>' +
+        '<td class="num">' + (l.FrontageFt != null ? l.FrontageFt : '—') + '</td>' +
+        '<td>' + chip(s.Sk1) + chip(s.Sk2) + chip(s.Sk3) + '</td>' +
+        '<td class="num comp">' + (s.Composite != null ? s.Composite : '—') + '</td>' +
+        '<td><a href="' + esc(l.SourceUrl) + '" target="_blank" rel="noopener">view ↗</a></td></tr>';
+    });
+    document.getElementById('lot-table').innerHTML = h;
+  }
+
+  function buildMap(lots){
+    var m = L.map('map', { scrollWheelZoom: false });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      { attribution: '&copy; OpenStreetMap contributors', maxZoom: 17 }).addTo(m);
+    var pts = [];
+    lots.forEach(function(l, i){
+      if (l.Lat == null || l.Lon == null) return;
+      pts.push([l.Lat, l.Lon]);
+      var s = l.Scores || {};
+      var pop = '<div class="lot-pop"><b>' + (i + 1) + ' · ' + esc(l.Name || l.LakeName || 'Lot') + '</b><br>' +
+        money(l.PriceUsd) +
+        (l.AcreageAc != null ? ' · ' + l.AcreageAc + ' ac' : '') +
+        (l.FrontageFt != null ? ' · ' + l.FrontageFt + ' ft front' : '') + '<br>' +
+        'SK ' + chip(s.Sk1) + chip(s.Sk2) + chip(s.Sk3) + ' · composite ' + (s.Composite != null ? s.Composite : '—') + '<br>' +
+        ((l.Flags || []).length ? '<span style="color:#C2401B">' + esc((l.Flags || []).join(' · ')) + '</span><br>' : '') +
+        '<a href="' + esc(l.SourceUrl) + '" target="_blank" rel="noopener">View listing ↗</a></div>';
+      L.circleMarker([l.Lat, l.Lon], { radius: 9, color: '#1C1B18', weight: 1.5,
+        fillColor: BANDCOLOR[band(s.Composite || 0)], fillOpacity: .92 })
+        .addTo(m).bindPopup(pop);
+    });
+    if (pts.length) m.fitBounds(pts, { padding: [30, 30] });
+    window._lotMap = m;
+    if (!document.getElementById('tab-map').hidden) m.invalidateSize();
+  }
+
+  fetch('data.json')
+    .then(function(r){ return r.ok ? r.json() : Promise.reject(); })
+    .then(function(d){
+      document.getElementById('lots-asof').textContent =
+        'AS OF ' + d.AsOf + ' · ' + d.Lots.length + ' LOTS · RANKED BY COMPOSITE SK-FIT SCORE';
+      buildTable(d.Lots);
+      function tryMap(){
+        if (window.L) { buildMap(d.Lots); return true; }
+        return false;
+      }
+      if (!tryMap()){
+        window.addEventListener('load', function(){
+          if (!tryMap()) document.getElementById('map').innerHTML =
+            '<p class="rnote" style="padding:14px">MAP NEEDS LEAFLET (CDN BLOCKED?) — THE TABLE BELOW HAS EVERYTHING</p>';
+        });
+      }
+    })
+    .catch(function(){
+      document.getElementById('lots-asof').textContent = 'NO LOT DATA YET — FIRST WEEKLY SWEEP PENDING';
+    });
+
   fetch('renders/index.json')
     .then(function(r){ return r.ok ? r.json() : Promise.reject(); })
     .then(function(list){

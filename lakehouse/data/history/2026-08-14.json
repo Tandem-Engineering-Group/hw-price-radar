@@ -1,0 +1,460 @@
+{
+ "AsOf": "2026-08-14",
+ "Lots": [
+  {
+   "LotId": "a157405d8ba5",
+   "Source": "watchlist",
+   "SourceUrl": "https://www.mirealsource.com/7681-nw-torch-lake-kewadin-mi-49648/aspmi80053934_l_MiRealSource",
+   "Lat": 44.998,
+   "Lon": -85.335,
+   "Status": "Active",
+   "FirstSeen": "2026-08-14",
+   "LastSeen": "2026-08-14",
+   "PriceUsd": 2400000,
+   "PriceHistory": [
+    {
+     "Date": "2026-08-14",
+     "PriceUsd": 2400000
+    }
+   ],
+   "AcreageAc": 2.77,
+   "FrontageFt": 247,
+   "LakeName": "Torch Lake",
+   "LakeTier": "Tier1",
+   "County": "Antrim",
+   "Township": null,
+   "RoadElevationFt": null,
+   "ShoreElevationFt": null,
+   "GradeFallFt": null,
+   "ShoreFacing": null,
+   "DriveMinsFromDetroit": 280,
+   "Name": "7681 NW Torch Lake Dr \u2014 Torch Lake",
+   "Utilities": null,
+   "UtilitiesBand": null,
+   "GrowthBand": "Med",
+   "TaxBand": "Low",
+   "LastVerified": "2026-08-14",
+   "Scores": {
+    "Sk1": "AMBER",
+    "Sk2": "AMBER",
+    "Sk3": "AMBER",
+    "Composite": 57
+   },
+   "Flags": [
+    "ApproxLocation",
+    "MayHaveStructure",
+    "NeedsElevation"
+   ],
+   "Notes": "MLS 1930547. Wooded, end-of-road privacy, west shore. Price conflict: $2.4M vs $2.25M (Scofield). Listed as vacant land but description mentions an existing home usable as guest house \u2014 verify before treating as raw lot.",
+   "Placeholder": false
+  },
+  {
+   "LotId": "3c50a0523470",
+   "Source": "watchlist",
+   "SourceUrl": "https://www.watersideproperties.net/23/torch-lake-properties",
+   "Lat": 44.883,
+   "Lon": -85.264,
+   "Status": "Active",
+   "FirstSeen": "2026-08-14",
+   "LastSeen": "2026-08-14",
+   "PriceUsd": 2600000,
+   "PriceHistory": [
+    {
+     "Date": "2026-08-14",
+     "PriceUsd": 2600000
+    }
+   ],
+   "AcreageAc": 0.9,
+   "FrontageFt": 102,
+   "LakeName": "Torch Lake",
+   "LakeTier": "Tier1",
+   "County": "Antrim",
+   "Township": null,
+   "RoadElevationFt": null,
+   "ShoreElevationFt": null,
+   "GradeFallFt": null,
+   "ShoreFacing": "W",
+   "DriveMinsFromDetroit": 269,
+   "Name": "Torch Lake Dr vacant parcel, Alden \u2014 Torch Lake",
+   "Utilities": null,
+   "UtilitiesBand": null,
+   "GrowthBand": "Med",
+   "TaxBand": "Low",
+   "LastVerified": "2026-08-14",
+   "Scores": {
+    "Sk1": "AMBER",
+    "Sk2": "AMBER",
+    "Sk3": "GREEN",
+    "Composite": 55
+   },
+   "Flags": [
+    "ApproxLocation",
+    "IndexUrlOnly",
+    "NeedsElevation"
+   ],
+   "Notes": "\"Nearly one acre, 102 ft of crystal-clear frontage.\" Alden side = east shore, so W (sunset) facing is inferred from the address, not stated. No individual listing URL surfaced \u2014 broker inventory page linked.",
+   "Placeholder": false
+  },
+  {
+   "LotId": "fc9f20192b9d",
+   "Source": "watchlist",
+   "SourceUrl": "https://www.realestateone.com/MI/Antrim/Williamsburg/LOT-1-Elk-Vista-Court-Williamsburg-MI-49690/1919960-MITAAR",
+   "Lat": 44.815,
+   "Lon": -85.39,
+   "Status": "Active",
+   "FirstSeen": "2026-08-14",
+   "LastSeen": "2026-08-14",
+   "PriceUsd": 225000,
+   "PriceHistory": [
+    {
+     "Date": "2026-08-14",
+     "PriceUsd": 225000
+    }
+   ],
+   "AcreageAc": 5.06,
+   "FrontageFt": null,
+   "LakeName": "Elk Lake",
+   "LakeTier": "Tier1",
+   "County": "Antrim",
+   "Township": null,
+   "RoadElevationFt": null,
+   "ShoreElevationFt": null,
+   "GradeFallFt": null,
+   "ShoreFacing": null,
+   "DriveMinsFromDetroit": 268,
+   "Name": "Lot 1 Elk Vista Court \u2014 Elk Lake view",
+   "Utilities": "Underground natural gas, 400A electric, private well + septic, 1-gig fiber (spring 2026)",
+   "UtilitiesBand": "Full",
+   "GrowthBand": "High",
+   "TaxBand": "Med",
+   "LastVerified": "2026-08-14",
+   "Scores": {
+    "Sk1": "AMBER",
+    "Sk2": "AMBER",
+    "Sk3": "AMBER",
+    "Composite": 45
+   },
+   "Flags": [
+    "ApproxLocation",
+    "NeedsElevation",
+    "NotWaterfront"
+   ],
+   "Notes": "MLS 1919960. NOT waterfront \u2014 partial Elk Lake views. Included as a feasibility wildcard: gentle topography stated to support walkouts (SK-1 geometry without the frontage), best utility package of the sweep, 6 of 9 lots already under contract. 1/9 interest in 6.6-acre preserve.",
+   "Placeholder": false
+  },
+  {
+   "LotId": "4b30966aeb29",
+   "Source": "watchlist",
+   "SourceUrl": "https://www.landsearch.com/properties/2620-sandy-rdg-lake-leelanau-mi-49653/4143113",
+   "Lat": 44.972,
+   "Lon": -85.712,
+   "Status": "Active",
+   "FirstSeen": "2026-08-14",
+   "LastSeen": "2026-08-14",
+   "PriceUsd": 649000,
+   "PriceHistory": [
+    {
+     "Date": "2026-08-14",
+     "PriceUsd": 649000
+    }
+   ],
+   "AcreageAc": 0.35,
+   "FrontageFt": 110,
+   "LakeName": "Lake Leelanau",
+   "LakeTier": "Tier2",
+   "County": "Leelanau",
+   "Township": null,
+   "RoadElevationFt": null,
+   "ShoreElevationFt": null,
+   "GradeFallFt": null,
+   "ShoreFacing": null,
+   "DriveMinsFromDetroit": 292,
+   "Name": "Sandy Ridge Rd Lot 7 \u2014 Lake Leelanau",
+   "Utilities": "Cable, gas, electric at street; approved conventional septic",
+   "UtilitiesBand": "Full",
+   "GrowthBand": "High",
+   "TaxBand": "Low",
+   "LastVerified": "2026-08-14",
+   "Scores": {
+    "Sk1": "AMBER",
+    "Sk2": "AMBER",
+    "Sk3": "AMBER",
+    "Composite": 43
+   },
+   "Flags": [
+    "ApproxLocation",
+    "NeedsElevation"
+   ],
+   "Notes": "Cleared and prepped, low bluff, hard-sand bottom, cul-de-sac; ~20 min to Traverse City. Price conflict across sources: $649k (LandSearch) vs $700k (Sterling Properties MLS 1929806) \u2014 using lower until verified.",
+   "Placeholder": false
+  },
+  {
+   "LotId": "dfa653818dee",
+   "Source": "watchlist",
+   "SourceUrl": "https://www.landsearch.com/properties/eagle-point-rd-grayling-mi-49738/4248798",
+   "Lat": 44.657,
+   "Lon": -84.775,
+   "Status": "Active",
+   "FirstSeen": "2026-08-14",
+   "LastSeen": "2026-08-14",
+   "PriceUsd": null,
+   "PriceHistory": [],
+   "AcreageAc": null,
+   "FrontageFt": 180,
+   "LakeName": "Lake Margrethe",
+   "LakeTier": "Other",
+   "County": "Crawford",
+   "Township": null,
+   "RoadElevationFt": null,
+   "ShoreElevationFt": null,
+   "GradeFallFt": null,
+   "ShoreFacing": "W",
+   "DriveMinsFromDetroit": 236,
+   "Name": "Eagle Point tip lot \u2014 Lake Margrethe",
+   "Utilities": "Natural gas and high-speed internet available (electric not stated)",
+   "UtilitiesBand": "Partial",
+   "GrowthBand": "Low",
+   "TaxBand": "Med",
+   "LastVerified": "2026-08-14",
+   "Scores": {
+    "Sk1": "AMBER",
+    "Sk2": "AMBER",
+    "Sk3": "GREEN",
+    "Composite": 43
+   },
+   "Flags": [
+    "ApproxLocation",
+    "NeedsElevation",
+    "PriceOnInquiry"
+   ],
+   "Notes": "MLS 201828162 (RE/MAX Grayling). \"Perhaps the last undeveloped lot\" on the lake; point lot with stated sunrise AND sunset views (W facing set from the sunset statement). One snippet says \"10 lots on Eagle Point Road\" \u2014 parcel identity needs verification.",
+   "Placeholder": false
+  },
+  {
+   "LotId": "9645393f9375",
+   "Source": "watchlist",
+   "SourceUrl": "https://www.trishhartwick.com/crooked-lake/",
+   "Lat": 45.415,
+   "Lon": -84.845,
+   "Status": "Active",
+   "FirstSeen": "2026-08-14",
+   "LastSeen": "2026-08-14",
+   "PriceUsd": null,
+   "PriceHistory": [],
+   "AcreageAc": 1.5,
+   "FrontageFt": 250,
+   "LakeName": "Crooked Lake",
+   "LakeTier": "Other",
+   "County": "Emmet",
+   "Township": null,
+   "RoadElevationFt": null,
+   "ShoreElevationFt": null,
+   "GradeFallFt": null,
+   "ShoreFacing": null,
+   "DriveMinsFromDetroit": 298,
+   "Name": "Channel Rd estate parcel \u2014 Crooked Lake",
+   "Utilities": "EGLE approval and septic easement in place (electric/gas not stated)",
+   "UtilitiesBand": null,
+   "GrowthBand": "High",
+   "TaxBand": "Med",
+   "LastVerified": "2026-08-14",
+   "Scores": {
+    "Sk1": "AMBER",
+    "Sk2": "AMBER",
+    "Sk3": "AMBER",
+    "Composite": 42
+   },
+   "Flags": [
+    "ApproxLocation",
+    "NeedsElevation",
+    "PriceOnInquiry"
+   ],
+   "Notes": "MLS 479964, stated ACTIVE. Cleared, park-like, private protected cove, sandy bottom, views of Oden Island; \"one of the last estate-sized parcels\" on the lake. Price not published in search results \u2014 broker link.",
+   "Placeholder": false
+  },
+  {
+   "LotId": "1b983d5a1b94",
+   "Source": "watchlist",
+   "SourceUrl": "https://www.brookwalsh.com/shoreline-lake-charlevoix.php",
+   "Lat": 45.171,
+   "Lon": -85.135,
+   "Status": "Active",
+   "FirstSeen": "2026-08-14",
+   "LastSeen": "2026-08-14",
+   "PriceUsd": null,
+   "PriceHistory": [],
+   "AcreageAc": null,
+   "FrontageFt": null,
+   "LakeName": "Lake Charlevoix",
+   "LakeTier": "Tier1",
+   "County": "Charlevoix",
+   "Township": null,
+   "RoadElevationFt": null,
+   "ShoreElevationFt": null,
+   "GradeFallFt": null,
+   "ShoreFacing": null,
+   "DriveMinsFromDetroit": 287,
+   "Name": "Shoreline home sites, East Jordan \u2014 Lake Charlevoix",
+   "Utilities": "Developer home sites (municipal-adjacent); dock slip assigned at purchase",
+   "UtilitiesBand": "Full",
+   "GrowthBand": "Med",
+   "TaxBand": "Low",
+   "LastVerified": "2026-08-14",
+   "Scores": {
+    "Sk1": "AMBER",
+    "Sk2": "AMBER",
+    "Sk3": "AMBER",
+    "Composite": 35
+   },
+   "Flags": [
+    "ApproxLocation",
+    "NeedsElevation",
+    "PriceOnInquiry",
+    "SharedFrontage"
+   ],
+   "Notes": "Development lots from \"under $400,000\"; 225+ ft of SHARED sandy-bottom frontage (left out of FrontageFt so it doesn't score as private), assigned dock slips incl. cruiser wells/boat lifts. Min lot 9,500 sqft.",
+   "Placeholder": false
+  },
+  {
+   "LotId": "6902bf25eb39",
+   "Source": "watchlist",
+   "SourceUrl": "https://www.movoto.com/beulah-mi/lot4-crystal-view-cmns-beulah-mi-49617-842_1932651/",
+   "Lat": 44.64,
+   "Lon": -86.12,
+   "Status": "Active",
+   "FirstSeen": "2026-08-14",
+   "LastSeen": "2026-08-14",
+   "PriceUsd": 150000,
+   "PriceHistory": [
+    {
+     "Date": "2026-08-14",
+     "PriceUsd": 150000
+    }
+   ],
+   "AcreageAc": 3.0,
+   "FrontageFt": null,
+   "LakeName": "Crystal Lake",
+   "LakeTier": "Tier1",
+   "County": "Benzie",
+   "Township": null,
+   "RoadElevationFt": null,
+   "ShoreElevationFt": null,
+   "GradeFallFt": null,
+   "ShoreFacing": null,
+   "DriveMinsFromDetroit": 286,
+   "Name": "Lot 4 Crystal View Commons \u2014 Crystal Lake bluff view",
+   "Utilities": null,
+   "UtilitiesBand": null,
+   "GrowthBand": "Med",
+   "TaxBand": "Med",
+   "LastVerified": "2026-08-14",
+   "Scores": {
+    "Sk1": "AMBER",
+    "Sk2": "AMBER",
+    "Sk3": "AMBER",
+    "Composite": 34
+   },
+   "Flags": [
+    "ApproxLocation",
+    "NeedsElevation",
+    "NotWaterfront"
+   ],
+   "Notes": "MLS 1932651. NOT waterfront \u2014 bluff site with Crystal Lake view, 3 acres. Private gravel road, buyer installs well + septic, association design approval required. Cheap-land wildcard for a view-driven SK-3.",
+   "Placeholder": false
+  },
+  {
+   "LotId": "ff86b694144a",
+   "Source": "watchlist",
+   "SourceUrl": "https://www.lakehouse.com/000-arbutus-ln-beulah-michigan-49617-p6675591.html",
+   "Lat": 44.635,
+   "Lon": -86.1,
+   "Status": "Active",
+   "FirstSeen": "2026-08-14",
+   "LastSeen": "2026-08-14",
+   "PriceUsd": 245000,
+   "PriceHistory": [
+    {
+     "Date": "2026-08-14",
+     "PriceUsd": 245000
+    }
+   ],
+   "AcreageAc": 1.2,
+   "FrontageFt": null,
+   "LakeName": "Crystal Lake",
+   "LakeTier": "Tier1",
+   "County": "Benzie",
+   "Township": null,
+   "RoadElevationFt": null,
+   "ShoreElevationFt": null,
+   "GradeFallFt": null,
+   "ShoreFacing": null,
+   "DriveMinsFromDetroit": 285,
+   "Name": "Arbutus Ln, Buttercup Shores \u2014 Crystal Lake",
+   "Utilities": null,
+   "UtilitiesBand": null,
+   "GrowthBand": "Med",
+   "TaxBand": "Med",
+   "LastVerified": "2026-08-14",
+   "Scores": {
+    "Sk1": "AMBER",
+    "Sk2": "AMBER",
+    "Sk3": "AMBER",
+    "Composite": 30
+   },
+   "Flags": [
+    "ApproxLocation",
+    "NeedsElevation",
+    "SharedFrontage"
+   ],
+   "Notes": "1.2 ac with association privileges on 295 ft of SHARED Crystal Lake frontage (swim/boat/shore use \u2014 not private, so FrontageFt left null). Seasonal bay views; minutes to Beulah/Frankfort.",
+   "Placeholder": false
+  },
+  {
+   "LotId": "106c7e405c26",
+   "Source": "watchlist",
+   "SourceUrl": "https://www.landsearch.com/properties/marion-ctr-charlevoix-mi-49720/2402777",
+   "Lat": 45.283,
+   "Lon": -85.245,
+   "Status": "Active",
+   "FirstSeen": "2026-08-14",
+   "LastSeen": "2026-08-14",
+   "PriceUsd": 200000,
+   "PriceHistory": [
+    {
+     "Date": "2026-08-14",
+     "PriceUsd": 200000
+    }
+   ],
+   "AcreageAc": 1.33,
+   "FrontageFt": null,
+   "LakeName": null,
+   "LakeTier": "Other",
+   "County": "Charlevoix",
+   "Township": null,
+   "RoadElevationFt": null,
+   "ShoreElevationFt": null,
+   "GradeFallFt": null,
+   "ShoreFacing": null,
+   "DriveMinsFromDetroit": 299,
+   "Name": "Marion Center Rd parcel \u2014 Charlevoix",
+   "Utilities": null,
+   "UtilitiesBand": null,
+   "GrowthBand": "Med",
+   "TaxBand": "Low",
+   "LastVerified": "2026-08-14",
+   "Scores": {
+    "Sk1": "AMBER",
+    "Sk2": "AMBER",
+    "Sk3": "AMBER",
+    "Composite": 18
+   },
+   "Flags": [
+    "ApproxLocation",
+    "NeedsElevation",
+    "WaterfrontUnverified"
+   ],
+   "Notes": "1.33 ac in a 7-parcel development (avg 118 ft frontage, ~450 ft deep). Surfaced under a waterfront query but the frontage may be ROAD frontage \u2014 waterfront status unverified, no lake attributed until confirmed.",
+   "Placeholder": false
+  }
+ ]
+}

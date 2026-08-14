@@ -31,7 +31,6 @@ jobs:
           git config user.name "lot-radar-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/ ../site/lakehouse/
-          git diff --cached --quiet || git commit -m "lakehouse: weekly radar $(date -u +%F)"
-          git push
+          git diff --cached --quiet || { git commit -m "lakehouse: weekly radar $(date -u +%F)"; git pull --rebase origin main; git push; }
   # No Pages job here: pushing site/** triggers the host repo's daily-prices deploy,
   # which publishes all of site/ (including site/lakehouse/).

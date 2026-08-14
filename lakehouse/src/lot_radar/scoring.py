@@ -88,6 +88,18 @@ def _composite(lot: dict, cfg: dict) -> int:
     budget = cfg["Budget"]["MaxPriceUsd"]
     if budget and lot.get("PriceUsd") and lot["PriceUsd"] <= budget:
         pts += w["PriceUnderBudget"]
+    # judgment-tier bands, set by the weekly sweep; missing band = no points
+    for weight_key, lot_key in (("Utilities", "UtilitiesBand"),
+                                ("Growth", "GrowthBand"),
+                                ("Tax", "TaxBand")):
+        band = lot.get(lot_key)
+        if band and weight_key in w:
+            pts += w[weight_key].get(band, 0)
+    # market value: asking price per foot of frontage
+    pf = w.get("PricePerFrontFt")
+    if pf and lot.get("PriceUsd") and fr:
+        ppf = lot["PriceUsd"] / fr
+        pts += pf["Le3000"] if ppf <= 3000 else pf["Le5000"] if ppf <= 5000 else pf["Gt5000"]
     return min(pts, 100)
 
 

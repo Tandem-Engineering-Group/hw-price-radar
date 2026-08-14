@@ -7,6 +7,8 @@ from typing import Optional
 
 VALID_STATUS = {"Active", "Pending", "Sold", "Delisted"}
 VALID_FACING = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"}
+VALID_UTILITIES_BAND = {"Full", "Partial", "None"}
+VALID_LEVEL_BAND = {"High", "Med", "Low"}
 
 
 def lot_id(source_url: str) -> str:
@@ -36,6 +38,12 @@ class Lot:
     GradeFallFt: Optional[float] = None
     ShoreFacing: Optional[str] = None
     DriveMinsFromDetroit: Optional[int] = None
+    Name: Optional[str] = None
+    Utilities: Optional[str] = None
+    UtilitiesBand: Optional[str] = None
+    GrowthBand: Optional[str] = None
+    TaxBand: Optional[str] = None
+    LastVerified: Optional[str] = None
     Scores: dict = field(default_factory=dict)
     Flags: list = field(default_factory=list)
     Notes: str = ""
@@ -49,6 +57,12 @@ class Lot:
             problems.append(f"ShoreFacing '{self.ShoreFacing}' invalid")
         if not (-90 <= self.Lat <= 90 and -180 <= self.Lon <= 180):
             problems.append("Lat/Lon out of range")
+        if self.UtilitiesBand and self.UtilitiesBand not in VALID_UTILITIES_BAND:
+            problems.append(f"UtilitiesBand '{self.UtilitiesBand}' invalid")
+        for name in ("GrowthBand", "TaxBand"):
+            val = getattr(self, name)
+            if val and val not in VALID_LEVEL_BAND:
+                problems.append(f"{name} '{val}' invalid")
         return problems
 
     def to_dict(self) -> dict:

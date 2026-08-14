@@ -62,6 +62,19 @@ def test_composite_rewards_tier1_slope_frontage():
     assert "NarrowFrontage" in weak["Flags"]
 
 
+def test_composite_judgment_bands_add_points():
+    plain = score_lot(base(GradeFallFt=1.0), CFG, LAKES)
+    banded = score_lot(base(GradeFallFt=1.0, UtilitiesBand="Full",
+                            GrowthBand="High", TaxBand="Low"), CFG, LAKES)
+    assert banded["Scores"]["Composite"] > plain["Scores"]["Composite"]
+
+
+def test_composite_rewards_price_per_front_foot():
+    value = score_lot(base(GradeFallFt=1.0, PriceUsd=400000), CFG, LAKES)
+    dear = score_lot(base(GradeFallFt=1.0, PriceUsd=900000), CFG, LAKES)
+    assert value["Scores"]["Composite"] > dear["Scores"]["Composite"]
+
+
 def test_drive_minutes_computed():
     lot = score_lot(base(GradeFallFt=9.0), CFG, LAKES)
     assert 150 <= lot["DriveMinsFromDetroit"] <= 320
