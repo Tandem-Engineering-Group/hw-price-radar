@@ -20,8 +20,9 @@ Two concerns, one personal project (split later if either grows):
    Michigan lakehouse (SK-1 Stacked Chalet, SK-2 A + Bar, SK-3 Kicked Ridge). Static
    reference: deck, diagrams, render prompt pack. Nothing to build; this is design context
    for everything below.
-2. **Lot Radar** — automated weekly discovery + scoring of lakefront lots in northern
-   Michigan, published to a static GitHub Pages dashboard. The radar's job is to answer
+2. **Lot Radar** — automated weekly discovery + scoring of lakefront lots on Michigan
+   INTERIOR lakes statewide (northern tier + downstate; Great Lakes frontage out of
+   scope), published to a static GitHub Pages dashboard. The radar's job is to answer
    the open design question: **which parti does the land want?** SK-1 needs 8–10 ft of
    grade fall to the water; SK-2 wants a wide flat lot; SK-3 wants a view axis. The
    scoring engine encodes exactly that.
@@ -119,11 +120,13 @@ Search scope: waterfront **lots/land** (not homes), counties in `config/counties
 price cap from `config/scoring.yml`. Every adapter failure = AMBER flag in dashboard
 footer with LastGoodRun date, never a crashed pipeline.
 
-## Dashboard (Phase 3)
+## Dashboard (Phase 3 — first cut LIVE)
 
-Single static page in `site/lakehouse/` (currently the SK concept portal — Phase 3 grows
-it into the radar dashboard, keeping the sheet set), vanilla JS + Leaflet (CDN), no build
-step, must still render if CDNs are blocked. Reuses the SK
+Single static page in `site/lakehouse/` with two tabs: **SK Set** (concept sheet set +
+render strip) and **Lot Map** (Leaflet CDN + OSM tiles; weekly top-10 markers colored by
+composite band, popup links to the live listing, sortable-enough table below). Reads
+`data.json` (written by the pipeline) at a relative path. No build step; the page must
+still fully render if CDNs are blocked — the table works without Leaflet. Reuses the SK
 drafting aesthetic: vellum `#EFEDE6`, ink `#1C1B18`, graphite `#6E6A61`, redline
 `#C2401B` for flags/watch-outs, lake `#3E7C96`. Monospace labels, sheet-border framing —
 match `docs/sk-set/aframe-hybrid-concept-partis.html`.
@@ -154,18 +157,30 @@ enrichment; cache forever) → score → write data + snapshot → render `site/
 digest so the phone gets a native notification. No Pages deploy job of its own: a push
 touching `site/**` triggers the host repo's deploy automatically.
 
+## Weekly sweep (live) — how the 10 lots stay fresh
+
+A weekly claude.ai Routine (Mondays, fresh session) does the judgment work no adapter
+can: re-verify each watchlist lot via WebSearch (listing pages are egress-blocked from
+the session — snippets only, facts never invented), update prices/Status/LastVerified,
+hunt replacements, keep ~20 Active lots (statewide interior lakes — cover northern tier
+AND downstate each sweep), then run pytest + the pipeline and ship via PR. Conventions it must keep: FrontageFt is PRIVATE frontage only; ApproxLocation /
+SharedFrontage / NotWaterfront / WaterfrontUnverified / MayHaveStructure /
+PriceOnInquiry / IndexUrlOnly flags; bands per scoring.yml comments; lower price on
+conflicts, noted. The `lot-radar-weekly.yml` Action stays dispatch-only (rescore
+without discovery) until Phase 5 replaces the Routine.
+
 ## Phase plan — STOP at every gate
 
-- **Phase 0 — Verify scaffold.** Read every file in this repo. Run `pytest` (scoring tests
-  must pass). Report tree + test results. **STOP.**
-- **Phase 1 — Pipeline core on seeds.** Implement `pipeline.py` end-to-end using only
-  `config/watchlist.yml` seeds (no network). Output `data/lots.json` + scored table
-  printed in chat. **STOP: review scores against the rubric by hand.**
+- **Phase 0 — Verify scaffold.** ✅ done (2026-08-14): tests green.
+- **Phase 1 — Pipeline core on seeds.** ✅ done (2026-08-14): `pipeline.py` runs
+  watchlist → merge/diff → score → `data/lots.json` + history snapshot +
+  `site/lakehouse/data.json`. Watchlist now carries 10 REAL curated listings
+  (placeholders retired).
 - **Phase 2 — Live enrichment.** Validate EPQS on 2–3 known points (e.g. a Torch Lake
   shore point vs a point 500 ft inland — sanity: shore ≈ 590 ft ASL). Wire Overpass shore
   lookup + drive-time calc. Re-score seeds. **STOP: confirm GradeFallFt numbers look sane.**
-- **Phase 3 — Dashboard.** Grow `site/lakehouse/` into the radar dashboard, load seed data.
-  **STOP: share URL, visual check on mobile.**
+- **Phase 3 — Dashboard.** ✅ first cut done (2026-08-14): Lot Map tab live with real
+  data. Remaining: filter bar, This Week diff panel, lot detail cards.
 - **Phase 4 — Adapters.** One source at a time, fixture-tested, politeness rules above.
   **STOP after each adapter with sample discoveries.**
 - **Phase 5 — Automation.** Uncomment the cron in `.github/workflows/lot-radar-weekly.yml`, add the

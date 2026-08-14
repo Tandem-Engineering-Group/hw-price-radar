@@ -1,44 +1,359 @@
-# PLACEHOLDER SEEDS — pipeline exercise only. Coordinates are generic shore-adjacent
-# points, NOT real listings. Replace SourceUrl with real listing URLs to promote a lot;
-# anything still marked Placeholder: true is excluded from the published dashboard.
+# Weekly top-10 watchlist — REAL public listings, curated by the weekly agentic
+# sweep from web-search results (listing pages themselves are egress-blocked from
+# the sweep environment, so facts come from search snippets and are re-verified
+# weekly; see Notes per lot). Lat/Lon are lake/road-level approximations, never
+# parcel surveys — every lot carries the ApproxLocation flag. FrontageFt is
+# PRIVATE frontage only; shared/association frontage is described in Notes and
+# left null so it never inflates scoring. Bands (Utilities/Growth/Tax) follow
+# config/scoring.yml rules: statement-based utilities, county-level judgment for
+# growth and non-homestead tax burden.
+# Swept: 2026-08-14
 Lots:
-  - Placeholder: true
-    SourceUrl: "TODO-paste-listing-url-1"
+  - SourceUrl: "https://www.landsearch.com/properties/2620-sandy-rdg-lake-leelanau-mi-49653/4143113"
+    Name: "Sandy Ridge Rd Lot 7 — Lake Leelanau"
+    LakeName: Lake Leelanau
+    County: Leelanau
+    Lat: 44.972
+    Lon: -85.712
+    PriceUsd: 649000
+    AcreageAc: 0.35
+    FrontageFt: 110
+    UtilitiesBand: Full
+    Utilities: "Cable, gas, electric at street; approved conventional septic"
+    GrowthBand: High
+    TaxBand: Low
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation]
+    Notes: >-
+      Cleared and prepped, low bluff, hard-sand bottom, cul-de-sac; ~20 min to
+      Traverse City. Price conflict across sources: $649k (LandSearch) vs $700k
+      (Sterling Properties MLS 1929806) — using lower until verified.
+  - SourceUrl: "https://www.trishhartwick.com/crooked-lake/"
+    Name: "Channel Rd estate parcel — Crooked Lake"
+    LakeName: Crooked Lake
+    County: Emmet
+    Lat: 45.415
+    Lon: -84.845
+    PriceUsd: null
+    AcreageAc: 1.5
+    FrontageFt: 250
+    Utilities: "EGLE approval and septic easement in place (electric/gas not stated)"
+    GrowthBand: High
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, PriceOnInquiry]
+    Notes: >-
+      MLS 479964, stated ACTIVE. Cleared, park-like, private protected cove,
+      sandy bottom, views of Oden Island; "one of the last estate-sized parcels"
+      on the lake. Price not published in search results — broker link.
+  - SourceUrl: "https://www.mirealsource.com/7681-nw-torch-lake-kewadin-mi-49648/aspmi80053934_l_MiRealSource"
+    Name: "7681 NW Torch Lake Dr — Torch Lake"
     LakeName: Torch Lake
     County: Antrim
-    Lat: 44.9410
-    Lon: -85.3080
-    PriceUsd: 495000
-    AcreageAc: 1.2
-    FrontageFt: 150
+    Lat: 44.998
+    Lon: -85.335
+    PriceUsd: 2400000
+    AcreageAc: 2.77
+    FrontageFt: 247
+    GrowthBand: Med
+    TaxBand: Low
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, MayHaveStructure]
+    Notes: >-
+      MLS 1930547. Wooded, end-of-road privacy, west shore. Price conflict:
+      $2.4M vs $2.25M (Scofield). Listed as vacant land but description mentions
+      an existing home usable as guest house — verify before treating as raw lot.
+  - SourceUrl: "https://www.watersideproperties.net/23/torch-lake-properties"
+    Name: "Torch Lake Dr vacant parcel, Alden — Torch Lake"
+    LakeName: Torch Lake
+    County: Antrim
+    Lat: 44.883
+    Lon: -85.264
+    PriceUsd: 2600000
+    AcreageAc: 0.9
+    FrontageFt: 102
     ShoreFacing: W
-  - Placeholder: true
-    SourceUrl: "TODO-paste-listing-url-2"
-    LakeName: Higgins Lake
-    County: Roscommon
-    Lat: 44.4790
-    Lon: -84.7580
-    PriceUsd: 325000
-    AcreageAc: 0.8
-    FrontageFt: 100
-    ShoreFacing: NW
-  - Placeholder: true
-    SourceUrl: "TODO-paste-listing-url-3"
-    LakeName: Walloon Lake
+    GrowthBand: Med
+    TaxBand: Low
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, IndexUrlOnly]
+    Notes: >-
+      "Nearly one acre, 102 ft of crystal-clear frontage." Alden side = east
+      shore, so W (sunset) facing is inferred from the address, not stated.
+      No individual listing URL surfaced — broker inventory page linked.
+  - SourceUrl: "https://www.landsearch.com/properties/eagle-point-rd-grayling-mi-49738/4248798"
+    Name: "Eagle Point tip lot — Lake Margrethe"
+    LakeName: Lake Margrethe
+    County: Crawford
+    Lat: 44.657
+    Lon: -84.775
+    PriceUsd: null
+    FrontageFt: 180
+    ShoreFacing: W
+    UtilitiesBand: Partial
+    Utilities: "Natural gas and high-speed internet available (electric not stated)"
+    GrowthBand: Low
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, PriceOnInquiry]
+    Notes: >-
+      MLS 201828162 (RE/MAX Grayling). "Perhaps the last undeveloped lot" on the
+      lake; point lot with stated sunrise AND sunset views (W facing set from
+      the sunset statement). One snippet says "10 lots on Eagle Point Road" —
+      parcel identity needs verification.
+  - SourceUrl: "https://www.brookwalsh.com/shoreline-lake-charlevoix.php"
+    Name: "Shoreline home sites, East Jordan — Lake Charlevoix"
+    LakeName: Lake Charlevoix
     County: Charlevoix
-    Lat: 45.2650
-    Lon: -84.9720
-    PriceUsd: 610000
-    AcreageAc: 1.8
-    FrontageFt: 175
+    Lat: 45.171
+    Lon: -85.135
+    PriceUsd: null
+    UtilitiesBand: Full
+    Utilities: "Developer home sites (municipal-adjacent); dock slip assigned at purchase"
+    GrowthBand: Med
+    TaxBand: Low
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, SharedFrontage, PriceOnInquiry]
+    Notes: >-
+      Development lots from "under $400,000"; 225+ ft of SHARED sandy-bottom
+      frontage (left out of FrontageFt so it doesn't score as private), assigned
+      dock slips incl. cruiser wells/boat lifts. Min lot 9,500 sqft.
+  - SourceUrl: "https://www.lakehouse.com/000-arbutus-ln-beulah-michigan-49617-p6675591.html"
+    Name: "Arbutus Ln, Buttercup Shores — Crystal Lake"
+    LakeName: Crystal Lake
+    County: Benzie
+    Lat: 44.635
+    Lon: -86.100
+    PriceUsd: 245000
+    AcreageAc: 1.2
+    GrowthBand: Med
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, SharedFrontage]
+    Notes: >-
+      1.2 ac with association privileges on 295 ft of SHARED Crystal Lake
+      frontage (swim/boat/shore use — not private, so FrontageFt left null).
+      Seasonal bay views; minutes to Beulah/Frankfort.
+  - SourceUrl: "https://www.landsearch.com/properties/marion-ctr-charlevoix-mi-49720/2402777"
+    Name: "Marion Center Rd parcel — Charlevoix"
+    County: Charlevoix
+    Lat: 45.283
+    Lon: -85.245
+    PriceUsd: 200000
+    AcreageAc: 1.33
+    GrowthBand: Med
+    TaxBand: Low
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, WaterfrontUnverified]
+    Notes: >-
+      1.33 ac in a 7-parcel development (avg 118 ft frontage, ~450 ft deep).
+      Surfaced under a waterfront query but the frontage may be ROAD frontage —
+      waterfront status unverified, no lake attributed until confirmed.
+  - SourceUrl: "https://www.realestateone.com/MI/Antrim/Williamsburg/LOT-1-Elk-Vista-Court-Williamsburg-MI-49690/1919960-MITAAR"
+    Name: "Lot 1 Elk Vista Court — Elk Lake view"
+    LakeName: Elk Lake
+    County: Antrim
+    Lat: 44.815
+    Lon: -85.390
+    PriceUsd: 225000
+    AcreageAc: 5.06
+    UtilitiesBand: Full
+    Utilities: "Underground natural gas, 400A electric, private well + septic, 1-gig fiber (spring 2026)"
+    GrowthBand: High
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, NotWaterfront]
+    Notes: >-
+      MLS 1919960. NOT waterfront — partial Elk Lake views. Included as a
+      feasibility wildcard: gentle topography stated to support walkouts (SK-1
+      geometry without the frontage), best utility package of the sweep, 6 of 9
+      lots already under contract. 1/9 interest in 6.6-acre preserve.
+  - SourceUrl: "https://www.movoto.com/beulah-mi/lot4-crystal-view-cmns-beulah-mi-49617-842_1932651/"
+    Name: "Lot 4 Crystal View Commons — Crystal Lake bluff view"
+    LakeName: Crystal Lake
+    County: Benzie
+    Lat: 44.640
+    Lon: -86.120
+    PriceUsd: 150000
+    AcreageAc: 3.0
+    GrowthBand: Med
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, NotWaterfront]
+    Notes: >-
+      MLS 1932651. NOT waterfront — bluff site with Crystal Lake view, 3 acres.
+      Private gravel road, buyer installs well + septic, association design
+      approval required. Cheap-land wildcard for a view-driven SK-3.
+  # ---- statewide interior-lakes expansion, swept 2026-08-14 ----
+  - SourceUrl: "https://www.lakehouse.com/long-lake-presque-isle-county-michigan-lake-homes-for-sale-b7567.html"
+    Name: "SW shore 200 ft — Long Lake (Alpena)"
+    LakeName: Long Lake (Alpena)
+    County: Alpena
+    Lat: 45.155
+    Lon: -83.520
+    PriceUsd: null
+    FrontageFt: 200
+    GrowthBand: Low
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, PriceOnInquiry, IndexUrlOnly]
+    Notes: >-
+      LakeHouse Ad# 7755282, added 05/2026, updated 06/2026. Private quiet cedar
+      woods at "one of the highest elevations on the lake" (no grade number
+      stated — promising for SK-1, needs elevation check), main-body views.
+  - SourceUrl: "https://www.homes.com/canadian-lakes-mi/land-for-sale/p2/"
+    Name: "Tullymore Lake 127 ft — Canadian Lakes"
+    LakeName: Tullymore Lake
+    County: Mecosta
+    Lat: 43.580
+    Lon: -85.290
+    PriceUsd: null
+    AcreageAc: 0.76
+    FrontageFt: 127
+    GrowthBand: Med
+    TaxBand: Low
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, PriceOnInquiry, IndexUrlOnly]
+    Notes: >-
+      MLS 26028575, stated ACTIVE (2026-format number — freshest true-waterfront
+      signal of the statewide sweep). Private 127 ft frontage, quiet road, near
+      Canadian Lakes clubhouse/golf. Price not published in snippets.
+  - SourceUrl: "https://www.landwatch.com/michigan-land-for-sale/canadian-lakes/waterfront-property"
+    Name: "Lake of the Clouds walkout lot — Canadian Lakes"
+    LakeName: Lake of the Clouds
+    County: Mecosta
+    Lat: 43.585
+    Lon: -85.285
+    PriceUsd: null
+    AcreageAc: 0.5
+    FrontageFt: 100
+    GrowthBand: Med
+    TaxBand: Low
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, PriceOnInquiry, IndexUrlOnly]
+    Notes: >-
+      Across from 6615 Donegal Ct. Wooded, "slopes down to the lake, ideal for a
+      walkout" — the only sweep candidate whose listing states SK-1 walkout
+      topography outright (no grade number; needs elevation check). Canadian
+      Lakes membership incl. golf.
+  - SourceUrl: "https://bid.lastbidrealestate.com/properties/3157229"
+    Name: "Waterfront Lot 5, 174 ft — Lake Isabella"
+    LakeName: Lake Isabella
+    County: Isabella
+    Lat: 43.638
+    Lon: -85.005
+    PriceUsd: null
+    FrontageFt: 174
+    UtilitiesBand: Partial
+    Utilities: "Sewer and natural gas along the road (electric not stated)"
+    GrowthBand: Low
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, PriceOnInquiry, AuctionListing]
+    Notes: >-
+      90 N Rolland Rd, Weidman — SW corner of 800-ac private all-sports lake.
+      Cleared FLAT building site on a protected channel (SK-2 geometry, hurts
+      SK-1). Auction/bid listing (LASTBID) — verify auction is live. HOA
+      $300/yr vacant.
+  - SourceUrl: "https://www.golighthouserealty.com/landlots-for-sale/MI/Coldwater"
+    Name: "Wooded 120 ft — Coldwater Lake"
+    LakeName: Coldwater Lake
+    County: Branch
+    Lat: 41.855
+    Lon: -85.025
+    PriceUsd: 149900
+    FrontageFt: 120
+    GrowthBand: Low
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, IndexUrlOnly]
+    Notes: >-
+      Near Iyopawa Island/Shawnee Shoals. Secluded, wooded, private drive,
+      SEPTIC APPROVED and buildable — "one of the last vacant waterfront lots on
+      Coldwater Lake." Motivated seller, short-term owner financing floated.
+      Price seen once in snippets; re-verify.
+  - SourceUrl: "https://www.lakehomes.com/michigan/north-lake-coldwater-twp"
+    Name: "High-ground 252 ft — North Lake (Coldwater chain)"
+    LakeName: North Lake
+    County: Branch
+    Lat: 41.975
+    Lon: -84.980
+    PriceUsd: null
+    FrontageFt: 252
     ShoreFacing: SW
-  - Placeholder: true
-    SourceUrl: "TODO-paste-listing-url-4"
-    LakeName: Otsego Lake
-    County: Otsego
-    Lat: 44.9600
-    Lon: -84.6870
-    PriceUsd: 210000
-    AcreageAc: 0.6
-    FrontageFt: 70
-    ShoreFacing: E
+    GrowthBand: Low
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, PriceOnInquiry, IndexUrlOnly]
+    Notes: >-
+      North Chain of Lakes. "Excellent HIGH GROUND frontage", mature trees,
+      stated southwestern view + sunsets (SW facing from the listing text).
+      Elevation language promising for SK-1/SK-3; no grade number stated.
+  - SourceUrl: "https://www.mymichiganproperty.com/richland-homes-for-sale/land/"
+    Name: "Eagle's Nest 3.28 ac — Little Gull Lake"
+    LakeName: Little Gull Lake
+    County: Kalamazoo
+    Lat: 42.418
+    Lon: -85.395
+    PriceUsd: 50000
+    AcreageAc: 3.28
+    GrowthBand: High
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, IndexUrlOnly]
+    Notes: >-
+      9145 N 34th St, Richland — "private, wooded waterfrontage" in the
+      seven-site Eagle's Nest enclave next to Gull Lake proper. Frontage feet
+      not stated (left null). Cheapest waterfront-adjacent land of the sweep.
+  - SourceUrl: "https://www.zillow.com/cassopolis-mi/diamond-lake_att/"
+    Name: "21318 Carlton Ave 0.44 ac — Diamond Lake"
+    LakeName: Diamond Lake
+    County: Cass
+    Lat: 41.895
+    Lon: -85.990
+    PriceUsd: 1050000
+    AcreageAc: 0.44
+    GrowthBand: Med
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, IndexUrlOnly, VerifyVacant]
+    Notes: >-
+      Listed by The Lake Life Realty Group; $100k price cut on Aug 1 (strong
+      active signal). Premium SW-market lake (Chicago draw). Verify truly
+      vacant land, not a teardown; frontage feet not stated.
+  - SourceUrl: "https://www.homes.com/hamburg-township-mi/acreage/"
+    Name: "Wooded rolling 3 ac, 123 ft — Strawberry Lake"
+    LakeName: Strawberry Lake
+    County: Livingston
+    Lat: 42.457
+    Lon: -83.855
+    PriceUsd: null
+    AcreageAc: 3.0
+    FrontageFt: 123
+    GrowthBand: High
+    TaxBand: Med
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, PriceOnInquiry, IndexUrlOnly]
+    Notes: >-
+      Hamburg Twp, Huron River / Portage chain of nine all-sports lakes.
+      "Beautifully wooded, rolling, perfectly private" — rolling grade worth an
+      elevation check for SK-1. Rare acreage+frontage combo this close to
+      Detroit (~50 min). Price not published in snippets.
+  - SourceUrl: "https://www.landwatch.com/michigan-land-for-sale/whitmore-lake/waterfront-property"
+    Name: "Sandy-bottom 49 ft — Whitmore Lake"
+    LakeName: Whitmore Lake
+    County: Washtenaw
+    Lat: 42.430
+    Lon: -83.750
+    PriceUsd: null
+    AcreageAc: 0.13
+    FrontageFt: 49
+    GrowthBand: High
+    TaxBand: High
+    LastVerified: "2026-08-14"
+    Flags: [ApproxLocation, PriceOnInquiry, IndexUrlOnly, NarrowFrontage]
+    Notes: >-
+      Northfield Twp parcel B-02-05-255-014, added 04/22/2026. Firm sandy
+      bottom, gentle slope, room within setbacks for parking + lakefront yard.
+      Tightest lot of the set but the closest true frontage to Detroit
+      (~45 min). Price not published in snippets.

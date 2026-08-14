@@ -62,5 +62,4 @@ jobs:
           git config user.name "lakehouse-renders[bot]"
           git config user.email "actions@users.noreply.github.com"
           git add ../site/lakehouse/renders/
-          git diff --cached --quiet || git commit -m "lakehouse: concept renders (${{ inputs.engine }}, ${{ inputs.tier }} tier)"
-          git push
+          git diff --cached --quiet || { git commit -m "lakehouse: concept renders (${{ inputs.engine }}, ${{ inputs.tier }} tier)"; git pull --rebase origin main; git push; }

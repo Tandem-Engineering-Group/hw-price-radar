@@ -1,4 +1,4 @@
-# Northern lower peninsula focus. Trim or extend freely.
+# Michigan interior lakes statewide (northern tier + downstate). Trim or extend freely.
 Counties:
   - Antrim
   - Benzie
@@ -16,3 +16,26 @@ Counties:
   - Presque Isle
   - Roscommon
   - Wexford
+  # northeast
+  - Alcona
+  - Alpena
+  # west/central
+  - Mason
+  - Lake
+  - Mecosta
+  - Isabella
+  - Newaygo
+  # southwest
+  - Kalamazoo
+  - Barry
+  - Allegan
+  - Cass
+  - Van Buren
+  - St. Joseph
+  - Branch
+  # southeast (short drives from Detroit)
+  - Genesee
+  - Livingston
+  - Washtenaw
+  - Oakland
+  - Lapeer

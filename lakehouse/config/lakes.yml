@@ -1,4 +1,6 @@
-# LakeTier drives a scoring bonus. Tier1 = premium clarity/value-retention inland lakes.
+# LakeTier drives a scoring bonus. Tier1 = premium clarity/value-retention inland
+# lakes. Scope is Michigan interior lakes STATEWIDE (northern tier + downstate) —
+# Great Lakes frontage is out of scope.
 Tier1:
   - Torch Lake
   - Elk Lake
@@ -9,6 +11,9 @@ Tier1:
   - Higgins Lake
   - Burt Lake
   - Mullett Lake
+  - Gull Lake           # Kalamazoo/Barry — deep, clear, strongest downstate market
+  - Hubbard Lake        # Alcona — big clear NE water
+  - Diamond Lake        # Cass — premium SW market
 Tier2:
   - Lake Leelanau
   - Intermediate Lake
@@ -18,3 +23,15 @@ Tier2:
   - Long Lake           # Grand Traverse
   - Duck Lake
   - Platte Lake
+  - Gun Lake            # Barry/Allegan
+  - Hamlin Lake         # Mason
+  - Lake Fenton         # Genesee
+  - Grand Lake          # Presque Isle
+  - Big Star Lake       # Lake Co
+  - Klinger Lake        # St. Joseph
+  - Corey Lake          # St. Joseph
+  - Strawberry Lake     # Livingston (Pinckney chain)
+  - Portage Lake        # Livingston/Washtenaw (Pinckney chain)
+  - Lakeville Lake      # Oakland
+  - Lake Avalon         # Montmorency
+  - Long Lake (Alpena)  # Alpena
