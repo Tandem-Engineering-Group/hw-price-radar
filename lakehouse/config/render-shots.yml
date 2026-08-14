@@ -1,0 +1,139 @@
+# Concept-render shot list — prompts lifted verbatim from
+# docs/sk-set/lakehouse-render-prompt-pack.md (Rev 0.1), Midjourney flags dropped.
+# Consumed by tools/render_shots.py, which runs ONLY in the lakehouse-renders
+# Action (the runner has open internet; GEMINI_API_KEY lives in Actions secrets).
+# tier: hero = the default six-shot set; full adds the rest.
+Base: >-
+  Photorealistic architectural photograph, inland lake in northern Michigan,
+  red pines and hemlock forest, calm water, late-summer evening light,
+  medium-format camera, 24mm tilt-shift, natural color grade, no people,
+  no text, no watermark —
+AspectRatio: "16:9"
+Shots:
+  - Id: sk1-hero
+    Scheme: SK-1
+    Label: Hero from the water
+    Tier: hero
+    Prompt: >-
+      classic A-frame cabin with a full-height glass gable facing the lake, steep
+      cedar-clad roof planes, riding on a 3D-printed concrete plinth with visible
+      horizontal print layer lines and one sweeping curved corner, walkout lower
+      level, wide cedar deck with black steel railing, 20-ft shipping-container
+      plunge pool set flush at the deck edge, dark bronze standing-seam trim, warm
+      interior glow through the gable glazing, seen from a dock across still water
+  - Id: sk1-dusk
+    Scheme: SK-1
+    Label: Dusk deck + pool
+    Tier: hero
+    Prompt: >-
+      close view along the lakeside cedar deck at dusk, steaming container plunge
+      pool flush with the decking, black railing, glowing A-frame glass gable
+      rising above, printed-concrete plinth below with corduroy layer lines
+      catching warm light
+  - Id: sk1-3dp
+    Scheme: SK-1
+    Label: 3DP detail
+    Tier: full
+    Prompt: >-
+      macro architectural detail, curved 3D-printed concrete plinth wall wrapping
+      a cabin entry, exposed print layers reading like strata, cedar soffit above,
+      raking evening light
+  - Id: sk1-aerial
+    Scheme: SK-1
+    Label: Aerial
+    Tier: full
+    Prompt: >-
+      drone three-quarter shot of an A-frame cabin on a wooded slope above a lake,
+      garage doors in the uphill gable end of the concrete base, deck and
+      container pool on the lake side, gravel drive winding through pines
+  - Id: sk1-interior
+    Scheme: SK-1
+    Label: Interior
+    Tier: full
+    Prompt: >-
+      A-frame great room looking through full-height gable glazing to a lake,
+      exposed rafters converging overhead, loft catwalk, warm cedar, blackened
+      steel, low sun on the water
+  - Id: sk2-hero
+    Scheme: SK-2
+    Label: Hero at dusk
+    Tier: hero
+    Prompt: >-
+      matte-black standing-seam A-frame with warm wood soffits beside a flat-roof
+      two-story bar volume clad in torrefied ash, joined by a low curved white
+      GFRC entry link with subtle printed texture, slim black railing on the
+      bar's rooftop deck, matte-black container plunge pool running perpendicular
+      toward the lake as a third module, dusk sky, lake reflection
+  - Id: sk2-pool-axis
+    Scheme: SK-2
+    Label: Pool axis
+    Tier: hero
+    Prompt: >-
+      view straight down a cedar deck toward the lake along a container plunge
+      pool, black A-frame wall on the left, wood-clad flat-roof volume with roof
+      terrace on the right, curved white printed link glowing between the two
+      volumes
+  - Id: sk2-3dp-link
+    Scheme: SK-2
+    Label: 3DP link detail
+    Tier: full
+    Prompt: >-
+      detail shot of a curved GFRC facade panel entry link between a black
+      A-frame and a torrefied-wood box, thin shadow gaps between panels,
+      printed-mold surface texture, crisp joints
+  - Id: sk2-aerial
+    Scheme: SK-2
+    Label: Aerial
+    Tier: full
+    Prompt: >-
+      drone shot of an A-frame plus flat-roof bar composition in a lakefront
+      clearing, furnished roof deck, container pool as a third parallel bar,
+      long shadows through pines
+  - Id: sk2-roof-deck
+    Scheme: SK-2
+    Label: Roof deck
+    Tier: full
+    Prompt: >-
+      golden-hour view from the bar's rooftop terrace past the black A-frame
+      ridge to a northern lake, wood decking, slim railing, drink on a side table
+  - Id: sk3-hero
+    Scheme: SK-3
+    Label: Hero side elevation
+    Tier: hero
+    Prompt: >-
+      asymmetric modern lake cabin, one long zinc-gray standing-seam roof plane
+      descending over a drive-under garage, the opposite lake-end eave sweeping
+      upward in a curved glulam kick over a deep lakeside deck, curved larch and
+      GFRC gable panels following the roofline, blackened-steel base, morning
+      mist on the water
+  - Id: sk3-under-kick
+    Scheme: SK-3
+    Label: Under the kick
+    Tier: hero
+    Prompt: >-
+      view from beneath a dramatically upswept curved timber eave sheltering a
+      lake-facing deck, exposed curved glulam rafters overhead, container plunge
+      pool nosing toward the water at the deck corner, low sun flaring under the
+      roof edge
+  - Id: sk3-panel
+    Scheme: SK-3
+    Label: Panel detail
+    Tier: full
+    Prompt: >-
+      close-up of curved GFRC facade panels with fine printed texture tracking a
+      sweeping roof edge, larch siding below, knife-edge shadow lines
+  - Id: sk3-aerial
+    Scheme: SK-3
+    Label: Aerial
+    Tier: full
+    Prompt: >-
+      aerial of an asymmetric long-roof cabin on a lake, roofline curling upward
+      at the water end, deck with a perpendicular container pool, gravel drive
+      disappearing under the roof tail
+  - Id: sk3-interior
+    Scheme: SK-3
+    Label: Interior
+    Tier: full
+    Prompt: >-
+      great room beneath an asymmetric curving roof, curved glulam beams
+      overhead, glazed gable to the lake, larch ceiling, concrete floor
