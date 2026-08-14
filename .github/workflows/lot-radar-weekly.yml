@@ -27,10 +27,20 @@ jobs:
       - run: pytest -q
       - run: PYTHONPATH=src python -m lot_radar.pipeline --weekly
       - name: Commit data + site
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "lot-radar-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/ ../site/lakehouse/
-          git diff --cached --quiet || { git commit -m "lakehouse: weekly radar $(date -u +%F)"; git pull --rebase origin main; git push; }
+          git diff --cached --quiet && exit 0
+          git commit -m "lakehouse: weekly radar $(date -u +%F)"
+          git pull --rebase origin main
+          git push
+          # GITHUB_TOKEN pushes don't fire the site/** trigger — kick the deploy.
+          curl -sS -X POST -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/daily-prices.yml/dispatches" \
+            -d '{"ref":"main"}'
   # No Pages job here: pushing site/** triggers the host repo's daily-prices deploy,
   # which publishes all of site/ (including site/lakehouse/).
