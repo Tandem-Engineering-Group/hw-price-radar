@@ -3,10 +3,10 @@
   "floor": 2299.0,
   "floor90": 3639.0,
   "median90": 3719.0,
-  "trend_month": 130.0,
+  "trend_month": 130.16,
   "proj30": {
-   "date": "2026-09-12",
-   "price": 3849.0
+   "date": "2026-09-13",
+   "price": 3849.16
   },
   "references": {
    "launch_price": 2299

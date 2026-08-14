@@ -1,5 +1,5 @@
 {
- "as_of": "2026-08-13T14:33:20+00:00",
+ "as_of": "2026-08-14T14:19:29+00:00",
  "skus": {
   "ms-s1-max-128": {
    "name": "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)",
@@ -43,13 +43,13 @@
     },
     {
      "retailer": "microcenter-pny",
-     "price": null,
-     "stock": null,
+     "price": 4399.99,
+     "stock": "page-scan fallback \u2014 verify",
      "url": "https://www.microcenter.com/product/697035/pny-nvidia-rtx-pro-5000-blackwell-single-fan-48gb-gddr7-pcie-50-graphics-card"
     },
     {
      "retailer": "compsource",
-     "price": 6446.69,
+     "price": null,
      "stock": null,
      "url": "https://www.compsource.com/buy/VCNRTXPRO5000BPB/Pny-Technologies-356/"
     },
@@ -66,10 +66,7 @@
      "url": null
     }
    ],
-   "best": {
-    "price": 6446.69,
-    "source": "compsource"
-   }
+   "best": null
   },
   "dgx-spark-fe": {
    "name": "NVIDIA DGX Spark Founders Edition (GB10, 128GB/4TB, DGX OS)",
