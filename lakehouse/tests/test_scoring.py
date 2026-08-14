@@ -75,6 +75,20 @@ def test_composite_rewards_price_per_front_foot():
     assert value["Scores"]["Composite"] > dear["Scores"]["Composite"]
 
 
+def test_composite_normalized_to_known_factors():
+    # unverified grade fall must not count AGAINST a lot (vs known-flat)
+    unknown = score_lot(base(), CFG, LAKES)
+    known_flat = score_lot(base(GradeFallFt=1.0), CFG, LAKES)
+    assert unknown["Scores"]["Composite"] > known_flat["Scores"]["Composite"]
+    assert unknown["Scores"]["FactorsKnown"] < known_flat["Scores"]["FactorsKnown"]
+
+
+def test_zero_frontage_scores_as_none_not_unknown():
+    shared = score_lot(base(GradeFallFt=1.0, FrontageFt=0, PriceUsd=None), CFG, LAKES)
+    unknown = score_lot(base(GradeFallFt=1.0, FrontageFt=None, PriceUsd=None), CFG, LAKES)
+    assert shared["Scores"]["Composite"] < unknown["Scores"]["Composite"]
+
+
 def test_drive_minutes_computed():
     lot = score_lot(base(GradeFallFt=9.0), CFG, LAKES)
     assert 150 <= lot["DriveMinsFromDetroit"] <= 320

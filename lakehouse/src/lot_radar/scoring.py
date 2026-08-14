@@ -67,40 +67,68 @@ def _parti_chips(lot: dict, rules: dict) -> tuple[dict, list]:
     return {"Sk1": sk1, "Sk2": sk2, "Sk3": sk3}, flags
 
 
-def _composite(lot: dict, cfg: dict) -> int:
+def _composite(lot: dict, cfg: dict) -> tuple[int, int, int]:
+    """Composite = percent of ACHIEVABLE points from known factors.
+
+    A factor with no data (e.g. GradeFallFt unverified) is excluded from both
+    sides, so missing data never counts against a lot — check Flags instead.
+    FrontageFt: null means unknown; an explicit 0 means known-no-private-frontage
+    (shared/view lots) and DOES score. Returns (composite, known, total factors).
+    """
     w = cfg["Weights"]
-    pts = 0
+    earned = possible = known = total = 0
+
+    def add(pts: int | None, mx: int) -> None:
+        nonlocal earned, possible, known, total
+        total += 1
+        if pts is None:                    # factor unknown for this lot
+            return
+        earned += pts
+        possible += mx
+        known += 1
+
     gf = lot.get("GradeFallFt")
-    if gf is not None:
-        pts += w["GradeFall"]["Ge8"] if gf >= 8 else w["GradeFall"]["Ge4"] if gf >= 4 else w["GradeFall"]["Lt4"]
-    fr = lot.get("FrontageFt") or 0
+    gw = w["GradeFall"]
+    add(None if gf is None else gw["Ge8"] if gf >= 8 else gw["Ge4"] if gf >= 4 else gw["Lt4"],
+        max(gw.values()))
+    fr = lot.get("FrontageFt")
     fw = w["Frontage"]
-    pts += fw["Ge150"] if fr >= 150 else fw["Ge100"] if fr >= 100 else fw["Ge75"] if fr >= 75 else fw["Lt75"]
-    ac = lot.get("AcreageAc") or 0
+    add(None if fr is None else fw["Ge150"] if fr >= 150 else fw["Ge100"] if fr >= 100
+        else fw["Ge75"] if fr >= 75 else fw["Lt75"], max(fw.values()))
+    ac = lot.get("AcreageAc")
     aw = w["Acreage"]
-    pts += aw["Ge1_5"] if ac >= 1.5 else aw["Ge0_75"] if ac >= 0.75 else aw["Lt0_75"]
-    pts += w["Orientation"].get(lot.get("ShoreFacing") or "N", 0)
-    pts += w["LakeTier"].get(lot.get("LakeTier") or "Other", 0)
+    add(None if ac is None else aw["Ge1_5"] if ac >= 1.5 else aw["Ge0_75"] if ac >= 0.75
+        else aw["Lt0_75"], max(aw.values()))
+    facing = lot.get("ShoreFacing")
+    add(None if not facing else w["Orientation"].get(facing, 0), max(w["Orientation"].values()))
+    add(w["LakeTier"].get(lot.get("LakeTier") or "Other", 0), max(w["LakeTier"].values()))
     dm = lot.get("DriveMinsFromDetroit")
-    if dm is not None:
-        dw = w["DriveMins"]
-        pts += dw["Le180"] if dm <= 180 else dw["Le240"] if dm <= 240 else dw["Le300"] if dm <= 300 else dw["Gt300"]
+    dw = w["DriveMins"]
+    add(None if dm is None else dw["Le180"] if dm <= 180 else dw["Le240"] if dm <= 240
+        else dw["Le300"] if dm <= 300 else dw["Gt300"], max(dw.values()))
     budget = cfg["Budget"]["MaxPriceUsd"]
-    if budget and lot.get("PriceUsd") and lot["PriceUsd"] <= budget:
-        pts += w["PriceUnderBudget"]
-    # judgment-tier bands, set by the weekly sweep; missing band = no points
+    if budget:                             # factor exists only when a budget is configured
+        add(None if not lot.get("PriceUsd")
+            else w["PriceUnderBudget"] if lot["PriceUsd"] <= budget else 0,
+            w["PriceUnderBudget"])
     for weight_key, lot_key in (("Utilities", "UtilitiesBand"),
                                 ("Growth", "GrowthBand"),
                                 ("Tax", "TaxBand")):
-        band = lot.get(lot_key)
-        if band and weight_key in w:
-            pts += w[weight_key].get(band, 0)
-    # market value: asking price per foot of frontage
+        if weight_key in w:
+            band = lot.get(lot_key)
+            add(None if not band else w[weight_key].get(band, 0), max(w[weight_key].values()))
     pf = w.get("PricePerFrontFt")
-    if pf and lot.get("PriceUsd") and fr:
-        ppf = lot["PriceUsd"] / fr
-        pts += pf["Le3000"] if ppf <= 3000 else pf["Le5000"] if ppf <= 5000 else pf["Gt5000"]
-    return min(pts, 100)
+    if pf:
+        price = lot.get("PriceUsd")
+        if price and fr:
+            ppf = price / fr
+            add(pf["Le3000"] if ppf <= 3000 else pf["Le5000"] if ppf <= 5000 else pf["Gt5000"],
+                max(pf.values()))
+        else:
+            add(None, max(pf.values()))
+    if not possible:
+        return 0, known, total
+    return round(100 * earned / possible), known, total
 
 
 def score_lot(lot: dict, cfg: dict, lakes_cfg: dict) -> dict:
@@ -109,6 +137,8 @@ def score_lot(lot: dict, cfg: dict, lakes_cfg: dict) -> dict:
     if lot.get("DriveMinsFromDetroit") is None and lot.get("Lat") and lot.get("Lon"):
         lot["DriveMinsFromDetroit"] = drive_minutes(lot["Lat"], lot["Lon"], cfg)
     chips, flags = _parti_chips(lot, cfg["PartiRules"])
-    lot["Scores"] = {**chips, "Composite": _composite(lot, cfg)}
+    composite, known, total = _composite(lot, cfg)
+    lot["Scores"] = {**chips, "Composite": composite,
+                     "FactorsKnown": known, "FactorsTotal": total}
     lot["Flags"] = sorted(set(lot.get("Flags", []) + flags))
     return lot

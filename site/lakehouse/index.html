@@ -102,6 +102,10 @@
   .dot{display:inline-block;width:11px;height:11px;border:1px solid var(--ink);border-radius:50%;margin-right:2px;vertical-align:-1px}
   .dot.g{background:#4C8A4F}.dot.a{background:#D9A21B}.dot.r{background:#C2401B}
   .comp{font-family:"Oswald",system-ui,sans-serif;font-weight:600;font-size:15px}
+  .pill{display:inline-block;min-width:34px;text-align:center;padding:2px 7px;border:1px solid var(--ink);font-family:"Oswald",system-ui,sans-serif;font-weight:600;font-size:14px}
+  .pill.g{background:#4C8A4F;color:#fff}
+  .pill.a{background:#D9A21B;color:#1C1B18}
+  .pill.r{background:#C2401B;color:#fff}
   .leaflet-container{font:inherit}
   .lot-pop b{font-family:"Oswald",system-ui,sans-serif;font-size:14px;letter-spacing:.04em}
   .lot-pop{font-size:12px;line-height:1.5}
@@ -137,6 +141,7 @@
           <span><i class="dot g"></i> composite ≥ 70</span>
           <span><i class="dot a"></i> 45–69</span>
           <span><i class="dot r"></i> &lt; 45</span>
+          <span>score = % of achievable points from VERIFIED facts — unverified factors don't count against a lot (tap a pin for how many factors are known)</span>
           <span>SK chips: SK-1 needs grade fall · SK-2 wants flat + wide · SK-3 wants a sunset axis</span>
         </div>
         <div class="lot-table-wrap">
@@ -554,23 +559,29 @@
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   function money(v){ return v == null ? 'inquire' : '$' + Number(v).toLocaleString(); }
-  function band(c){ return c >= 60 ? 'g' : c >= 40 ? 'a' : 'r'; }
+  function band(c){ return c >= 70 ? 'g' : c >= 45 ? 'a' : 'r'; }
   var BANDCOLOR = { g: '#4C8A4F', a: '#D9A21B', r: '#C2401B' };
   function chip(v){ return '<i class="dot ' + (v === 'GREEN' ? 'g' : v === 'RED' ? 'r' : 'a') + '" title="' + esc(v) + '"></i>'; }
 
+  function scorePill(s){
+    var c = s.Composite != null ? s.Composite : 0;
+    return '<span class="pill ' + band(c) + '" title="scored on ' + (s.FactorsKnown || '?') +
+           ' of ' + (s.FactorsTotal || '?') + ' factors">' + c + '</span>';
+  }
+
   function buildTable(lots){
-    var h = '<tr><th>#</th><th>Lot</th><th class="num">Price</th><th class="num">Acres</th>' +
-            '<th class="num">Front ft</th><th>SK 1·2·3</th><th class="num">Score</th><th>Listing</th></tr>';
+    var h = '<tr><th>#</th><th class="num">Score</th><th>Lot</th><th class="num">Price</th>' +
+            '<th class="num">Acres</th><th class="num">Front ft</th><th>SK 1·2·3</th><th>Listing</th></tr>';
     lots.forEach(function(l, i){
       var s = l.Scores || {};
       h += '<tr><td>' + (i + 1) + '</td>' +
+        '<td class="num">' + scorePill(s) + '</td>' +
         '<td><b>' + esc(l.Name || l.LakeName || 'Lot') + '</b><br><span style="color:var(--graphite)">' +
           esc((l.LakeName ? l.LakeName + ' · ' : '') + (l.County || '') + ' Co.') + '</span></td>' +
         '<td class="num">' + money(l.PriceUsd) + '</td>' +
         '<td class="num">' + (l.AcreageAc != null ? l.AcreageAc : '—') + '</td>' +
         '<td class="num">' + (l.FrontageFt != null ? l.FrontageFt : '—') + '</td>' +
         '<td>' + chip(s.Sk1) + chip(s.Sk2) + chip(s.Sk3) + '</td>' +
-        '<td class="num comp">' + (s.Composite != null ? s.Composite : '—') + '</td>' +
         '<td><a href="' + esc(l.SourceUrl) + '" target="_blank" rel="noopener">view ↗</a></td></tr>';
     });
     document.getElementById('lot-table').innerHTML = h;
@@ -589,7 +600,8 @@
         money(l.PriceUsd) +
         (l.AcreageAc != null ? ' · ' + l.AcreageAc + ' ac' : '') +
         (l.FrontageFt != null ? ' · ' + l.FrontageFt + ' ft front' : '') + '<br>' +
-        'SK ' + chip(s.Sk1) + chip(s.Sk2) + chip(s.Sk3) + ' · composite ' + (s.Composite != null ? s.Composite : '—') + '<br>' +
+        'SK ' + chip(s.Sk1) + chip(s.Sk2) + chip(s.Sk3) + ' · score ' + scorePill(s) +
+        ' <span style="color:var(--graphite)">(' + (s.FactorsKnown || '?') + '/' + (s.FactorsTotal || '?') + ' factors known)</span><br>' +
         ((l.Flags || []).length ? '<span style="color:#C2401B">' + esc((l.Flags || []).join(' · ')) + '</span><br>' : '') +
         '<a href="' + esc(l.SourceUrl) + '" target="_blank" rel="noopener">View listing ↗</a></div>';
       L.circleMarker([l.Lat, l.Lon], { radius: 9, color: '#1C1B18', weight: 1.5,
