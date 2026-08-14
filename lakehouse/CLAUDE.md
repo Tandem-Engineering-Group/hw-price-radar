@@ -91,9 +91,14 @@ Per-parti chips:
 - **Sk3 (Kicked Ridge):** ShoreFacing ∈ {W, SW, NW} AND FrontageFt ≥ 100 → GREEN;
   else AMBER. The kick wants a sunset axis.
 
-Composite (0–100): grade-fall band + frontage band + acreage + orientation + lake tier +
-drive-time band + price sanity. Exact weights live in `config/scoring.yml` — tune there,
-never hardcode. Unit tests in `tests/test_scoring.py` pin the bands; keep them green.
+Composite (0–100): **percent of achievable points from KNOWN factors** — grade-fall,
+frontage, acreage, orientation, lake tier, drive-time, budget (when set), utilities /
+growth / tax bands, price-per-frontage-foot. A factor with no data is excluded from
+both sides, so unverified facts never count against a lot (Flags carry the caveats;
+`Scores.FactorsKnown/FactorsTotal` show the basis). `FrontageFt: 0` means known-no-
+private-frontage and scores as none; null means unknown. Exact weights live in
+`config/scoring.yml` — tune there, never hardcode. Unit tests pin the bands; keep
+them green.
 
 ## Enrichment (Phase 2)
 

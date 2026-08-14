@@ -3,8 +3,9 @@
 # the sweep environment, so facts come from search snippets and are re-verified
 # weekly; see Notes per lot). Lat/Lon are lake/road-level approximations, never
 # parcel surveys — every lot carries the ApproxLocation flag. FrontageFt is
-# PRIVATE frontage only; shared/association frontage is described in Notes and
-# left null so it never inflates scoring. Bands (Utilities/Growth/Tax) follow
+# PRIVATE frontage only: an explicit 0 means known-no-private-frontage
+# (shared/view lots — scores as none), null means unknown (excluded from the
+# composite's known-factor basis). Bands (Utilities/Growth/Tax) follow
 # config/scoring.yml rules: statement-based utilities, county-level judgment for
 # growth and non-homestead tax burden.
 # Swept: 2026-08-14
@@ -108,6 +109,7 @@ Lots:
     Lat: 45.171
     Lon: -85.135
     PriceUsd: null
+    FrontageFt: 0   # known: no private frontage
     UtilitiesBand: Full
     Utilities: "Developer home sites (municipal-adjacent); dock slip assigned at purchase"
     GrowthBand: Med
@@ -126,13 +128,14 @@ Lots:
     Lon: -86.100
     PriceUsd: 245000
     AcreageAc: 1.2
+    FrontageFt: 0   # known: no private frontage
     GrowthBand: Med
     TaxBand: Med
     LastVerified: "2026-08-14"
     Flags: [ApproxLocation, SharedFrontage]
     Notes: >-
       1.2 ac with association privileges on 295 ft of SHARED Crystal Lake
-      frontage (swim/boat/shore use — not private, so FrontageFt left null).
+      frontage (swim/boat/shore use — not private, so private frontage is 0).
       Seasonal bay views; minutes to Beulah/Frankfort.
   - SourceUrl: "https://www.landsearch.com/properties/marion-ctr-charlevoix-mi-49720/2402777"
     Name: "Marion Center Rd parcel — Charlevoix"
@@ -141,6 +144,7 @@ Lots:
     Lon: -85.245
     PriceUsd: 200000
     AcreageAc: 1.33
+    FrontageFt: 0   # known: no private frontage
     GrowthBand: Med
     TaxBand: Low
     LastVerified: "2026-08-14"
@@ -157,6 +161,7 @@ Lots:
     Lon: -85.390
     PriceUsd: 225000
     AcreageAc: 5.06
+    FrontageFt: 0   # known: no private frontage
     UtilitiesBand: Full
     Utilities: "Underground natural gas, 400A electric, private well + septic, 1-gig fiber (spring 2026)"
     GrowthBand: High
@@ -176,6 +181,7 @@ Lots:
     Lon: -86.120
     PriceUsd: 150000
     AcreageAc: 3.0
+    FrontageFt: 0   # known: no private frontage
     GrowthBand: Med
     TaxBand: Med
     LastVerified: "2026-08-14"
