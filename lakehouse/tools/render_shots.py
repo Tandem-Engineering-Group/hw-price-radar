@@ -1,10 +1,16 @@
-"""Generate SK-set concept renders via the Gemini image API ("nano banana").
+"""Generate SK-set concept renders. Two engines:
 
-Runs in the lakehouse-renders GitHub Action, where the runner has open internet
-and GEMINI_API_KEY lives in Actions secrets — never in the repo. Shots and
-prompts come from config/render-shots.yml; output goes to site/lakehouse/renders/
-as JPEG (Pillow, an Actions-only dep) or PNG when Pillow is absent, plus an
-index.json manifest the portal page reads to populate its render strip.
+- sdxl (default): SDXL-Turbo on the Actions runner's CPU — keyless, open weights,
+  anonymous Hugging Face download. ~2-5 min per shot; deps installed by the
+  workflow only when this engine is selected.
+- gemini: the Gemini image API ("nano banana") — better quality, needs the
+  GEMINI_API_KEY Actions secret.
+
+Runs in the lakehouse-renders GitHub Action, where the runner has open internet.
+Shots and prompts come from config/render-shots.yml; output goes to
+site/lakehouse/renders/ as JPEG (Pillow, an Actions-only dep) or PNG when Pillow
+is absent, plus an index.json manifest the portal page reads to populate its
+render strip.
 
 Fail-soft per shot: a failed generation logs and continues; the manifest always
 reflects exactly what exists on disk, so hand-dropped renders named <shot-id>.jpg
@@ -60,6 +66,29 @@ def generate(prompt: str, key: str, aspect: str) -> bytes | None:
     return None
 
 
+_SDXL = {}
+
+
+def generate_sdxl(prompt: str, aspect: str) -> bytes | None:
+    from io import BytesIO
+    import torch
+    from diffusers import AutoPipelineForText2Image
+    if "pipe" not in _SDXL:
+        _SDXL["pipe"] = AutoPipelineForText2Image.from_pretrained(
+            "stabilityai/sdxl-turbo", torch_dtype=torch.bfloat16)
+        _SDXL["pipe"].set_progress_bar_config(disable=True)
+    w, h = (832, 464) if aspect == "16:9" else (768, 768)   # turbo-native scale, /8 multiples
+    try:
+        img = _SDXL["pipe"](prompt=prompt, num_inference_steps=4,
+                            guidance_scale=0.0, width=w, height=h).images[0]
+    except Exception as e:                # noqa: BLE001 — fail-soft per shot
+        print(f"  {type(e).__name__}: {e}", file=sys.stderr)
+        return None
+    buf = BytesIO()
+    img.save(buf, "PNG")
+    return buf.getvalue()
+
+
 def save(raw: bytes, stem: str) -> Path:
     try:
         from io import BytesIO
@@ -83,6 +112,7 @@ def write_manifest(shots: list[dict]) -> list[dict]:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--engine", choices=["sdxl", "gemini"], default="sdxl")
     ap.add_argument("--tier", choices=["hero", "full"], default="hero")
     ap.add_argument("--only", help="comma-separated shot Ids, overrides --tier")
     ap.add_argument("--manifest-only", action="store_true",
@@ -95,7 +125,7 @@ def main() -> int:
 
     if not args.manifest_only:
         key = os.environ.get("GEMINI_API_KEY")
-        if not key:
+        if args.engine == "gemini" and not key:
             print("GEMINI_API_KEY not set", file=sys.stderr)
             return 1
         if args.only:
@@ -104,14 +134,19 @@ def main() -> int:
         else:
             todo = [s for s in shots if args.tier == "full" or s["Tier"] == "hero"]
         done = 0
+        base = cfg["Base"].rstrip(" —")
         for shot in todo:
-            print(f"{shot['Id']} — {shot['Scheme']} {shot['Label']}")
-            raw = generate(f"{cfg['Base']} {shot['Prompt']}", key, cfg["AspectRatio"])
+            print(f"{shot['Id']} — {shot['Scheme']} {shot['Label']}", flush=True)
+            if args.engine == "sdxl":
+                # CLIP truncates at 77 tokens: shot specifics go first so they survive
+                raw = generate_sdxl(f"{shot['Prompt']}, {base}", cfg["AspectRatio"])
+            else:
+                raw = generate(f"{cfg['Base']} {shot['Prompt']}", key, cfg["AspectRatio"])
+                time.sleep(2)                 # politeness between API calls
             if raw:
                 path = save(raw, shot["Id"])
                 print(f"  wrote {path.name} ({path.stat().st_size:,} bytes)")
                 done += 1
-            time.sleep(2)                     # politeness between calls
         if todo and not done:
             print("every requested shot failed — check the key/model", file=sys.stderr)
             write_manifest(shots)
