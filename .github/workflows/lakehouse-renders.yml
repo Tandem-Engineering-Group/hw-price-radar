@@ -1,0 +1,45 @@
+name: lakehouse-renders
+
+# Generates SK-set concept renders with the Gemini image API (nano banana) —
+# the runner has open internet; the key lives only in Actions secrets.
+# Committing to site/** auto-triggers the daily-prices Pages deploy.
+on:
+  workflow_dispatch:
+    inputs:
+      tier:
+        description: "hero = six-shot set, full = all fifteen"
+        type: choice
+        options: [hero, full]
+        default: hero
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    working-directory: lakehouse
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require GEMINI_API_KEY secret
+        env:
+          KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          [ -n "$KEY" ] || { echo "::error::GEMINI_API_KEY secret not set (repo Settings → Secrets and variables → Actions). Get a key at https://aistudio.google.com/apikey"; exit 1; }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install pyyaml pillow
+      - name: Generate renders
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python tools/render_shots.py --tier "${{ inputs.tier }}"
+      - name: Commit renders
+        run: |
+          git config user.name "lakehouse-renders[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git add ../site/lakehouse/renders/
+          git diff --cached --quiet || git commit -m "lakehouse: concept renders (${{ inputs.tier }} tier)"
+          git push

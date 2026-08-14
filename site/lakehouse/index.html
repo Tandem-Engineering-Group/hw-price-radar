@@ -83,6 +83,12 @@
   .lbl-r{font-size:9px;fill:var(--redline);letter-spacing:.08em;font-weight:500}
   .lbl-w{font-size:9px;fill:#28536b;letter-spacing:.08em}
 
+  /* ---- render strip ---- */
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:10px}
+  .rgrid figure{border:1px solid var(--ink);padding:6px 6px 2px;background:var(--paper)}
+  .rgrid img{width:100%;height:auto;display:block;border:1px solid var(--hairline)}
+  .rnote{color:var(--graphite);font-size:12px;letter-spacing:.03em}
+
   @media (max-width:560px){
     .spec dl,.note{grid-template-columns:96px 1fr}
     body{padding:12px 8px 44px}
@@ -434,6 +440,15 @@
     </div>
   </section>
 
+  <!-- ================= RENDERS ================= -->
+  <section class="notes" id="renders">
+    <div class="notes-inner">
+      <h2>Concept Renders</h2>
+      <p class="rnote" id="render-note">RENDER SET PENDING — generated from the Rev 0.1 prompt pack by the <em>lakehouse-renders</em> Action (Gemini image model); this strip populates automatically once the first set is committed. AI concept imagery, not the design.</p>
+      <div class="rgrid" id="render-grid"></div>
+    </div>
+  </section>
+
   <!-- ================= NOTES ================= -->
   <section class="notes">
     <div class="notes-inner">
@@ -469,5 +484,28 @@
   <p class="foot">SK SET v0.1 · CONCEPT ONLY · PICK A PARTI AND THE NEXT REV GETS PLANS + A FORMA-READY MASSING BRIEF</p>
   <p class="foot">SOURCE + DECK + RENDER PROMPT PACK: <a href="https://github.com/Tandem-Engineering-Group/hw-price-radar/tree/main/lakehouse" style="color:inherit">lakehouse/ IN THE HOST REPO</a></p>
 </div>
+<script>
+(function(){
+  fetch('renders/index.json')
+    .then(function(r){ return r.ok ? r.json() : Promise.reject(); })
+    .then(function(list){
+      if (!list.length) return;
+      var grid = document.getElementById('render-grid');
+      list.forEach(function(s){
+        var fig = document.createElement('figure');
+        var img = document.createElement('img');
+        img.loading = 'lazy';
+        img.src = 'renders/' + s.file;
+        img.alt = s.scheme + ' — ' + s.label + ' (AI concept render)';
+        var cap = document.createElement('figcaption');
+        cap.textContent = s.scheme + ' · ' + s.label;
+        fig.appendChild(img); fig.appendChild(cap); grid.appendChild(fig);
+      });
+      var note = document.getElementById('render-note');
+      note.textContent = 'AI CONCEPT RENDERS — GENERATED FROM THE REV 0.1 PROMPT PACK · MOOD, NOT THE DESIGN';
+    })
+    .catch(function(){ /* page must fully render without the manifest */ });
+})();
+</script>
 </body>
 </html>
