@@ -57,10 +57,11 @@
   nav{
     position:sticky;top:0;z-index:50;
     display:flex;background:rgba(8,20,32,.92);backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--line);
+    border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;
   }
+  nav::-webkit-scrollbar{display:none}
   nav button{
-    flex:1;appearance:none;background:none;border:none;cursor:pointer;
+    flex:1 0 auto;min-width:88px;appearance:none;background:none;border:none;cursor:pointer;
     padding:12px 4px 10px;color:var(--dim);
     font-family:'Barlow Condensed',sans-serif;font-size:15.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
     border-bottom:2px solid transparent;transition:color .15s;
@@ -186,6 +187,39 @@
   .risk p{font-size:13px;color:var(--paper)}
   .risk p small{display:block;color:var(--dim);font-size:12px}
 
+  /* ---- OWNERSHIP ---- */
+  .ent{padding:11px 0;border-bottom:1px solid var(--line)}
+  .ent:last-child{border-bottom:none}
+  .ent .eh{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
+  .ent .en{font-family:'Barlow Condensed',sans-serif;font-size:16.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+  .ent .ec{font-size:13px;color:var(--paper);margin-top:3px}
+  .ent .ed{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--dim);margin-top:4px}
+  .ent .ed b{color:var(--paper);font-weight:500}
+  .conf{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;padding:1px 5px;border-radius:3px;text-transform:uppercase}
+  .conf.high{color:var(--green);border:1px solid rgba(79,191,123,.45)}
+  .conf.med{color:var(--amber);border:1px solid rgba(232,163,61,.45)}
+  .conf.low{color:var(--red);border:1px dashed rgba(228,96,78,.5)}
+  .opn{padding:10px 0;border-bottom:1px dashed var(--line)}
+  .opn:last-child{border-bottom:none}
+  .opn .ot{font-size:14px;font-weight:600;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+  .opn p{font-size:12.5px;color:var(--dim);margin-top:4px}
+  .stackbar{display:flex;height:20px;border:1px solid var(--line);border-radius:4px;overflow:hidden;margin:8px 0 4px}
+  .stackbar i{display:block;height:100%}
+  .stackleg{display:flex;flex-wrap:wrap;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim)}
+
+  /* ---- SIM / FUEL charts ---- */
+  .chartbox{background:#0A1A2A;border:1px solid var(--line);border-radius:6px;padding:8px 6px 4px;margin-top:10px;overflow-x:auto}
+  .chartbox svg{min-width:520px}
+  .tbl{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:12px;margin-top:10px}
+  .tbl th{text-align:right;color:var(--dim);font-weight:500;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:6px 4px;border-bottom:1px solid var(--line)}
+  .tbl th:first-child,.tbl td:first-child{text-align:left}
+  .tbl td{text-align:right;padding:7px 4px;border-bottom:1px dashed var(--line)}
+  .tbl td.win{color:var(--green)}
+  .tbl td.lose{color:var(--red)}
+  .segs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 2px}
+  .segs button{appearance:none;cursor:pointer;background:var(--chart2);border:1px solid var(--line);color:var(--dim);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;padding:6px 10px;border-radius:5px}
+  .segs button.on{color:var(--paper);border-color:var(--aqua);background:rgba(69,198,214,.1)}
   footer{max-width:860px;margin:0 auto;padding:6px 16px 30px;font-size:11px;color:var(--faint);line-height:1.7}
   footer b{color:var(--dim);font-weight:500}
 </style>
@@ -210,6 +244,9 @@
   <button data-t="bal">Balance</button>
   <button data-t="re">Solar+BESS</button>
   <button data-t="lng">LNG</button>
+  <button data-t="own">Ownership</button>
+  <button data-t="sim">Sim</button>
+  <button data-t="fuel">Fuel Log</button>
 </nav>
 
 <main>
@@ -354,6 +391,116 @@
     <div class="risk"><span class="chip a">AMBER</span><p>Fuel switching doesn't fix the wires. The 2026 outages were distribution failures; LNG lowers cost, not feeder risk.<small>Bahamas Grid Co. rebuild is the critical path — benefits land summer 2027+.</small></p></div>
     <div class="risk"><span class="chip a">AMBER</span><p>Schedule: BPL targeted first LNG engines Q1 '26; terminal broke ground Jul '26 — first gas now Q1 '27. One-year slip already banked.<small>Watch Phase 2/3 dates accordingly.</small></p></div>
     <div class="risk"><span class="chip g">GREEN</span><p>Economics validated externally: Moody's outlook upgrade cites energy reform; projected ~$210M/yr system savings at full build-out.<small>IDB adding $90M for SCADA/OMS + smart metering.</small></p></div>
+  </div>
+</section>
+
+<!-- ============ TAB 5 · OWNERSHIP ============ -->
+<section id="own">
+  <div class="card">
+    <h2>Who controls what<span class="tag">control · domicile · confidence</span></h2>
+    <p class="note" style="margin-bottom:6px">Confidence chips are about <b>this page's sourcing</b>, not the companies.
+      <span class="conf high">High</span> = stated in the EMP/company filings cited in the footer ·
+      <span class="conf med">Med</span> = reported but not filing-confirmed ·
+      <span class="conf low">Low</span> = inferred, treat as a research lead.</p>
+    <div id="owntable"></div>
+  </div>
+  <div class="card">
+    <h2>Where the control sits<span class="tag">share of installed MW by owner type</span></h2>
+    <div class="stackbar" id="ownbar"></div>
+    <div class="stackleg" id="ownleg"></div>
+    <p class="note" style="margin-top:10px">Generation is overwhelmingly state-held; the <b>fuel chain</b> is where
+      foreign control concentrates — one supplier (Shell) under one SPA, into a terminal 40% Shell / 60% FOCOL, operated
+      by a UK contractor. Grand Bahama is the one grid outside BPL entirely, controlled from Halifax.</p>
+  </div>
+  <div class="card">
+    <h2>Openings to stabilise the grid<span class="tag">what a third party could actually do</span></h2>
+    <div id="openings"></div>
+  </div>
+</section>
+
+<!-- ============ TAB 6 · SIMULATION ============ -->
+<section id="sim">
+  <div class="card">
+    <h2>24-hour dispatch simulation<span class="tag">day/night · wind/no-wind</span></h2>
+    <div class="ctl">
+      <label>Grid</label>
+      <select id="sgrid">
+        <option value="np">New Providence · 260 MW peak</option>
+        <option value="ab">Abaco · 28 MW peak</option>
+        <option value="el">Eleuthera · 20 MW peak</option>
+        <option value="ex">Exuma · 13 MW peak</option>
+        <option value="mi">Family Island microgrid · 2 MW peak</option>
+      </select>
+    </div>
+    <div class="segs" id="segday">
+      <button data-d="peak" class="on">Peak summer day</button><button data-d="avg">Average day</button><button data-d="mild">Mild winter day</button>
+    </div>
+    <div class="segs" id="segwind">
+      <button data-w="0" class="on">No wind</button><button data-w="0.12">Light</button><button data-w="0.28">Trade wind</button><button data-w="0.42">Strong</button>
+    </div>
+    <div class="segs" id="segcloud">
+      <button data-c="1">Clear sky</button><button data-c="0.875" class="on">Typical</button><button data-c="0.45">Overcast</button>
+    </div>
+    <div class="ctl"><label>Solar PV <output id="o_pv">0 MW</output></label><input type="range" id="s_pv" min="0" max="400" step="5" value="0"></div>
+    <div class="ctl"><label>Wind capacity <output id="o_wd">0 MW</output></label><input type="range" id="s_wd" min="0" max="200" step="5" value="0"></div>
+    <div class="ctl"><label>BESS power <output id="o_bp">0 MW</output></label><input type="range" id="s_bp" min="0" max="300" step="5" value="0"></div>
+    <div class="ctl"><label>BESS duration <output id="o_bh">4.0 h</output></label><input type="range" id="s_bh" min="0" max="8" step="0.5" value="4"></div>
+    <div class="ctl">
+      <label>Thermal fleet</label>
+      <select id="sunit">
+        <option value="w50_gas">Wärtsilä 50 · gas (LNG Phase 1)</option>
+        <option value="w50_hfo">Wärtsilä 50 · HFO (today)</option>
+        <option value="diesel">Medium-speed · ADO diesel</option>
+        <option value="tm2500">GE TM2500 · gas</option>
+        <option value="ccgt">CCGT · gas (Phase 3)</option>
+      </select>
+    </div>
+    <div class="chartbox"><svg id="simchart" viewBox="0 0 760 320" role="img" aria-label="Hourly dispatch stack"></svg></div>
+    <div class="results" id="simres"></div>
+    <div class="assump">
+      <div class="small" style="letter-spacing:.08em;text-transform:uppercase">How this dispatches</div>
+      <ul>
+        <li>Solar and wind serve load first; surplus charges the battery, the rest is curtailed.</li>
+        <li>Battery discharges into any remaining net load before thermal starts (88% round-trip).</li>
+        <li>Off-peak (load below 72% of the day's peak) the battery also tops up from thermal headroom, which is how
+            island storage actually runs. Note what that does: with no renewable surplus to soak, a battery
+            <b>raises</b> total fuel slightly through round-trip losses while <b>cutting the peak thermal call</b>.
+            Its value there is firm capacity, reserve and inertia — not fuel. Fuel savings only arrive once
+            solar or wind is large enough to spill.</li>
+        <li>Thermal fills the balance up to firm capacity; anything left is <b style="color:var(--red)">unserved</b>.</li>
+        <li>Load shape is a tropical evening-peaking curve; solar is a clear-sky bell scaled to a 21% annual capacity factor at "Typical".</li>
+        <li>Screening dispatch — no unit commitment, no minimum loads, no reserve constraint, no network limits. 8760-hour modelling is required for design.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TAB 7 · FUEL LOGISTICS ============ -->
+<section id="fuel">
+  <div class="card">
+    <h2>Diesel delivery vs LNG shipping<span class="tag">cadence · autonomy · cost</span></h2>
+    <div class="ctl"><label>Thermal energy served <output id="o_gwh">1,410 GWh/yr</output></label><input type="range" id="s_gwh" min="10" max="1600" step="10" value="1410"></div>
+    <div class="ctl"><label>HFO price <output id="o_hfo">$90 /bbl</output></label><input type="range" id="s_hfo" min="40" max="160" step="5" value="90"></div>
+    <div class="ctl"><label>ADO diesel price <output id="o_ado">$3.20 /gal</output></label><input type="range" id="s_ado" min="1.5" max="6" step="0.1" value="3.2"></div>
+    <div class="ctl"><label>LNG delivered <output id="o_lng">$11.0 /MMBtu</output></label><input type="range" id="s_lng" min="5" max="25" step="0.5" value="11"></div>
+    <div id="fueltbl"></div>
+    <p class="note" style="margin-top:10px" id="fuelverdict"></p>
+  </div>
+  <div class="card">
+    <h2>Delivery timing<span class="tag">120-day window · each tick is one arrival</span></h2>
+    <div class="chartbox"><svg id="deliv" viewBox="0 0 760 210" role="img" aria-label="Delivery cadence comparison"></svg></div>
+    <div id="delivnote"></div>
+  </div>
+  <div class="card">
+    <h2>Distributing LNG to the Family Islands<span class="tag">ISO-container spokes</span></h2>
+    <div class="ctl"><label>Island peak load <output id="o_fi">2.0 MW</output></label><input type="range" id="s_fi" min="0.5" max="10" step="0.5" value="2"></div>
+    <div class="ctl"><label>Solar+BESS share of island energy <output id="o_fire">40 %</output></label><input type="range" id="s_fire" min="0" max="90" step="5" value="40"></div>
+    <div class="results" id="fires"></div>
+    <p class="note" style="margin-top:10px" id="finote"></p>
+  </div>
+  <div class="card">
+    <h2>The hurricane case<span class="tag">FSU casts off</span></h2>
+    <div id="hurr"></div>
   </div>
 </section>
 
@@ -699,6 +846,321 @@ document.querySelectorAll('.presets button').forEach(b=>b.addEventListener('clic
   calc();
 }));
 calc();
+
+
+/* ================= OWNERSHIP ================= */
+const OWNERS=[
+ {e:'Bahamas Power & Light (BPL)',ctl:'Generation + supply on New Providence and ~25 Family Island grids',
+  dom:'The Bahamas · state-owned',fnd:'2016, successor to Bahamas Electricity Corp. (1956)',stk:'100% government',conf:'high',t:'state'},
+ {e:'Bahamas Grid Company',ctl:'Transmission &amp; distribution rebuild and network operation',
+  dom:'The Bahamas · SPV',fnd:'Stood up 2024–25 under the energy-reform package',stk:'State-linked vehicle with a private technical partner',conf:'low',t:'state'},
+ {e:'Grand Bahama Power Company',ctl:'The Freeport grid end-to-end — the one system outside BPL',
+  dom:'Bahamas-operating, <b>controlled from Halifax, Nova Scotia</b>',fnd:'Emera Inc. founded 1998 out of Nova Scotia Power (1919)',stk:'Emera majority (~80%); ICD Utilities, BISX-listed, holds the rest',conf:'med',t:'foreign'},
+ {e:'Shell plc',ctl:'Sole LNG supplier under the SPA; 40% of the regas terminal',
+  dom:'<b>United Kingdom</b> (London)',fnd:'1907 Royal Dutch/Shell merger; UK-domiciled since 2022',stk:'40% of New Providence Gas',conf:'high',t:'foreign'},
+ {e:'FOCOL Holdings / Sun Oil',ctl:'60% of the regas terminal; national fuel distribution',
+  dom:'<b>The Bahamas</b> · BISX-listed',fnd:'1990s, from Freeport Oil Company',stk:'60% of New Providence Gas',conf:'high',t:'local'},
+ {e:'px Group',ctl:'O&amp;M contractor for the Clifton Pier regas terminal',
+  dom:'<b>United Kingdom</b> (Teesside)',fnd:'1988',stk:'Service contract',conf:'med',t:'foreign'},
+ {e:'Family Island Microgrid Co.',ctl:'Solar+BESS microgrids — Harbour Is., Bimini, Moore’s Is., Black Point, Staniel Cay, Farmer’s Cay',
+  dom:'The Bahamas',fnd:'PPAs signed 2025',stk:'IPP under PPA',conf:'med',t:'ipp'},
+ {e:'RenugenPro',ctl:'Solar+BESS+LNG hybrids — San Salvador, Long Is., Cat Is.',
+  dom:'Not published',fnd:'—',stk:'IPP under PPA',conf:'low',t:'ipp'},
+ {e:'Inter-American Development Bank',ctl:'$90M for SCADA/OMS and smart metering',
+  dom:'Washington, D.C.',fnd:'1959',stk:'Lender',conf:'high',t:'lender'},
+ {e:'Morton Salt (Inagua)',ctl:'Captive self-generation at Matthew Town, separate from BPL',
+  dom:'US · Stone Canyon Industries',fnd:'Morton 1848',stk:'Captive load + own plant',conf:'med',t:'captive'},
+ {e:'Spanish Wells co-op',ctl:'St George’s Cay community utility',
+  dom:'The Bahamas',fnd:'—',stk:'Community-owned',conf:'med',t:'local'},
+];
+const TCOL={state:'#45C6D6',foreign:'#9B8CF2',local:'#4FBF7B',ipp:'#EFCB4F',lender:'#7E93A3',captive:'#E8A33D'};
+document.getElementById('owntable').innerHTML=OWNERS.map(o=>`
+  <div class="ent">
+    <div class="eh"><span class="en">${o.e}</span><span class="conf ${o.conf}">${o.conf}</span></div>
+    <div class="ec">${o.ctl}</div>
+    <div class="ed">Domicile <b>${o.dom}</b> · Founded ${o.fnd} · Stake: ${o.stk}</div>
+  </div>`).join('');
+
+// installed MW by owner type (BPL total vs GBPC vs captive/co-op)
+const MWBY={};
+PLANTS.forEach(p=>{ if(!p.mw) return;
+  const t = p.f==='sep' ? (p.n.indexOf('GBPC')>=0?'foreign':'local') : 'state';
+  MWBY[t]=(MWBY[t]||0)+p.mw; });
+const MWTOT=Object.values(MWBY).reduce((a,b)=>a+b,0);
+const TLBL={state:'BPL (state)',foreign:'Emera / Grand Bahama',local:'Community utility'};
+document.getElementById('ownbar').innerHTML=Object.entries(MWBY)
+  .sort((a,b)=>b[1]-a[1]).map(([t,v])=>`<i style="width:${v/MWTOT*100}%;background:${TCOL[t]}"></i>`).join('');
+document.getElementById('ownleg').innerHTML=Object.entries(MWBY).sort((a,b)=>b[1]-a[1])
+  .map(([t,v])=>`<span><span class="dot" style="background:${TCOL[t]}"></span>${TLBL[t]||t} ${v.toFixed(0)} MW · ${(v/MWTOT*100).toFixed(0)}%</span>`).join('');
+
+const OPENINGS=[
+ {t:'Grid-forming BESS on New Providence',i:'high',e:'med',w:'IPP or BPL capex',
+  p:'The Jul 5 ’26 blackout was a cascade after one station tripped. Grid-forming batteries supply synthetic inertia and sub-second reserve — the fastest available cut in cascade risk, and it lands years before the wires rebuild does.'},
+ {t:'Feeder and substation hardening',i:'high',e:'high',w:'Bahamas Grid Co. + EPC',
+  p:'Nameplate generation on New Providence already exceeds peak. The outages are distribution failures. Reconductoring, sectionalising, automated reclosers and undergrounding the worst feeders buy more reliability per dollar than any new megawatt.'},
+ {t:'Intra-bank subsea interconnection',i:'high',e:'high',w:'Study stage — no announced project',
+  p:'Deep channels between banks are what make inter-island transmission uneconomic — but <b>within</b> a bank the water is shallow. New Providence–Andros, and Abaco–Grand Bahama across the Little Bahama Bank, are both shallow-water routes. One link lets a strong grid back up a weak one and cuts the reserve margin every isolated system has to carry alone.'},
+ {t:'Second LNG source or independent regas',i:'med',e:'med',w:'Open',
+  p:'A single supplier under a single SPA, feeding a floating storage unit that leaves before hurricanes, is the sharpest fuel risk on the chain. A second cargo source — or onshore tankage sized for the storm window — de-risks it without touching the wires.'},
+ {t:'Demand response at large loads',i:'med',e:'low',w:'BPL tariff design',
+  p:'Resort and Baha Mar-scale loads can shift or shed several MW at the evening peak for near-zero capital. The cheapest peak megawatt available anywhere on this list.'},
+ {t:'Solar+BESS PPAs on the remaining sub-MW islands',i:'med',e:'low',w:'IPP under PPA',
+  p:'Crooked, Acklins, Mayaguana and Rum Cay still run pure diesel at the highest $/kWh in the country. Ragged Island already proves the template works.'},
+ {t:'Keep dual-fuel capability after gas conversion',i:'med',e:'low',w:'BPL operating policy',
+  p:'Station A’s Wärtsilä 50s were bought tri-fuel in 2019. Retaining HFO/ADO capability is a free hedge against an interruption anywhere on the LNG chain.'},
+];
+document.getElementById('openings').innerHTML=OPENINGS.map(o=>`
+  <div class="opn">
+    <div class="ot">${o.t}<span class="chip ${o.i==='high'?'g':'a'}">impact ${o.i}</span><span class="chip b">effort ${o.e}</span></div>
+    <p>${o.p}</p>
+    <p class="mono" style="font-size:11px;color:var(--faint)">Who: ${o.w}</p>
+  </div>`).join('');
+
+/* ================= ENGINEERING CONSTANTS (screening) ================= */
+const FUELS={
+  hfo:{n:'HFO (Bunker C)',per:6.29,unit:'bbl',co2:78.8},   // MMBtu per bbl
+  ado:{n:'ADO (diesel)',per:0.139,unit:'gal',co2:73.2},     // MMBtu per gal
+  lng:{n:'LNG (delivered)',per:1,unit:'MMBtu',co2:53.1},
+};
+const UNITS={
+  w50_gas:{n:'Wärtsilä 50 · gas',hr:7700,f:'lng'},
+  w50_hfo:{n:'Wärtsilä 50 · HFO',hr:7900,f:'hfo'},
+  diesel :{n:'Medium-speed · ADO',hr:8200,f:'ado'},
+  tm2500 :{n:'GE TM2500 · gas',hr:9500,f:'lng'},
+  ccgt   :{n:'CCGT · gas',hr:6500,f:'lng'},
+};
+const PRICE={hfo:90,ado:3.20,lng:11.0};
+const perMMBtu=f=>PRICE[f]/FUELS[f].per;
+const mwhCost=k=>UNITS[k].hr*perMMBtu(UNITS[k].f)/1000;
+const mwhCO2 =k=>UNITS[k].hr/1000*FUELS[UNITS[k].f].co2;   // kg/MWh
+
+/* ================= SIMULATION ================= */
+const LOADSHAPE=[.66,.63,.61,.60,.60,.62,.66,.72,.78,.83,.87,.90,.91,.92,.93,.93,.92,.91,.94,1.00,.99,.93,.83,.73];
+const WINDSHAPE=[1.12,1.14,1.15,1.14,1.10,1.04,.96,.90,.86,.85,.88,.93,.99,1.05,1.09,1.11,1.10,1.06,1.01,.97,.99,1.03,1.07,1.10];
+const SUNRISE=6.5,SUNSET=19.0,PVK=0.7236;   // PVK ⇒ 24% clear-sky CF, 21% at "Typical"
+const solarH=h=>(h<SUNRISE||h>SUNSET)?0:Math.sin(Math.PI*(h-SUNRISE)/(SUNSET-SUNRISE));
+const SGRID={np:{pk:260,firm:292},ab:{pk:28,firm:56},el:{pk:20,firm:30},ex:{pk:13,firm:16},mi:{pk:2,firm:3}};
+const DAYSCALE={peak:1,avg:0.78,mild:0.62};
+const SIM={grid:'np',day:'peak',wind:0,cloud:0.875,pv:0,wd:0,bp:0,bh:4,unit:'w50_gas'};
+
+function simulate(c){
+  const g=SGRID[c.grid], sc=DAYSCALE[c.day];
+  const L=LOADSHAPE.map(f=>f*g.pk*sc);
+  const S=Array.from({length:24},(_,h)=>c.pv*PVK*c.cloud*solarH(h+0.5));
+  const W=Array.from({length:24},(_,h)=>c.wd*c.wind*WINDSHAPE[h]);
+  const cap=c.bp*c.bh, e=Math.sqrt(0.88);
+  const net=L.map((v,h)=>v-S[h]-W[h]);
+
+  // Peak-shaving target: the lowest thermal ceiling the battery can hold the day
+  // to, given its power and energy. Storage is dispatched to that ceiling rather
+  // than greedily, which is what actually cuts the peak call instead of moving it.
+  const usable=cap*e;
+  let lo=0, hi=Math.max(0,...net);
+  for(let i=0;i<48;i++){
+    const T=(lo+hi)/2;
+    const need=net.reduce((a,v)=>a+Math.min(c.bp,Math.max(0,v-T)),0);
+    if(need>usable) lo=T; else hi=T;
+  }
+  const T=hi;
+
+  let soc=cap*0.5, rows=null;
+  for(let pass=0;pass<2;pass++){        // second pass starts from a settled state of charge
+    rows=[];
+    for(let h=0;h<24;h++){
+      let chg=0,dis=0,th=0,cu=0,un=0,thc=0;
+      const n=net[h];
+      if(n<0){                                        // renewable surplus — soak it
+        const sur=-n; chg=Math.min(c.bp,sur,(cap-soc)/e); soc+=chg*e; cu=sur-chg;
+      } else if(n>T+0.001){                           // above the ceiling — discharge
+        dis=Math.min(c.bp,n-T,soc*e); soc-=dis/e;
+        th=Math.min(g.firm,n-dis); un=n-dis-th;
+      } else {                                        // below the ceiling — serve load, refill headroom
+        th=Math.min(g.firm,n); un=n-th;
+        thc=Math.max(0,Math.min(c.bp,(cap-soc)/e,T-th,g.firm-th));
+        chg=thc; soc+=thc*e; th+=thc;
+      }
+      rows.push({L:L[h],S:S[h],W:W[h],chg,dis,th,cu,un,soc,thc});
+    }
+  }
+  const sum=k=>rows.reduce((a,r)=>a+r[k],0);
+  const load=sum('L'), reUsed=sum('S')+sum('W')-sum('cu');
+  const peakTh=Math.max(...rows.map(r=>r.th));
+  const peakNoBess=Math.max(0,...net);
+  return {rows,load,reUsed,curt:sum('cu'),therm:sum('th'),uns:sum('un'),dis:sum('dis'),
+          thc:sum('thc'),peakTh,peakNoBess,cap,firm:g.firm};
+}
+
+function drawSim(){
+  const r=simulate(SIM), W=760,H=320,PADL=48,PADB=26,PADT=10;
+  const maxY=Math.max(...r.rows.map(x=>Math.max(x.L,x.S+x.W+x.dis+x.th)))*1.12||1;
+  const bw=(W-PADL-8)/24, y=v=>PADT+(H-PADT-PADB)*(1-v/maxY);
+  let g='';
+  // night shading
+  g+=`<rect x="${PADL}" y="${PADT}" width="${bw*SUNRISE}" height="${H-PADT-PADB}" fill="#060F18"/>`;
+  g+=`<rect x="${PADL+bw*SUNSET}" y="${PADT}" width="${bw*(24-SUNSET)}" height="${H-PADT-PADB}" fill="#060F18"/>`;
+  for(let i=0;i<=4;i++){ const v=maxY*i/4;
+    g+=`<line x1="${PADL}" y1="${y(v)}" x2="${W-8}" y2="${y(v)}" stroke="#1D3A52" stroke-width=".6"/>`;
+    g+=`<text x="${PADL-5}" y="${y(v)+3}" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="#54687A">${v.toFixed(0)}</text>`; }
+  const SEG=[['S','#EFCB4F'],['W','#4FBF7B'],['dis','#45C6D6'],['th','#E8A33D'],['un','#E4604E']];
+  r.rows.forEach((x,h)=>{
+    let base=0;
+    SEG.forEach(([k,col])=>{ const v=x[k]; if(v<=0.001) return;
+      g+=`<rect x="${PADL+h*bw+1}" y="${y(base+v)}" width="${bw-2}" height="${Math.max(0,y(base)-y(base+v))}" fill="${col}" fill-opacity=".85"/>`;
+      base+=v; });
+  });
+  // load line
+  g+=`<polyline fill="none" stroke="#DCE7EE" stroke-width="1.6" stroke-dasharray="4 3" points="${
+    r.rows.map((x,h)=>`${PADL+h*bw+bw/2},${y(x.L)}`).join(' ')}"/>`;
+  [0,6,12,18,23].forEach(h=>g+=`<text x="${PADL+h*bw+bw/2}" y="${H-8}" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#54687A">${String(h).padStart(2,'0')}:00</text>`);
+  g+=`<text x="${PADL-5}" y="${PADT+8}" text-anchor="end" font-family="IBM Plex Mono" font-size="8.5" fill="#54687A">MW</text>`;
+  document.getElementById('simchart').innerHTML=g;
+
+  const share=r.load?r.reUsed/r.load*100:0, u=SIM.unit;
+  const cost=r.therm*mwhCost(u), co2=r.therm*mwhCO2(u)/1000;
+  document.getElementById('simres').innerHTML=`
+   <div class="res"><div class="v" style="color:var(--solar)">${share.toFixed(1)}<small> %</small></div><div class="l">RE share of the day</div></div>
+   <div class="res"><div class="v">${r.therm.toFixed(0)}<small> MWh</small></div><div class="l">Thermal generation</div></div>
+   <div class="res"><div class="v" style="color:${r.uns>0.5?'var(--red)':'var(--green)'}">${r.uns.toFixed(1)}<small> MWh</small></div><div class="l">Unserved energy</div></div>
+   <div class="res"><div class="v">${r.curt.toFixed(0)}<small> MWh</small></div><div class="l">Curtailed RE</div></div>
+   <div class="res"><div class="v" style="color:var(--green)">$${(cost/1000).toFixed(1)}<small> k/day</small></div><div class="l">Fuel cost · ${UNITS[u].n}</div></div>
+   <div class="res"><div class="v">${co2.toFixed(0)}<small> t/day</small></div><div class="l">CO₂</div></div>
+   <div class="res"><div class="v">${r.cap?(r.dis/r.cap).toFixed(2):'0.00'}<small> cyc</small></div><div class="l">Battery cycles/day</div></div>
+   <div class="res"><div class="v">${r.peakTh.toFixed(0)}<small> MW</small></div><div class="l">Peak thermal call${
+      r.cap>0?` · ${(r.peakNoBess-r.peakTh)>0.5?'−'+(r.peakNoBess-r.peakTh).toFixed(0)+' MW shaved':'no shaving'}`:''}</div></div>`;
+}
+function bindSeg(id,key,cast){
+  document.querySelectorAll('#'+id+' button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.toggle('on',x===b));
+    SIM[key]=cast(b.dataset.d??b.dataset.w??b.dataset.c); drawSim(); }));
+}
+bindSeg('segday','day',v=>v); bindSeg('segwind','wind',Number); bindSeg('segcloud','cloud',Number);
+const simInputs=[['s_pv','pv','o_pv',v=>v+' MW'],['s_wd','wd','o_wd',v=>v+' MW'],
+                 ['s_bp','bp','o_bp',v=>v+' MW'],['s_bh','bh','o_bh',v=>(+v).toFixed(1)+' h']];
+simInputs.forEach(([id,key,out,f])=>{
+  const el=document.getElementById(id);
+  el.addEventListener('input',()=>{SIM[key]=+el.value;document.getElementById(out).textContent=f(el.value);drawSim();});
+});
+document.getElementById('sgrid').addEventListener('change',e=>{
+  SIM.grid=e.target.value;
+  const g=SGRID[SIM.grid];
+  // rescale the sliders so Family Island grids are usable
+  [['s_pv',2],['s_wd',1],['s_bp',1.5]].forEach(([id,m])=>{
+    const el=document.getElementById(id); el.max=Math.ceil(g.pk*m); el.step=g.pk<20?0.5:5;
+    if(+el.value>+el.max) el.value=el.max;
+  });
+  SIM.pv=+document.getElementById('s_pv').value; SIM.wd=+document.getElementById('s_wd').value; SIM.bp=+document.getElementById('s_bp').value;
+  document.getElementById('o_pv').textContent=SIM.pv+' MW';
+  document.getElementById('o_wd').textContent=SIM.wd+' MW';
+  document.getElementById('o_bp').textContent=SIM.bp+' MW';
+  drawSim();
+});
+document.getElementById('sunit').addEventListener('change',e=>{SIM.unit=e.target.value;drawSim();});
+drawSim();
+
+/* ================= FUEL LOGISTICS ================= */
+const LOG={gwh:1410,hfoParcel:30000,lngParcel:15000,isoM3:40};  // bbl · m³ · m³
+const LNG_MMBTU_M3=22.0, BOILOFF=0.0012;                        // per day on the FSU
+function fuelCalc(){
+  const out={};
+  for(const k of ['w50_hfo','diesel','w50_gas']){
+    const u=UNITS[k], f=u.f;
+    const mmbtu=LOG.gwh*1000*u.hr/1000;
+    const parcelMMBtu = f==='lng' ? LOG.lngParcel*LNG_MMBTU_M3 : (f==='hfo'? LOG.hfoParcel*FUELS.hfo.per : LOG.hfoParcel*FUELS.hfo.per*0.92);
+    const trips=mmbtu/parcelMMBtu;
+    out[k]={mmbtu,cost:mmbtu*perMMBtu(f),perMWh:mwhCost(k),trips,gap:365/trips,
+            co2:LOG.gwh*1000*mwhCO2(k)/1e6, fuel:f, parcelMMBtu};
+  }
+  return out;
+}
+function drawFuel(){
+  const r=fuelCalc(), rows=[['w50_hfo','HFO today'],['diesel','ADO diesel'],['w50_gas','LNG (Phase 1 engines)']];
+  const best=Math.min(...rows.map(([k])=>r[k].cost));
+  document.getElementById('fueltbl').innerHTML=`<table class="tbl">
+   <tr><th>Option</th><th>$/MMBtu</th><th>$/MWh</th><th>Fuel $/yr</th><th>Arrivals/yr</th><th>Every</th><th>kt CO₂</th></tr>
+   ${rows.map(([k,lbl])=>{const x=r[k];const w=x.cost===best;
+     return `<tr><td>${lbl}</td><td>$${perMMBtu(x.fuel).toFixed(2)}</td><td>$${x.perMWh.toFixed(0)}</td>
+      <td class="${w?'win':(x.cost>best*1.4?'lose':'')}">$${(x.cost/1e6).toFixed(1)}M</td>
+      <td>${x.trips.toFixed(0)}</td><td>${x.gap.toFixed(1)} d</td><td>${x.co2.toFixed(0)}</td></tr>`;}).join('')}
+  </table>`;
+  const save=r.w50_hfo.cost-r.w50_gas.cost;
+  document.getElementById('fuelverdict').innerHTML =
+    save>0 ? `At these prices LNG saves <b style="color:var(--green)">$${(save/1e6).toFixed(1)}M/yr</b> against HFO on the same engines
+      (${(save/r.w50_hfo.cost*100).toFixed(0)}% of the fuel bill) and cuts CO₂ by ${(r.w50_hfo.co2-r.w50_gas.co2).toFixed(0)} kt/yr.
+      Diesel is the expensive fallback at <b>$${r.diesel.perMWh.toFixed(0)}/MWh</b> — ${(r.diesel.perMWh/r.w50_gas.perMWh).toFixed(1)}× the gas cost —
+      which is why it belongs in reserve, not in baseload.`
+    : `At these prices LNG is <b style="color:var(--red)">more expensive than HFO</b> by $${(-save/1e6).toFixed(1)}M/yr.
+       Below roughly $${(perMMBtu('hfo')*UNITS.w50_hfo.hr/UNITS.w50_gas.hr).toFixed(2)}/MMBtu delivered, gas wins on fuel cost alone; above it,
+       the case has to rest on emissions, maintenance and price stability instead.`;
+
+  // 120-day arrival timeline
+  const W=760,H=210,PADL=118;
+  const lanes=[['w50_hfo','HFO cargo','#E8A33D'],['diesel','ADO parcel','#E4604E'],['w50_gas','LNG cargo','#45C6D6']];
+  let g=`<text x="8" y="16" font-family="IBM Plex Mono" font-size="9.5" fill="#54687A">ARRIVALS OVER 120 DAYS</text>`;
+  lanes.forEach(([k,lbl,col],i)=>{
+    const yy=52+i*46, gap=r[k].gap;
+    g+=`<text x="8" y="${yy-8}" font-family="IBM Plex Mono" font-size="10.5" fill="#DCE7EE">${lbl}</text>`;
+    g+=`<text x="8" y="${yy+7}" font-family="IBM Plex Mono" font-size="9" fill="#54687A">every ${gap.toFixed(1)} d</text>`;
+    g+=`<line x1="${PADL}" y1="${yy}" x2="${W-14}" y2="${yy}" stroke="#1D3A52" stroke-width="1"/>`;
+    for(let d=0;d<=120;d+=gap){ const x=PADL+(W-14-PADL)*d/120;
+      g+=`<line x1="${x}" y1="${yy-11}" x2="${x}" y2="${yy+11}" stroke="${col}" stroke-width="2"/>`; }
+  });
+  for(let d=0;d<=120;d+=30){ const x=PADL+(W-14-PADL)*d/120;
+    g+=`<text x="${x}" y="${H-12}" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#54687A">day ${d}</text>`; }
+  document.getElementById('deliv').innerHTML=g;
+
+  const auto=k=>r[k].parcelMMBtu/(r[k].mmbtu/365);
+  document.getElementById('delivnote').innerHTML=`<p class="note" style="margin-top:8px">
+    One full parcel is <b>${auto('w50_hfo').toFixed(1)} days</b> of burn as HFO
+    (${LOG.hfoParcel.toLocaleString()} bbl) versus <b>${auto('w50_gas').toFixed(1)} days</b> as LNG
+    (${LOG.lngParcel.toLocaleString()} m³ carrier). Fewer, larger LNG arrivals mean the system leans harder on
+    <b>storage</b> than on shipping frequency — and LNG storage boils off at ~${(BOILOFF*100).toFixed(2)}%/day,
+    so idle inventory is not free the way a diesel tank is.</p>`;
+
+  // Family Island ISO containers
+  const fiPk=+document.getElementById('s_fi').value, reShare=+document.getElementById('s_fire').value/100;
+  const fiEnergy=fiPk*0.55*8760*(1-reShare);                  // MWh/yr from gensets
+  const fiMMBtu=fiEnergy*8500/1000;
+  const perIso=LOG.isoM3*LNG_MMBTU_M3;
+  const isos=fiMMBtu/perIso;
+  document.getElementById('fires').innerHTML=`
+   <div class="res"><div class="v">${fiEnergy.toFixed(0)}<small> MWh/yr</small></div><div class="l">Genset energy after RE</div></div>
+   <div class="res"><div class="v" style="color:var(--aqua)">${isos.toFixed(0)}<small> ISO/yr</small></div><div class="l">40-ft LNG containers</div></div>
+   <div class="res"><div class="v">${(isos/52).toFixed(1)}<small> /week</small></div><div class="l">Mailboat lifts</div></div>
+   <div class="res"><div class="v">$${(fiMMBtu*perMMBtu('lng')/1000).toFixed(0)}<small> k/yr</small></div><div class="l">Island fuel cost, LNG</div></div>`;
+  const dieselCost=fiEnergy*mwhCost('diesel');
+  document.getElementById('finote').innerHTML=`Each 40-ft ISO tank holds ~${perIso.toFixed(0)} MMBtu usable.
+    At ${(isos/52).toFixed(1)} containers a week this rides existing mailboat/landing-craft schedules — no new vessel — but it only
+    works if the island can hold ≥2 containers and turn them inside the ~30–60 day hold time before venting.
+    Against ADO diesel at today's price the island saves
+    <b style="color:${dieselCost>fiMMBtu*perMMBtu('lng')?'var(--green)':'var(--red)'}">
+    $${Math.abs(dieselCost-fiMMBtu*perMMBtu('lng'))/1000>=1?((dieselCost-fiMMBtu*perMMBtu('lng'))/1000).toFixed(0)+'k/yr':'—'}</b>.
+    Raising the solar+BESS share is the stronger lever: every point of RE removes fuel <i>and</i> a shipping leg.`;
+
+  // hurricane case
+  const daysOn=[3,5,7,10];
+  document.getElementById('hurr').innerHTML=`<p class="note">The FSU casts off ahead of severe weather, so during a storm window
+    New Providence runs on whatever sits in <b>onshore</b> tankage. What that buys, at Phase 1 gas burn:</p>
+    <table class="tbl"><tr><th>Onshore buffer</th><th>Gas MWh covered</th><th>Equivalent</th></tr>
+    ${daysOn.map(d=>{const mwh=90*0.6*24*d;
+      return `<tr><td>${d} days</td><td>${mwh.toFixed(0)} MWh</td><td>${d<5?'tight — a slow-moving system outlasts it':'covers a typical pass + return'}</td></tr>`;}).join('')}
+    </table>
+    <p class="note" style="margin-top:8px">This is the argument for keeping Station A tri-fuel. HFO in a fixed tank does not
+    cast off, and the engines were bought in 2019 able to burn it. Dual-fuel retention converts a single-supplier
+    marine dependency into an inconvenience rather than an outage.</p>`;
+}
+['s_gwh','s_hfo','s_ado','s_lng','s_fi','s_fire'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',e=>{
+    const v=+e.target.value;
+    if(id==='s_gwh'){LOG.gwh=v;document.getElementById('o_gwh').textContent=v.toLocaleString()+' GWh/yr';}
+    if(id==='s_hfo'){PRICE.hfo=v;document.getElementById('o_hfo').textContent='$'+v+' /bbl';}
+    if(id==='s_ado'){PRICE.ado=v;document.getElementById('o_ado').textContent='$'+v.toFixed(2)+' /gal';}
+    if(id==='s_lng'){PRICE.lng=v;document.getElementById('o_lng').textContent='$'+v.toFixed(1)+' /MMBtu';}
+    if(id==='s_fi'){document.getElementById('o_fi').textContent=v.toFixed(1)+' MW';}
+    if(id==='s_fire'){document.getElementById('o_fire').textContent=v+' %';}
+    drawFuel(); if(id==='s_hfo'||id==='s_ado'||id==='s_lng') drawSim();
+  });
+});
+drawFuel();
 
 /* ================= TABS ================= */
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{
