@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bahamas Grid Portal — Generation · Balance · Renewables · LNG</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+  :root{
+    --ink:#081420;          /* deep marine night */
+    --chart:#0D2032;        /* panel */
+    --chart2:#122A40;       /* raised panel */
+    --line:#1D3A52;
+    --bank:rgba(64,199,214,.13);
+    --bankline:#2E8CA0;
+    --sand:#C9BF9E;
+    --sandline:#8E876C;
+    --paper:#DCE7EE;
+    --dim:#7E93A3;
+    --faint:#54687A;
+    --aqua:#45C6D6;         /* LNG / data */
+    --amber:#E8A33D;        /* thermal HFO/diesel */
+    --solar:#EFCB4F;        /* PV */
+    --green:#4FBF7B;
+    --red:#E4604E;
+    --violet:#9B8CF2;       /* separate utility */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;
+    font-size:15px;line-height:1.5;
+    padding-bottom:56px;
+  }
+  .mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+  .disp{font-family:'Barlow Condensed','Arial Narrow',sans-serif;letter-spacing:.02em}
+
+  header{
+    padding:18px 16px 12px;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,#0A1A2A 0%,var(--ink) 100%);
+  }
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.22em;color:var(--aqua);text-transform:uppercase}
+  h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:30px;line-height:1.05;margin-top:4px;text-transform:uppercase;letter-spacing:.015em}
+  h1 .thin{color:var(--dim);font-weight:500}
+  .kpis{display:flex;gap:0;margin-top:14px;overflow-x:auto;scrollbar-width:none;border:1px solid var(--line);border-radius:6px;background:var(--chart)}
+  .kpis::-webkit-scrollbar{display:none}
+  .kpi{min-width:104px;padding:9px 12px;border-right:1px solid var(--line);flex:0 0 auto}
+  .kpi:last-child{border-right:none}
+  .kpi .v{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:600;color:var(--paper)}
+  .kpi .v small{font-size:11px;color:var(--dim);font-weight:400}
+  .kpi .l{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-top:1px}
+
+  nav{
+    position:sticky;top:0;z-index:50;
+    display:flex;background:rgba(8,20,32,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav button{
+    flex:1;appearance:none;background:none;border:none;cursor:pointer;
+    padding:12px 4px 10px;color:var(--dim);
+    font-family:'Barlow Condensed',sans-serif;font-size:15.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    border-bottom:2px solid transparent;transition:color .15s;
+  }
+  nav button.on{color:var(--aqua);border-bottom-color:var(--aqua)}
+  nav button:focus-visible{outline:2px solid var(--aqua);outline-offset:-2px}
+
+  main{max-width:860px;margin:0 auto;padding:16px 14px 40px}
+  section{display:none}
+  section.on{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){section.on{animation:none} .course{animation:none!important}}
+
+  .card{background:var(--chart);border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:14px}
+  .card h2{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .card h2 .tag{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--faint);letter-spacing:.14em;margin-left:8px;text-transform:none;vertical-align:middle}
+  .note{font-size:13px;color:var(--dim)}
+  .small{font-size:12px;color:var(--dim)}
+
+  /* chips */
+  .chip{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.1em;padding:2px 7px;border-radius:3px;text-transform:uppercase}
+  .chip.g{background:rgba(79,191,123,.14);color:var(--green);border:1px solid rgba(79,191,123,.4)}
+  .chip.a{background:rgba(232,163,61,.12);color:var(--amber);border:1px solid rgba(232,163,61,.4)}
+  .chip.r{background:rgba(228,96,78,.12);color:var(--red);border:1px solid rgba(228,96,78,.4)}
+  .chip.b{background:rgba(69,198,214,.1);color:var(--aqua);border:1px solid rgba(69,198,214,.4)}
+  .est{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--faint);letter-spacing:.08em;border:1px dashed var(--faint);border-radius:3px;padding:0 4px;margin-left:5px;vertical-align:1px}
+
+  /* ---- CHART TAB ---- */
+  .layers{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+  .layers button{
+    appearance:none;cursor:pointer;background:var(--chart);border:1px solid var(--line);color:var(--dim);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;padding:6px 10px;border-radius:5px;
+  }
+  .layers button.on{color:var(--paper);border-color:var(--aqua);background:rgba(69,198,214,.08)}
+  .mapwrap{background:radial-gradient(120% 90% at 30% 20%,#0C2135 0%,var(--ink) 70%);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  svg{display:block;width:100%;height:auto}
+  .isl{fill:var(--sand);fill-opacity:.9;stroke:var(--sandline);stroke-width:.7}
+  .bank{fill:var(--bank);stroke:var(--bankline);stroke-opacity:.5;stroke-width:.8;stroke-dasharray:3 3}
+  .grat{stroke:#17324A;stroke-width:.6}
+  .gratlab{font-family:'IBM Plex Mono',monospace;font-size:8px;fill:#2E4B63}
+  .lbl{font-family:'IBM Plex Mono',monospace;font-size:8.5px;fill:#6E8496;letter-spacing:.08em}
+  .lbl.big{font-size:9.5px;fill:#8DA3B3}
+  .node{cursor:pointer}
+  .node circle.halo{fill:none;stroke-width:1;opacity:.45}
+  .node.sel circle.halo{opacity:1;stroke-width:1.6}
+  .node text{font-family:'IBM Plex Mono',monospace;font-size:7.5px;fill:var(--ink);font-weight:600;text-anchor:middle;pointer-events:none}
+  .course{stroke:var(--aqua);stroke-width:1.6;fill:none;stroke-dasharray:6 5;animation:flow 2.6s linear infinite;opacity:.85}
+  .course2{stroke:var(--aqua);stroke-width:1;fill:none;stroke-dasharray:3 5;opacity:.5;animation:flow 3.4s linear infinite}
+  @keyframes flow{to{stroke-dashoffset:-22}}
+  .legend{display:flex;flex-wrap:wrap;gap:10px 16px;padding:10px 4px 2px;font-size:11.5px;color:var(--dim)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  #detail{margin-top:12px}
+  #detail .drow{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+  #detail .drow:last-child{border-bottom:none}
+  #detail .drow .k{color:var(--dim)}
+  #detail .drow .val{font-family:'IBM Plex Mono',monospace;text-align:right}
+
+  /* ---- BALANCE TAB ---- */
+  .grow{padding:11px 0;border-bottom:1px solid var(--line)}
+  .grow:last-child{border-bottom:none}
+  .grow .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .grow .nm{font-family:'Barlow Condensed',sans-serif;font-size:16.5px;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+  .grow .nums{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);white-space:nowrap}
+  .bar{position:relative;height:14px;background:#0A1A2A;border:1px solid var(--line);border-radius:3px;margin-top:7px;overflow:hidden}
+  .bar .inst{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,rgba(232,163,61,.25),rgba(232,163,61,.5));border-right:1px solid var(--amber)}
+  .bar .pk{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--aqua)}
+  .grow .foot{display:flex;justify-content:space-between;align-items:center;margin-top:6px;gap:8px}
+  .grow .foot .note{font-size:12px}
+
+  /* ---- SOLAR TAB ---- */
+  .presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+  .presets button{appearance:none;cursor:pointer;background:var(--chart2);border:1px solid var(--line);color:var(--paper);font-size:12px;padding:7px 10px;border-radius:5px;font-family:'IBM Plex Mono',monospace}
+  .presets button:active{border-color:var(--solar)}
+  .ctl{margin:14px 0}
+  .ctl label{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+  .ctl label output{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--solar);font-weight:600;text-transform:none;letter-spacing:0}
+  input[type=range]{width:100%;margin-top:8px;accent-color:var(--solar);height:26px}
+  select{width:100%;background:var(--chart2);border:1px solid var(--line);color:var(--paper);padding:9px;border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:13px;margin-top:6px}
+  .results{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+  .res{background:var(--chart2);border:1px solid var(--line);border-radius:6px;padding:10px}
+  .res .v{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:600}
+  .res .v small{font-size:11px;color:var(--dim);font-weight:400}
+  .res .l{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-top:2px}
+  .rebar{height:16px;border:1px solid var(--line);border-radius:3px;background:#0A1A2A;position:relative;overflow:hidden;margin-top:14px}
+  .rebar .fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,rgba(239,203,79,.35),rgba(239,203,79,.75))}
+  .rebar .goal{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--green)}
+  .assump{margin-top:14px;border-top:1px dashed var(--line);padding-top:10px}
+  .assump li{font-size:12px;color:var(--dim);margin:4px 0 4px 16px}
+
+  /* ---- LNG TAB ---- */
+  .flow{position:relative;padding-left:26px}
+  .flow::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--aqua),rgba(69,198,214,.15))}
+  .step{position:relative;padding:0 0 18px}
+  .step::before{content:"";position:absolute;left:-23px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--ink);border:2px solid var(--aqua)}
+  .step h3{font-family:'Barlow Condensed',sans-serif;font-size:16.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+  .step h3 .ph{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--aqua);letter-spacing:.16em;display:block;margin-bottom:1px}
+  .step p{font-size:13px;color:var(--dim);margin-top:3px}
+  .step .fact{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--paper);background:var(--chart2);border:1px solid var(--line);border-radius:4px;padding:2px 7px;display:inline-block;margin:5px 5px 0 0}
+  .risk{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);align-items:flex-start}
+  .risk:last-child{border-bottom:none}
+  .risk .chip{flex:0 0 auto;margin-top:2px}
+  .risk p{font-size:13px;color:var(--paper)}
+  .risk p small{display:block;color:var(--dim);font-size:12px}
+
+  footer{max-width:860px;margin:0 auto;padding:6px 16px 30px;font-size:11px;color:var(--faint);line-height:1.7}
+  footer b{color:var(--dim);font-weight:500}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Grid Intelligence · Commonwealth of The Bahamas</div>
+  <h1>Archipelago Power Portal <span class="thin">/ Gen · Balance · RE+Storage · LNG</span></h1>
+  <div class="kpis">
+    <div class="kpi"><div class="v">535<small> MW</small></div><div class="l">BPL installed</div></div>
+    <div class="kpi"><div class="v">~260<small> MW</small></div><div class="l">N.P. peak</div></div>
+    <div class="kpi"><div class="v">25+</div><div class="l">Isolated grids</div></div>
+    <div class="kpi"><div class="v">$1.14<small> B</small></div><div class="l">Reform plan</div></div>
+    <div class="kpi"><div class="v">30<small> %</small></div><div class="l">RE by 2030</div></div>
+    <div class="kpi"><div class="v">Q1·27</div><div class="l">First gas</div></div>
+  </div>
+</header>
+
+<nav>
+  <button class="on" data-t="chart">Chart</button>
+  <button data-t="bal">Balance</button>
+  <button data-t="re">Solar+BESS</button>
+  <button data-t="lng">LNG</button>
+</nav>
+
+<main>
+
+<!-- ============ TAB 1 · CHART ============ -->
+<section id="chart" class="on">
+  <div class="layers">
+    <button class="on" data-l="thermal">Thermal</button>
+    <button class="on" data-l="re">Renewable / Planned</button>
+    <button class="on" data-l="lng">LNG chain</button>
+  </div>
+  <div class="mapwrap"><svg id="map" viewBox="0 0 760 696" role="img" aria-label="Schematic chart of Bahamas power assets"></svg></div>
+  <div class="legend">
+    <span><span class="dot" style="background:var(--amber)"></span>HFO / diesel</span>
+    <span><span class="dot" style="background:var(--solar)"></span>Solar / hybrid</span>
+    <span><span class="dot" style="border:1.5px dashed var(--solar);background:none"></span>Planned RE</span>
+    <span><span class="dot" style="background:var(--aqua)"></span>LNG asset</span>
+    <span><span class="dot" style="background:var(--violet)"></span>Separate utility</span>
+    <span class="mono" style="font-size:10px;color:var(--faint)">marker ∝ MW · tap for detail</span>
+  </div>
+  <div id="detail" class="card">
+    <h2>Select an asset<span class="tag">tap any marker</span></h2>
+    <p class="note">Every generation node, planned solar site, and LNG facility is plotted at its charted position. Shaded aqua fields are the shallow banks — the reason every island runs an isolated grid: deep-water channels between banks make inter-island transmission uneconomic.</p>
+  </div>
+</section>
+
+<!-- ============ TAB 2 · BALANCE ============ -->
+<section id="bal">
+  <div class="card">
+    <h2>Supply vs. peak demand — by grid<span class="tag">amber bar = installed · cyan tick = peak</span></h2>
+    <div id="grids"></div>
+  </div>
+  <div class="card">
+    <h2>Reading the balance</h2>
+    <p class="note">New Providence now carries enough nameplate generation for peak — the binding constraint has shifted to the <b style="color:var(--amber)">distribution network</b>: feeder and substation bottlenecks overload and trip under high demand, which is what turned a single lightning strike at Blue Hills (Jul 5 '26) into an island-wide blackout. Bahamas Grid Company's rebuild (underway since Apr '25) isn't expected to be felt before <b>summer 2027</b>. Family Island grids are the opposite problem: thin, single-station systems where one engine failure equals an island outage.</p>
+  </div>
+</section>
+
+<!-- ============ TAB 3 · SOLAR + BESS ============ -->
+<section id="re">
+  <div class="card">
+    <h2>Where renewables land</h2>
+    <p class="note">Committed build-out: three utility-scale PV farms on New Providence (CV Bethel, Coral Harbour, Baillou Hills) each paired with BESS; ~24 Family Island projects under PPA — Family Island Microgrid Co. on Harbour Is., Bimini, Moore's Is., Black Point, Staniel Cay, Farmer's Cay; RenugenPro solar+BESS+LNG on San Salvador, Long Island, Cat Island. Ragged Island already runs BPL's model solar microgrid. Government target: <span class="mono" style="color:var(--solar)">128 MW</span> PV, 30% RE by 2030.</p>
+  </div>
+  <div class="card">
+    <h2>Screening calculator<span class="tag">PV + storage sizing</span></h2>
+    <div class="presets">
+      <button data-p="gov">Gov't plan · 128 MW</button>
+      <button data-p="goal">Hit 30% · ~310 MW</button>
+      <button data-p="fi">Family Is. microgrid</button>
+    </div>
+    <div class="ctl">
+      <label>Grid</label>
+      <select id="gsel">
+        <option value="np">New Providence · 260 MW peak</option>
+        <option value="nat">National (all grids) · ~360 MW peak</option>
+        <option value="ab">Abaco · ~28 MW peak</option>
+        <option value="el">Eleuthera · ~20 MW peak</option>
+        <option value="ex">Exuma · ~13 MW peak</option>
+        <option value="mi">Single microgrid · ~2 MW peak</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label>Solar capacity <output id="ov">128 MW</output></label>
+      <input type="range" id="mw" min="0" max="450" step="2" value="128">
+    </div>
+    <div class="ctl">
+      <label>BESS duration <output id="oh">3.0 h</output></label>
+      <input type="range" id="hrs" min="0" max="6" step="0.5" value="3">
+    </div>
+    <div class="results" id="res"></div>
+    <div class="rebar"><div class="fill" id="refill" style="width:0%"></div><div class="goal" style="left:30%"></div></div>
+    <div class="small" style="display:flex;justify-content:space-between;margin-top:4px"><span>Annual RE share</span><span class="mono" style="color:var(--green)">▎30% target</span></div>
+    <div class="assump">
+      <div class="small" style="letter-spacing:.08em;text-transform:uppercase">Assumptions — screening level</div>
+      <ul>
+        <li>PV capacity factor 21% (Bahamas insolation, fixed-tilt).</li>
+        <li>Grid energy = peak × 62% load factor × 8760 h.</li>
+        <li>Curtailment penalty above ~18% annual share, relieved by BESS duration (fully offset at 4 h).</li>
+        <li>BESS power = PV MW × duration; land at 2.5 ac/MW; fuel offset at 19¢/kWh HFO-era, CO₂ 0.72 kg/kWh.</li>
+        <li>Screening math only — dispatch modeling (8760 h) required for design.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TAB 4 · LNG ============ -->
+<section id="lng">
+  <div class="card">
+    <h2>Supply chain — molecule to megawatt</h2>
+    <div class="flow">
+      <div class="step">
+        <h3><span class="ph">SOURCE</span>Shell U.S. LNG portfolio · Gulf Coast</h3>
+        <p>Shell is sole supplier under an LNG Sale &amp; Purchase Agreement with Bahamas LNG Partner Ltd. (gov't SPV), drawing on its U.S. export portfolio and regional small-scale/bunkering network.</p>
+        <span class="fact">SPA + $30M performance LC</span><span class="fact">$99.9M fuel revolver · Santander</span>
+      </div>
+      <div class="step">
+        <h3><span class="ph">MARINE LEG</span>Small-scale carrier → Clifton Pier jetty</h3>
+        <p>Short-haul runs from the U.S. Gulf/Florida straits deliver into a Floating Storage Unit moored at the Clifton Pier jetty. The FSU casts off ahead of severe weather — a designed hurricane protocol, and a real availability variable.</p>
+        <span class="fact">FSU-based storage</span><span class="fact">Departs for hurricanes</span>
+      </div>
+      <div class="step">
+        <h3><span class="ph">TERMINAL</span>New Providence Gas — regas at Clifton Pier</h3>
+        <p>Onshore storage + vaporization owned by New Providence Gas Ltd. (Shell 40% / FOCOL's Sun Oil 60%), FID taken Jul '26, px Group contracted for O&amp;M. Send-out is piped as gas to generation.</p>
+        <span class="fact">~$500M facility</span><span class="fact">Ground broke Jul 13 '26</span><span class="fact">O&amp;M: px Group</span>
+      </div>
+      <div class="step">
+        <h3><span class="ph">PHASE 1 · Q1 2027</span>90 MW gas-fired at Clifton Pier</h3>
+        <p>First gas feeds ~90 MW at Clifton — incl. 2× GE TM2500 turbines (56 MW) per the EMP, alongside Station A's seven Wärtsilä 50s, which were bought tri-fuel (HFO/ADO/gas) in 2019 precisely for this conversion.</p>
+        <span class="fact">≈$50M/yr fuel savings, Ph.1</span>
+      </div>
+      <div class="step">
+        <h3><span class="ph">PHASE 2 · Q4 2027</span>Gas to Blue Hills</h3>
+        <p>Supply extended to the Blue Hills Power Station — the site whose July '26 lightning trip blacked out the island.</p>
+      </div>
+      <div class="step">
+        <h3><span class="ph">PHASE 3</span>Combined-cycle at Blue Hills · &gt;170 MW</h3>
+        <p>New CCGT baseload plant — would displace most residual HFO/diesel on New Providence and anchor the island's firm capacity around gas + solar/BESS.</p>
+      </div>
+      <div class="step">
+        <h3><span class="ph">FAMILY ISLANDS</span>Containerized LNG spokes</h3>
+        <p>RenugenPro's San Salvador, Long Island and Cat Island hybrids pair solar+BESS with LNG gensets — small-island volumes of this kind typically move as ISO-container LNG by mailboat/landing craft from a hub (inference; distribution mode not yet published).</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Risk register</h2>
+    <div class="risk"><span class="chip r">RED</span><p>Single-supplier fuel chain (Shell) with FSU storage that leaves in hurricanes.<small>Mitigation: onshore tank buffer sizing, dual-fuel retention on Station A (engines keep HFO/ADO capability).</small></p></div>
+    <div class="risk"><span class="chip a">AMBER</span><p>Fuel switching doesn't fix the wires. The 2026 outages were distribution failures; LNG lowers cost, not feeder risk.<small>Bahamas Grid Co. rebuild is the critical path — benefits land summer 2027+.</small></p></div>
+    <div class="risk"><span class="chip a">AMBER</span><p>Schedule: BPL targeted first LNG engines Q1 '26; terminal broke ground Jul '26 — first gas now Q1 '27. One-year slip already banked.<small>Watch Phase 2/3 dates accordingly.</small></p></div>
+    <div class="risk"><span class="chip g">GREEN</span><p>Economics validated externally: Moody's outlook upgrade cites energy reform; projected ~$210M/yr system savings at full build-out.<small>IDB adding $90M for SCADA/OMS + smart metering.</small></p></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <b>Data vintage Aug 2026.</b> Confirmed figures from BPL, FOCOL/Shell EMP filings, Tribune242, Eyewitness News, LNG Prime, Global Energy Monitor, IDB. Items tagged <span class="est" style="margin:0">EST</span> are engineering estimates pending URCA/BPL published station data. Chart is schematic — not for navigation. Single-file build · no dependencies · GH-Pages ready.
+</footer>
+
+<script>
+/* ================= DATA ================= */
+const PLANTS=[
+ // New Providence
+ {id:'cpA',n:'Clifton Pier — Station A',g:'New Providence',lat:25.004,lon:-77.556,mw:132,f:'hfo',t:'7× Wärtsilä 50, tri-fuel (HFO/ADO/gas)',s:'OP',est:false,note:'COD Dec 2019, $95–98M. Gas-conversion candidate for LNG Phase 1. Ops taken in-house from Wärtsilä end-2022.'},
+ {id:'cpL',n:'Clifton Pier — legacy units',g:'New Providence',lat:24.998,lon:-77.548,mw:60,f:'hfo',t:'Older MAN/BWSC slow-speed sets',s:'OP',est:true,note:'Partially retired; Station D replacement long-planned. Usable capacity varies with maintenance state.'},
+ {id:'bh',n:'Blue Hills Power Station',g:'New Providence',lat:25.041,lon:-77.372,mw:100,f:'hfo',t:'GTs + medium-speed diesels (incl. 30 MW GE, 2020)',s:'OP',est:true,note:'Lightning strike here on Jul 5 2026 cascaded into the island-wide blackout. LNG Phase 2 target (Q4 27); Phase 3 CCGT site (>170 MW).'},
+ {id:'lngT',n:'NPG LNG Terminal (u/c)',g:'New Providence',lat:25.010,lon:-77.565,mw:0,f:'lng',t:'FSU + onshore regas · Shell 40 / Sun Oil 60',s:'U/C',est:false,note:'~$500M. FID + groundbreaking Jul 2026, first gas Q1 2027 → 90 MW. O&M: px Group.'},
+ {id:'s1',n:'Baillou Hills Solar + BESS',g:'New Providence',lat:25.030,lon:-77.360,mw:0,f:'plan',t:'Utility PV + battery (planned)',s:'PLAN',est:true,note:'One of three committed NP solar farms adjoining the Baillou Hills station.'},
+ {id:'s2',n:'Coral Harbour Solar + BESS',g:'New Providence',lat:24.988,lon:-77.470,mw:0,f:'plan',t:'Utility PV + battery (planned)',s:'PLAN',est:true,note:'Committed NP solar farm; BESS firms output through cloud transients.'},
+ {id:'s3',n:'CV Bethel Solar + BESS',g:'New Providence',lat:25.020,lon:-77.330,mw:0,f:'plan',t:'Utility PV + battery (planned)',s:'PLAN',est:true,note:'Committed NP solar farm behind CV Bethel High School.'},
+ // Grand Bahama (separate utility)
+ {id:'gb',n:'GBPC — Freeport',g:'Grand Bahama',lat:26.522,lon:-78.658,mw:98,f:'sep',t:'Diesel + GT · Grand Bahama Power (Emera)',s:'OP',est:true,note:'Separate vertically-integrated utility; not BPL. Own tariff and reliability track.'},
+ // Abaco
+ {id:'wc',n:'Wilson City',g:'Abaco',lat:26.313,lon:-77.020,mw:48,f:'hfo',t:'HFO medium-speed station',s:'OP',est:true,note:'Abaco main station; system rebuilt post-Dorian. Extended-outage events reported 2026.'},
+ {id:'mh',n:'Marsh Harbour',g:'Abaco',lat:26.541,lon:-77.063,mw:8,f:'hfo',t:'Diesel peaking/backup',s:'OP',est:true,note:'Supports north Abaco load pocket.'},
+ {id:'moo',n:"Moore's Is. microgrid",g:'Abaco',lat:26.31,lon:-77.55,mw:0,f:'plan',t:'Solar+BESS (Family Is. Microgrid Co.)',s:'PLAN',est:true,note:'PPA signed; IPP-built hybrid.'},
+ // Eleuthera
+ {id:'rs',n:'Rock Sound',g:'Eleuthera',lat:24.899,lon:-76.199,mw:14,f:'hfo',t:'Diesel station',s:'OP',est:true,note:'South Eleuthera anchor; pole-fire/weather outages 2025.'},
+ {id:'hb',n:'Hatchet Bay',g:'Eleuthera',lat:25.343,lon:-76.494,mw:10,f:'hfo',t:'Diesel station + solar microgrid (dev)',s:'OP',est:true,note:'Rental generation eliminated Jun 2026 target; synchronized island ops.'},
+ {id:'hi',n:'Harbour Island',g:'Eleuthera',lat:25.500,lon:-76.635,mw:6,f:'hfo',t:'Diesel · microgrid PPA signed',s:'OP',est:true,note:'BPL reports 5–7 yr supply surplus; FIMCo hybrid coming.'},
+ // Exuma chain
+ {id:'gt',n:'George Town (Exuma)',g:'Exuma',lat:23.502,lon:-75.760,mw:16,f:'hfo',t:'Diesel station',s:'OP',est:true,note:'Fast-growing resort/residential load.'},
+ {id:'sc',n:'Staniel Cay hybrid',g:'Exuma Cays',lat:24.171,lon:-76.443,mw:1,f:'plan',t:'Solar+BESS (FIMCo)',s:'PLAN',est:true,note:'PPA signed 2025; build-out through 2026.'},
+ {id:'bp',n:'Black Point hybrid',g:'Exuma Cays',lat:24.098,lon:-76.400,mw:1,f:'plan',t:'Solar+BESS (FIMCo)',s:'PLAN',est:true,note:'PPA signed 2025.'},
+ {id:'fc',n:"Farmer's Cay hybrid",g:'Exuma Cays',lat:23.960,lon:-76.320,mw:0.5,f:'plan',t:'Solar+BESS (FIMCo)',s:'PLAN',est:true,note:'PPA signed 2025.'},
+ // Andros
+ {id:'nt',n:'Nicholls Town',g:'Andros',lat:25.140,lon:-78.005,mw:4,f:'hfo',t:'Diesel',s:'OP',est:true,note:'North Andros.'},
+ {id:'frc',n:'Fresh Creek',g:'Andros',lat:24.728,lon:-77.789,mw:3,f:'hfo',t:'Diesel',s:'OP',est:true,note:'Central Andros.'},
+ {id:'mc',n:'Mangrove Cay',g:'Andros',lat:24.225,lon:-77.684,mw:1.5,f:'hfo',t:'Diesel',s:'OP',est:true,note:''},
+ {id:'kb',n:'Kemps Bay',g:'Andros',lat:24.036,lon:-77.545,mw:1.5,f:'hfo',t:'Diesel',s:'OP',est:true,note:'South Andros.'},
+ // West / small
+ {id:'bi',n:'Alice Town (Bimini)',g:'Bimini',lat:25.728,lon:-79.297,mw:10,f:'hfo',t:'Diesel · microgrid PPA signed',s:'OP',est:true,note:'Resort-driven load growth; FIMCo hybrid planned.'},
+ {id:'gh',n:'Great Harbour Cay',g:'Berry Is.',lat:25.742,lon:-77.840,mw:3,f:'hfo',t:'Diesel',s:'OP',est:true,note:''},
+ // East / south
+ {id:'nb',n:'New Bight (Cat Is.)',g:'Cat Island',lat:24.285,lon:-75.410,mw:5,f:'hfo',t:'Diesel · RenugenPro hybrid coming',s:'OP',est:true,note:'Island-wide outage Jun 2026 (Rake & Scrape festival). Solar+BESS+LNG PPA signed.'},
+ {id:'ss',n:'Cockburn Town (San Sal)',g:'San Salvador',lat:24.052,lon:-74.531,mw:5,f:'hfo',t:'Diesel · RenugenPro hybrid coming',s:'OP',est:true,note:'Solar+BESS+LNG PPA signed.'},
+ {id:'dc',n:"Deadman's Cay (Long Is.)",g:'Long Island',lat:23.180,lon:-75.100,mw:8,f:'hfo',t:'Diesel · RenugenPro hybrid coming',s:'OP',est:true,note:'Solar+BESS+LNG PPA signed.'},
+ {id:'rc',n:'Port Nelson (Rum Cay)',g:'Rum Cay',lat:23.640,lon:-74.842,mw:0.5,f:'hfo',t:'Diesel',s:'OP',est:true,note:''},
+ {id:'ri',n:'Duncan Town (Ragged Is.)',g:'Ragged Is.',lat:22.187,lon:-75.727,mw:0.9,f:'sol',t:'Solar + BESS + diesel backup',s:'OP',est:true,note:'BPL\u2019s model microgrid — the template cited for the distributed-energy strategy.'},
+ {id:'ch',n:'Colonel Hill (Crooked Is.)',g:'Crooked Is.',lat:22.756,lon:-74.202,mw:1,f:'hfo',t:'Diesel',s:'OP',est:true,note:''},
+ {id:'sp',n:'Spring Point (Acklins)',g:'Acklins',lat:22.441,lon:-73.972,mw:1,f:'hfo',t:'Diesel',s:'OP',est:true,note:''},
+ {id:'my',n:"Abraham's Bay (Mayaguana)",g:'Mayaguana',lat:22.365,lon:-72.977,mw:0.8,f:'hfo',t:'Diesel',s:'OP',est:true,note:''},
+ {id:'in',n:'Matthew Town (Inagua)',g:'Inagua',lat:20.949,lon:-73.679,mw:2.5,f:'hfo',t:'Diesel (Morton Salt self-supplies separately)',s:'OP',est:true,note:''},
+ {id:'sw',n:'Spanish Wells co-op',g:'St. George\u2019s Cay',lat:25.542,lon:-76.762,mw:4,f:'sep',t:'Private community utility',s:'OP',est:true,note:'One of the few non-BPL systems.'},
+];
+
+const GRIDS=[
+ {n:'New Providence',inst:292,pk:260,est:true,st:'a',note:'Nameplate ≥ peak, but distribution bottlenecks are tripping the system — Jul 5 \u201926 island-wide blackout. Fix lands summer 2027+. Rentals still bridge maintenance gaps.'},
+ {n:'Grand Bahama (GBPC)',inst:98,pk:66,est:true,st:'g',note:'Separate Emera-owned utility; healthier margin, own rate structure.'},
+ {n:'Abaco',inst:56,pk:28,est:true,st:'a',note:'Capacity fine on paper; extended outages logged 2026. Post-Dorian network still hardening.'},
+ {n:'Eleuthera',inst:30,pk:20,est:true,st:'a',note:'Rental sets retired Jun \u201926 (target); stations being synchronized. Trending green.'},
+ {n:'Exuma',inst:16,pk:13,est:true,st:'a',note:'Thin margin against fast tourism-driven load growth.'},
+ {n:'Bimini',inst:10,pk:7,est:true,st:'a',note:'Resort growth; FIMCo hybrid PPA signed.'},
+ {n:'Andros (4 stations)',inst:10,pk:6,est:true,st:'g',note:'Four small isolated systems on one island.'},
+ {n:'Long Island',inst:8,pk:5,est:true,st:'g',note:'RenugenPro solar+BESS+LNG hybrid coming.'},
+ {n:'Cat Island',inst:5,pk:3.5,est:true,st:'a',note:'Jun \u201926 island-wide outage; hybrid PPA signed.'},
+ {n:'San Salvador',inst:5,pk:3,est:true,st:'g',note:'RenugenPro hybrid coming.'},
+ {n:'Berry Islands',inst:3,pk:2,est:true,st:'g',note:''},
+ {n:'Inagua',inst:2.5,pk:1.5,est:true,st:'g',note:'Morton Salt self-generates separately.'},
+ {n:'Ragged Island',inst:0.9,pk:0.4,est:true,st:'g',note:'Solar+BESS model microgrid — the national template.'},
+ {n:'Small SE islands',inst:3.3,pk:2,est:true,st:'a',note:'Crooked, Acklins, Mayaguana, Rum Cay — sub-MW diesel each; prime microgrid candidates.'},
+];
+
+/* ================= MAP ================= */
+const BB={w:-80.45,e:-72.55,s:20.55,n:27.15},K=Math.cos(23.9*Math.PI/180);
+const MW_=760, MH_=Math.round(MW_*(BB.n-BB.s)/((BB.e-BB.w)*K)); // ≈696
+const X=lon=>(lon-BB.w)/(BB.e-BB.w)*MW_;
+const Y=lat=>(BB.n-lat)/(BB.n-BB.s)*MH_;
+const P=pts=>pts.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join(' ')+' Z';
+
+const BANKS=[
+ [[-79.3,27.05],[-77.6,27.15],[-76.95,26.55],[-77.0,26.0],[-77.4,25.85],[-78.15,26.3],[-79.35,26.5]],
+ [[-79.3,25.35],[-78.6,25.42],[-77.8,25.3],[-77.15,25.12],[-76.55,24.6],[-76.05,23.8],[-75.55,23.15],[-75.55,22.55],[-76.45,22.0],[-77.35,22.3],[-78.35,23.3],[-79.35,24.2]],
+ [[-80.45,24.2],[-79.9,24.25],[-79.7,23.9],[-80.1,23.6],[-80.45,23.7]],
+ [[-76.9,25.65],[-76.05,24.7],[-75.25,23.9],[-74.75,22.8],[-75.05,22.7],[-75.5,23.6],[-76.35,24.6],[-77.0,25.45]],
+];
+const ISLES=[
+ [[-78.99,26.70],[-78.4,26.72],[-77.93,26.65],[-77.95,26.55],[-78.5,26.50],[-78.98,26.55]],
+ [[-77.95,26.90],[-77.55,26.95],[-77.15,26.60],[-77.00,26.35],[-77.05,25.95],[-77.25,26.00],[-77.20,26.35],[-77.45,26.62],[-77.90,26.80]],
+ [[-78.05,25.18],[-77.70,25.05],[-77.55,24.65],[-77.50,24.15],[-77.70,23.95],[-77.95,24.15],[-78.10,24.60],[-78.20,24.95]],
+ [[-77.56,25.03],[-77.42,25.09],[-77.27,25.05],[-77.30,24.98],[-77.50,24.97]],
+ [[-76.80,25.57],[-76.60,25.50],[-76.48,25.34],[-76.32,25.15],[-76.16,24.94],[-76.13,24.80],[-76.22,24.83],[-76.33,25.02],[-76.50,25.22],[-76.66,25.42]],
+ [[-76.55,24.28],[-76.30,24.05],[-76.05,23.85],[-75.80,23.60],[-75.70,23.45],[-75.78,23.42],[-75.98,23.62],[-76.25,23.90],[-76.52,24.18]],
+ [[-75.72,24.68],[-75.48,24.42],[-75.32,24.18],[-75.38,24.12],[-75.55,24.35],[-75.75,24.60]],
+ [[-74.58,24.10],[-74.46,24.10],[-74.44,23.98],[-74.56,23.98]],
+ [[-75.32,23.68],[-75.12,23.42],[-74.95,23.10],[-74.85,22.90],[-74.93,22.87],[-75.08,23.15],[-75.25,23.45],[-75.36,23.63]],
+ [[-74.45,22.78],[-74.15,22.85],[-73.95,22.72],[-73.85,22.45],[-73.95,22.30],[-74.05,22.45],[-74.10,22.65],[-74.35,22.68]],
+ [[-73.15,22.42],[-72.85,22.45],[-72.75,22.35],[-73.00,22.30]],
+ [[-73.90,21.20],[-73.45,21.30],[-73.20,21.05],[-73.35,20.90],[-73.68,20.90]],
+ [[-79.31,25.78],[-79.27,25.78],[-79.26,25.68],[-79.30,25.68]],
+ [[-77.90,25.82],[-77.72,25.70],[-77.78,25.66],[-77.92,25.76]],
+ [[-75.76,22.24],[-75.70,22.24],[-75.70,22.14],[-75.76,22.14]],
+ [[-74.88,23.68],[-74.80,23.68],[-74.80,23.60],[-74.88,23.60]],
+];
+const FLA=[[-80.45,27.15],[-80.05,27.15],[-80.10,26.4],[-80.28,25.7],[-80.45,25.2]];
+
+const FCOL={hfo:'var(--amber)',sol:'var(--solar)',plan:'none',lng:'var(--aqua)',sep:'var(--violet)'};
+const FSTK={hfo:'#7a5620',sol:'#8a7420',plan:'var(--solar)',lng:'#1f7f8c',sep:'#5a4fa0'};
+
+function drawMap(){
+  const s=[];
+  s.push('<rect width="'+MW_+'" height="'+MH_+'" fill="none"/>');
+  // graticule
+  for(let lo=-80;lo<=-73;lo++){s.push(`<line class="grat" x1="${X(lo)}" y1="0" x2="${X(lo)}" y2="${MH_}"/>`);s.push(`<text class="gratlab" x="${X(lo)+3}" y="${MH_-6}">${Math.abs(lo)}°W</text>`);}
+  for(let la=21;la<=27;la++){s.push(`<line class="grat" x1="0" y1="${Y(la)}" x2="${MW_}" y2="${Y(la)}"/>`);s.push(`<text class="gratlab" x="4" y="${Y(la)-3}">${la}°N</text>`);}
+  // Florida hint
+  s.push('<path d="'+P(FLA)+'" fill="#122636" stroke="#1D3A52" stroke-width="1"/>');
+  s.push(`<text class="lbl" x="${X(-80.38)}" y="${Y(26.6)}" transform="rotate(-78 ${X(-80.38)} ${Y(26.6)})">FLORIDA · U.S. SUPPLY</text>`);
+  // banks then isles
+  BANKS.forEach(b=>s.push('<path class="bank" d="'+P(b)+'"/>'));
+  ISLES.forEach(i=>s.push('<path class="isl" d="'+P(i)+'"/>'));
+  // labels
+  const L=[['GRAND BAHAMA',-78.7,26.86,1],['ABACO',-76.98,26.75,1],['ANDROS',-78.42,24.55,1],['NEW PROV.',-77.62,25.22,1],['ELEUTHERA',-76.02,25.32,1],['EXUMAS',-76.6,23.62,1],['CAT IS.',-75.28,24.62,0],['SAN SAL.',-74.4,24.22,0],['LONG IS.',-74.78,23.5,0],['RAGGED',-76.15,22.14,0],['CROOKED / ACKLINS',-74.55,22.14,0],['MAYAGUANA',-73.12,22.6,0],['GREAT INAGUA',-73.9,20.78,1],['BIMINI',-79.55,25.55,0],['BERRY IS.',-78.3,25.9,0],['GREAT BAHAMA BANK',-78.6,23.35,2],['LITTLE BAHAMA BANK',-78.85,26.28,2]];
+  L.forEach(([t,lo,la,b])=>s.push(`<text class="lbl${b==1?' big':''}" ${b==2?'fill-opacity=".55" font-style="italic"':''} x="${X(lo)}" y="${Y(la)}">${t}</text>`));
+  // LNG courses
+  s.push(`<g id="lngLayer"><path class="course" d="M ${X(-80.42)} ${Y(25.9)} C ${X(-79.6)} ${Y(25.3)}, ${X(-78.6)} ${Y(24.9)}, ${X(-77.62)} ${Y(24.97)}"/>`);
+  s.push(`<text class="lbl" fill="#45C6D6" x="${X(-79.75)}" y="${Y(25.5)}">LNG COURSE · SHELL U.S. PORTFOLIO</text>`);
+  // family island LNG spokes from Clifton
+  [[-75.41,24.285],[-74.531,24.052],[-75.10,23.18]].forEach(d=>{
+    s.push(`<path class="course2" d="M ${X(-77.55)} ${Y(25.0)} L ${X(d[0])} ${Y(d[1])}"/>`);
+  });
+  s.push(`<text class="lbl" fill-opacity=".8" fill="#45C6D6" x="${X(-75.9)}" y="${Y(23.05)}">ISO-CONTAINER SPOKES (PLANNED)</text></g>`);
+  // nodes
+  PLANTS.forEach(p=>{
+    const r=p.mw>0?Math.max(4,Math.sqrt(p.mw)*1.7):5;
+    const cls=p.f==='plan'?'re':(p.f==='sol'?'re':(p.f==='lng'?'lng':'thermal'));
+    const fill=p.f==='plan'?'rgba(239,203,79,.12)':FCOL[p.f];
+    const dash=p.f==='plan'?'stroke-dasharray="3 2"':'';
+    s.push(`<g class="node" data-id="${p.id}" data-layer="${cls}">
+      <circle class="halo" cx="${X(p.lon)}" cy="${Y(p.lat)}" r="${r+3.5}" stroke="${p.f==='plan'?'var(--solar)':FSTK[p.f]}"/>
+      <circle cx="${X(p.lon)}" cy="${Y(p.lat)}" r="${r}" fill="${fill}" stroke="${p.f==='plan'?'var(--solar)':FSTK[p.f]}" ${dash} stroke-width="1.1"/>
+      ${p.mw>=40?`<text x="${X(p.lon)}" y="${Y(p.lat)+2.6}">${p.mw}</text>`:''}
+    </g>`);
+  });
+  document.getElementById('map').innerHTML=s.join('');
+}
+drawMap();
+
+const detail=document.getElementById('detail');
+function showPlant(id){
+  const p=PLANTS.find(x=>x.id===id); if(!p)return;
+  document.querySelectorAll('.node').forEach(n=>n.classList.toggle('sel',n.dataset.id===id));
+  const fuel={hfo:'HFO / diesel',sol:'Solar hybrid',plan:'Planned RE',lng:'LNG infrastructure',sep:'Separate utility'}[p.f];
+  const st={OP:'<span class="chip g">Operating</span>','U/C':'<span class="chip b">Under const.</span>',PLAN:'<span class="chip a">Planned</span>'}[p.s];
+  detail.innerHTML=`<h2>${p.n} ${p.est?'<span class="est">EST</span>':''}</h2>
+    <div class="drow"><span class="k">Grid</span><span class="val">${p.g}</span></div>
+    <div class="drow"><span class="k">Capacity</span><span class="val">${p.mw>0?p.mw+' MW':'—'}</span></div>
+    <div class="drow"><span class="k">Type</span><span class="val" style="max-width:60%">${p.t}</span></div>
+    <div class="drow"><span class="k">Class</span><span class="val">${fuel}</span></div>
+    <div class="drow"><span class="k">Status</span><span class="val">${st}</span></div>
+    ${p.note?`<p class="note" style="margin-top:9px">${p.note}</p>`:''}`;
+}
+document.getElementById('map').addEventListener('click',e=>{
+  const g=e.target.closest('.node'); if(g) showPlant(g.dataset.id);
+});
+document.querySelectorAll('.layers button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    b.classList.toggle('on');
+    const on=b.classList.contains('on'), l=b.dataset.l;
+    document.querySelectorAll(`[data-layer="${l==='re'?'re':l}"]`).forEach(n=>n.style.display=on?'':'none');
+    if(l==='lng'){const g=document.getElementById('lngLayer'); if(g)g.style.display=on?'':'none';
+      document.querySelectorAll('[data-layer="lng"]').forEach(n=>n.style.display=on?'':'none');}
+  });
+});
+
+/* ================= BALANCE ================= */
+const gwrap=document.getElementById('grids');
+const maxI=Math.max(...GRIDS.map(g=>g.inst));
+gwrap.innerHTML=GRIDS.map(g=>{
+  const iw=Math.max(2,g.inst/maxI*100), pw=g.pk/maxI*100;
+  const margin=((g.inst-g.pk)/g.pk*100).toFixed(0);
+  const st={g:'<span class="chip g">Green</span>',a:'<span class="chip a">Amber</span>',r:'<span class="chip r">Red</span>'}[g.st];
+  return `<div class="grow">
+    <div class="top"><span class="nm">${g.n}${g.est?'<span class="est">EST</span>':''}</span>
+    <span class="nums">${g.inst}&thinsp;/&thinsp;${g.pk} MW · +${margin}%</span></div>
+    <div class="bar"><div class="inst" style="width:${iw}%"></div><div class="pk" style="left:${pw}%"></div></div>
+    <div class="foot">${st}<span class="note">${g.note}</span></div>
+  </div>`;
+}).join('');
+
+/* ================= SOLAR + BESS ================= */
+const GP={np:{pk:260},nat:{pk:360},ab:{pk:28},el:{pk:20},ex:{pk:13},mi:{pk:2}};
+const gsel=document.getElementById('gsel'),mw=document.getElementById('mw'),hrs=document.getElementById('hrs');
+const ov=document.getElementById('ov'),oh=document.getElementById('oh'),res=document.getElementById('res'),refill=document.getElementById('refill');
+const CF=.21, LF=.62;
+function fmt(x,d=0){return x.toLocaleString('en-US',{maximumFractionDigits:d})}
+function calc(){
+  const pk=GP[gsel.value].pk, S=+mw.value, H=+hrs.value;
+  ov.textContent=S+' MW'; oh.textContent=H.toFixed(1)+' h';
+  const E=pk*LF*8760;                       // MWh/yr demand
+  const raw=S*CF*8760;                      // MWh/yr PV
+  const rawShare=raw/E;
+  const pen=.5*Math.max(0,1-H/4);           // curtailment penalty factor
+  const curt=Math.max(0,rawShare-.18)*pen;  // share lost
+  const share=Math.max(0,rawShare-curt);
+  const used=share*E;
+  const bess=S*H;
+  const land=S*2.5;
+  const save=used*1000*.19/1e6;             // $M/yr at 19¢/kWh
+  const co2=used*720/1e6;                   // kt/yr
+  res.innerHTML=`
+    <div class="res"><div class="v" style="color:var(--solar)">${(share*100).toFixed(1)}<small> %</small></div><div class="l">Annual RE share</div></div>
+    <div class="res"><div class="v">${fmt(bess)}<small> MWh</small></div><div class="l">BESS energy (${S}&thinsp;MW × ${H}h)</div></div>
+    <div class="res"><div class="v">${fmt(used/1000)}<small> GWh/yr</small></div><div class="l">PV delivered ${curt>0?'· '+(curt*100).toFixed(0)+'% curtailed':''}</div></div>
+    <div class="res"><div class="v">${fmt(land)}<small> ac</small></div><div class="l">Land take</div></div>
+    <div class="res"><div class="v" style="color:var(--green)">$${save.toFixed(0)}<small> M/yr</small></div><div class="l">Fuel displaced (HFO era)</div></div>
+    <div class="res"><div class="v">${co2.toFixed(0)}<small> kt/yr</small></div><div class="l">CO₂ avoided</div></div>`;
+  refill.style.width=Math.min(100,share*100)+'%';
+}
+[gsel,mw,hrs].forEach(el=>el.addEventListener('input',calc));
+document.querySelectorAll('.presets button').forEach(b=>b.addEventListener('click',()=>{
+  const p=b.dataset.p;
+  if(p==='gov'){gsel.value='nat';mw.value=128;hrs.value=3;}
+  if(p==='goal'){gsel.value='nat';mw.value=310;hrs.value=4;}
+  if(p==='fi'){gsel.value='mi';mw.value=4;hrs.value=5;}
+  calc();
+}));
+calc();
+
+/* ================= TABS ================= */
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('main section').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));
+  window.scrollTo({top:0});
+}));
+// default select Station A
+showPlant('cpA');
+</script>
+</body>
+</html>

@@ -6,6 +6,10 @@ GitHub Actions cron → committed price history → GitHub Pages dashboard.
 
 **Dashboard:** https://tandem-engineering-group.github.io/hw-price-radar/
 
+**Also published here:** [Bahamas Grid Portal](https://tandem-engineering-group.github.io/hw-price-radar/bahamas/) — a standalone
+single-file grid-intelligence portal (`site/bahamas/`). Unrelated to price tracking;
+it shares the Pages site only, not the data pipeline.
+
 ## How it works
 - `skus.yaml` — the watchlist. Each source is tagged with a tier.
 - `src/collect.py` — deterministic tier. Runs daily at 13:17 UTC (~9:17am Detroit)
