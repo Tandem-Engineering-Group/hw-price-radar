@@ -95,20 +95,40 @@
     font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;padding:6px 10px;border-radius:5px;
   }
   .layers button.on{color:var(--paper);border-color:var(--aqua);background:rgba(69,198,214,.08)}
-  .mapwrap{background:radial-gradient(120% 90% at 30% 20%,#0C2135 0%,var(--ink) 70%);border:1px solid var(--line);border-radius:8px;overflow:hidden}
-  svg{display:block;width:100%;height:auto}
-  .isl{fill:var(--sand);fill-opacity:.9;stroke:var(--sandline);stroke-width:.7}
-  .bank{fill:var(--bank);stroke:var(--bankline);stroke-opacity:.5;stroke-width:.8;stroke-dasharray:3 3}
-  .grat{stroke:#17324A;stroke-width:.6}
-  .gratlab{font-family:'IBM Plex Mono',monospace;font-size:8px;fill:#2E4B63}
-  .lbl{font-family:'IBM Plex Mono',monospace;font-size:8.5px;fill:#6E8496;letter-spacing:.08em}
-  .lbl.big{font-size:9.5px;fill:#8DA3B3}
+  .mapwrap{position:relative;background:radial-gradient(120% 90% at 30% 20%,#0C2135 0%,var(--ink) 70%);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  svg{display:block;width:100%;height:auto;touch-action:none;cursor:grab}
+  svg:active{cursor:grabbing}
+  .mapctl{position:absolute;right:8px;top:8px;z-index:5;display:flex;gap:4px;align-items:center}
+  .mapctl button{width:30px;height:30px;border-radius:6px;cursor:pointer;
+    background:rgba(13,32,50,.9);border:1px solid var(--line);color:var(--paper);font-size:15px;line-height:1}
+  .mapctl button:active{border-color:var(--aqua)}
+  .mapctl #zlab{font-size:10.5px;color:var(--dim);background:rgba(13,32,50,.9);
+    border:1px solid var(--line);border-radius:6px;padding:0 6px;height:30px;display:flex;align-items:center}
+  .node .hit{fill:transparent;stroke:none}
+  .node:focus{outline:none}
+  .node:focus-visible circle.halo{stroke:var(--aqua);stroke-width:2.4;opacity:1}
+
+  /* asset list */
+  .agrp{margin-bottom:10px}
+  .agh{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);padding:6px 0 3px;border-bottom:1px solid var(--line)}
+  .arow{display:flex;width:100%;align-items:center;gap:9px;padding:8px 2px;background:none;border:none;
+    border-bottom:1px dashed var(--line);color:var(--paper);cursor:pointer;text-align:left;font:inherit;font-size:13.5px}
+  .arow:hover,.arow:focus-visible{background:var(--chart2);outline:none}
+  .adot{width:11px;height:11px;border-radius:50%;flex:0 0 auto;display:inline-block}
+  .arow .an{flex:1 1 auto}
+  .arow .amw{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--dim);flex:0 0 auto}
+  .isl{fill:var(--sand);fill-opacity:.9;stroke:var(--sandline);stroke-width:.7;vector-effect:non-scaling-stroke}
+  .bank{fill:var(--bank);stroke:var(--bankline);stroke-opacity:.5;stroke-width:.8;stroke-dasharray:3 3;vector-effect:non-scaling-stroke}
+  .grat{stroke:#17324A;stroke-width:.6;vector-effect:non-scaling-stroke}
+  .gratlab{font-family:'IBM Plex Mono',monospace;font-size:calc(8px*var(--k,1));fill:#2E4B63}
+  .lbl{font-family:'IBM Plex Mono',monospace;font-size:calc(8.5px*var(--k,1));fill:#6E8496;letter-spacing:.08em}
+  .lbl.big{font-size:calc(9.5px*var(--k,1));fill:#8DA3B3}
   .node{cursor:pointer}
   .node circle.halo{fill:none;stroke-width:1;opacity:.45}
   .node.sel circle.halo{opacity:1;stroke-width:1.6}
-  .node text{font-family:'IBM Plex Mono',monospace;font-size:7.5px;fill:var(--ink);font-weight:600;text-anchor:middle;pointer-events:none}
-  .course{stroke:var(--aqua);stroke-width:1.6;fill:none;stroke-dasharray:6 5;animation:flow 2.6s linear infinite;opacity:.85}
-  .course2{stroke:var(--aqua);stroke-width:1;fill:none;stroke-dasharray:3 5;opacity:.5;animation:flow 3.4s linear infinite}
+  .node text{font-family:'IBM Plex Mono',monospace;font-size:calc(7.5px*var(--k,1));fill:var(--ink);font-weight:600;text-anchor:middle;pointer-events:none}
+  .course{stroke:var(--aqua);stroke-width:1.6;vector-effect:non-scaling-stroke;fill:none;stroke-dasharray:6 5;animation:flow 2.6s linear infinite;opacity:.85}
+  .course2{stroke:var(--aqua);stroke-width:1;vector-effect:non-scaling-stroke;fill:none;stroke-dasharray:3 5;opacity:.5;animation:flow 3.4s linear infinite}
   @keyframes flow{to{stroke-dashoffset:-22}}
   .legend{display:flex;flex-wrap:wrap;gap:10px 16px;padding:10px 4px 2px;font-size:11.5px;color:var(--dim)}
   .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -201,7 +221,16 @@
     <button class="on" data-l="re">Renewable / Planned</button>
     <button class="on" data-l="lng">LNG chain</button>
   </div>
-  <div class="mapwrap"><svg id="map" viewBox="0 0 760 696" role="img" aria-label="Schematic chart of Bahamas power assets"></svg></div>
+  <div class="mapwrap">
+    <div class="mapctl">
+      <button id="zin"  aria-label="Zoom in">+</button>
+      <button id="zout" aria-label="Zoom out">−</button>
+      <button id="zrst" aria-label="Reset view">⤾</button>
+      <span id="zlab" class="mono">1.0×</span>
+    </div>
+    <svg id="map" role="application" aria-label="Interactive chart of Bahamas power assets — drag to pan, pinch or scroll to zoom, tap a marker for detail"></svg>
+  </div>
+  <p class="small" style="margin-top:6px">Drag to pan · pinch or scroll to zoom · tap a marker for detail. Dense clusters (New Providence) separate as you zoom in.</p>
   <div class="legend">
     <span><span class="dot" style="background:var(--amber)"></span>HFO / diesel</span>
     <span><span class="dot" style="background:var(--solar)"></span>Solar / hybrid</span>
@@ -209,6 +238,10 @@
     <span><span class="dot" style="background:var(--aqua)"></span>LNG asset</span>
     <span><span class="dot" style="background:var(--violet)"></span>Separate utility</span>
     <span class="mono" style="font-size:10px;color:var(--faint)">marker ∝ MW · tap for detail</span>
+  </div>
+  <div class="card">
+    <h2>All assets<span class="tag">tap to select + centre the chart</span></h2>
+    <div id="alist"></div>
   </div>
   <div id="detail" class="card">
     <h2>Select an asset<span class="tag">tap any marker</span></h2>
@@ -395,8 +428,8 @@ const GRIDS=[
 ];
 
 /* ================= MAP ================= */
-const BB={w:-80.45,e:-72.55,s:20.55,n:27.15},K=Math.cos(23.9*Math.PI/180);
-const MW_=760, MH_=Math.round(MW_*(BB.n-BB.s)/((BB.e-BB.w)*K)); // ≈696
+const BB={w:-80.55,e:-72.55,s:20.55,n:27.32},K=Math.cos(23.9*Math.PI/180);
+const MW_=760, MH_=Math.round(MW_*(BB.n-BB.s)/((BB.e-BB.w)*K)); // north edge clears Walker's Cay
 const X=lon=>(lon-BB.w)/(BB.e-BB.w)*MW_;
 const Y=lat=>(BB.n-lat)/(BB.n-BB.s)*MH_;
 const P=pts=>pts.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join(' ')+' Z';
@@ -408,24 +441,59 @@ const BANKS=[
  [[-76.9,25.65],[-76.05,24.7],[-75.25,23.9],[-74.75,22.8],[-75.05,22.7],[-75.5,23.6],[-76.35,24.6],[-77.0,25.45]],
 ];
 const ISLES=[
+ // Grand Bahama
  [[-78.99,26.70],[-78.4,26.72],[-77.93,26.65],[-77.95,26.55],[-78.5,26.50],[-78.98,26.55]],
- [[-77.95,26.90],[-77.55,26.95],[-77.15,26.60],[-77.00,26.35],[-77.05,25.95],[-77.25,26.00],[-77.20,26.35],[-77.45,26.62],[-77.90,26.80]],
- [[-78.05,25.18],[-77.70,25.05],[-77.55,24.65],[-77.50,24.15],[-77.70,23.95],[-77.95,24.15],[-78.10,24.60],[-78.20,24.95]],
- [[-77.56,25.03],[-77.42,25.09],[-77.27,25.05],[-77.30,24.98],[-77.50,24.97]],
+ // Great + Little Abaco (hook); east coast widened so Marsh Harbour sits on land
+ [[-77.95,26.90],[-77.55,26.95],[-77.32,26.78],[-77.15,26.62],[-77.02,26.52],[-76.96,26.30],
+  [-77.00,26.05],[-77.19,25.84],[-77.30,25.92],[-77.14,26.16],[-77.22,26.42],[-77.45,26.66],
+  [-77.70,26.80],[-77.93,26.84]],
+ // Andros — extended south past Kemps Bay
+ [[-78.05,25.18],[-77.70,25.05],[-77.55,24.65],[-77.48,24.20],[-77.50,23.92],[-77.68,23.88],
+  [-77.86,24.10],[-78.10,24.60],[-78.20,24.95]],
+ // New Providence — west end must reach Clifton Pier / the LNG jetty (-77.57)
+ [[-77.68,25.06],[-77.50,25.09],[-77.33,25.09],[-77.24,25.03],[-77.33,24.97],[-77.55,24.98],[-77.66,25.00]],
+ // Eleuthera
  [[-76.80,25.57],[-76.60,25.50],[-76.48,25.34],[-76.32,25.15],[-76.16,24.94],[-76.13,24.80],[-76.22,24.83],[-76.33,25.02],[-76.50,25.22],[-76.66,25.42]],
+ // Exuma chain incl. Great/Little Exuma
  [[-76.55,24.28],[-76.30,24.05],[-76.05,23.85],[-75.80,23.60],[-75.70,23.45],[-75.78,23.42],[-75.98,23.62],[-76.25,23.90],[-76.52,24.18]],
+ // Cat Island
  [[-75.72,24.68],[-75.48,24.42],[-75.32,24.18],[-75.38,24.12],[-75.55,24.35],[-75.75,24.60]],
+ // San Salvador
  [[-74.58,24.10],[-74.46,24.10],[-74.44,23.98],[-74.56,23.98]],
+ // Long Island
  [[-75.32,23.68],[-75.12,23.42],[-74.95,23.10],[-74.85,22.90],[-74.93,22.87],[-75.08,23.15],[-75.25,23.45],[-75.36,23.63]],
+ // Crooked & Acklins
  [[-74.45,22.78],[-74.15,22.85],[-73.95,22.72],[-73.85,22.45],[-73.95,22.30],[-74.05,22.45],[-74.10,22.65],[-74.35,22.68]],
+ // Mayaguana
  [[-73.15,22.42],[-72.85,22.45],[-72.75,22.35],[-73.00,22.30]],
+ // Great Inagua
  [[-73.90,21.20],[-73.45,21.30],[-73.20,21.05],[-73.35,20.90],[-73.68,20.90]],
+ // North + South Bimini
  [[-79.31,25.78],[-79.27,25.78],[-79.26,25.68],[-79.30,25.68]],
+ // Berry Islands
  [[-77.90,25.82],[-77.72,25.70],[-77.78,25.66],[-77.92,25.76]],
+ // Ragged Island
  [[-75.76,22.24],[-75.70,22.24],[-75.70,22.14],[-75.76,22.14]],
+ // Rum Cay
  [[-74.88,23.68],[-74.80,23.68],[-74.80,23.60],[-74.88,23.60]],
+ // ---- added: remaining inhabited/named islands ----
+ [[-77.60,26.35],[-77.50,26.35],[-77.49,26.27],[-77.59,26.27]],          // Moore's Island (Bight of Abaco)
+ [[-77.06,26.66],[-76.93,26.53],[-76.90,26.49],[-76.96,26.50],[-77.03,26.62]], // Abaco cays (Elbow/Man-O-War/Guana)
+ [[-78.35,27.24],[-78.16,27.26],[-78.14,27.18],[-78.33,27.17]],          // Grand Cay / Walker's Cay
+ [[-76.80,25.57],[-76.74,25.57],[-76.73,25.52],[-76.79,25.52]],          // Spanish Wells / St George's Cay
+ [[-76.65,25.53],[-76.61,25.53],[-76.60,25.46],[-76.64,25.46]],          // Harbour Island
+ [[-75.99,24.60],[-75.92,24.60],[-75.92,24.55],[-75.99,24.55]],          // Little San Salvador (Half Moon Cay)
+ [[-75.14,23.88],[-75.07,23.88],[-75.07,23.81],[-75.14,23.81]],          // Conception Island
+ [[-73.80,23.12],[-73.64,23.12],[-73.64,23.04],[-73.80,23.04]],          // Samana Cay
+ [[-73.64,22.62],[-73.53,22.62],[-73.53,22.55],[-73.64,22.55]],          // Plana Cays
+ [[-74.38,22.66],[-74.30,22.66],[-74.29,22.54],[-74.37,22.54]],          // Long Cay (Crooked group)
+ [[-73.03,21.52],[-72.90,21.52],[-72.88,21.42],[-73.01,21.42]],          // Little Inagua
+ [[-79.30,25.58],[-79.26,25.58],[-79.25,25.52],[-79.29,25.52]],          // Gun Cay / Cat Cays
+ [[-75.84,22.92],[-75.78,22.92],[-75.70,22.40],[-75.76,22.40]],          // Jumentos Cays / Ragged chain
+ [[-80.44,23.72],[-80.36,23.72],[-80.35,23.65],[-80.43,23.65]],          // Cay Sal
+ [[-79.60,23.52],[-79.54,23.52],[-79.53,23.40],[-79.59,23.40]],          // Anguilla Cays (Cay Sal Bank)
 ];
-const FLA=[[-80.45,27.15],[-80.05,27.15],[-80.10,26.4],[-80.28,25.7],[-80.45,25.2]];
+const FLA=[[-80.55,27.32],[-80.05,27.32],[-80.10,26.4],[-80.28,25.7],[-80.55,25.2]];
 
 const FCOL={hfo:'var(--amber)',sol:'var(--solar)',plan:'none',lng:'var(--aqua)',sep:'var(--violet)'};
 const FSTK={hfo:'#7a5620',sol:'#8a7420',plan:'var(--solar)',lng:'#1f7f8c',sep:'#5a4fa0'};
@@ -443,7 +511,9 @@ function drawMap(){
   BANKS.forEach(b=>s.push('<path class="bank" d="'+P(b)+'"/>'));
   ISLES.forEach(i=>s.push('<path class="isl" d="'+P(i)+'"/>'));
   // labels
-  const L=[['GRAND BAHAMA',-78.7,26.86,1],['ABACO',-76.98,26.75,1],['ANDROS',-78.42,24.55,1],['NEW PROV.',-77.62,25.22,1],['ELEUTHERA',-76.02,25.32,1],['EXUMAS',-76.6,23.62,1],['CAT IS.',-75.28,24.62,0],['SAN SAL.',-74.4,24.22,0],['LONG IS.',-74.78,23.5,0],['RAGGED',-76.15,22.14,0],['CROOKED / ACKLINS',-74.55,22.14,0],['MAYAGUANA',-73.12,22.6,0],['GREAT INAGUA',-73.9,20.78,1],['BIMINI',-79.55,25.55,0],['BERRY IS.',-78.3,25.9,0],['GREAT BAHAMA BANK',-78.6,23.35,2],['LITTLE BAHAMA BANK',-78.85,26.28,2]];
+  const L=[['GRAND BAHAMA',-78.7,26.86,1],['ABACO',-76.90,26.75,1],['ANDROS',-78.42,24.55,1],['NEW PROV.',-77.72,25.19,1],['ELEUTHERA',-76.02,25.32,1],['EXUMAS',-76.6,23.62,1],['CAT IS.',-75.28,24.62,0],['SAN SAL.',-74.4,24.22,0],['LONG IS.',-74.78,23.5,0],['RAGGED',-76.15,22.14,0],['CROOKED / ACKLINS',-74.55,22.14,0],['MAYAGUANA',-73.12,22.6,0],['GREAT INAGUA',-73.9,20.78,1],['BIMINI',-79.62,25.55,0],['BERRY IS.',-78.3,25.9,0],
+   ['WALKER’S CAY',-78.55,27.26,0],['MOORE’S IS.',-77.95,26.31,0],['SPANISH WELLS',-77.10,25.56,0],['HARBOUR IS.',-76.42,25.50,0],['CONCEPTION',-75.05,23.86,0],['RUM CAY',-74.78,23.66,0],['SAMANA CAY',-73.60,23.09,0],['PLANA CAYS',-73.50,22.60,0],['LITTLE INAGUA',-72.86,21.49,0],['JUMENTOS CAYS',-76.30,22.70,0],['CAY SAL BANK',-80.30,23.90,2],
+   ['GREAT BAHAMA BANK',-78.6,23.35,2],['LITTLE BAHAMA BANK',-78.85,26.28,2]];
   L.forEach(([t,lo,la,b])=>s.push(`<text class="lbl${b==1?' big':''}" ${b==2?'fill-opacity=".55" font-style="italic"':''} x="${X(lo)}" y="${Y(la)}">${t}</text>`));
   // LNG courses
   s.push(`<g id="lngLayer"><path class="course" d="M ${X(-80.42)} ${Y(25.9)} C ${X(-79.6)} ${Y(25.3)}, ${X(-78.6)} ${Y(24.9)}, ${X(-77.62)} ${Y(24.97)}"/>`);
@@ -453,21 +523,76 @@ function drawMap(){
     s.push(`<path class="course2" d="M ${X(-77.55)} ${Y(25.0)} L ${X(d[0])} ${Y(d[1])}"/>`);
   });
   s.push(`<text class="lbl" fill-opacity=".8" fill="#45C6D6" x="${X(-75.9)}" y="${Y(23.05)}">ISO-CONTAINER SPOKES (PLANNED)</text></g>`);
-  // nodes
+  // nodes — invisible hit disc first so small markers stay tappable on a phone
   PLANTS.forEach(p=>{
     const r=p.mw>0?Math.max(4,Math.sqrt(p.mw)*1.7):5;
     const cls=p.f==='plan'?'re':(p.f==='sol'?'re':(p.f==='lng'?'lng':'thermal'));
     const fill=p.f==='plan'?'rgba(239,203,79,.12)':FCOL[p.f];
     const dash=p.f==='plan'?'stroke-dasharray="3 2"':'';
-    s.push(`<g class="node" data-id="${p.id}" data-layer="${cls}">
-      <circle class="halo" cx="${X(p.lon)}" cy="${Y(p.lat)}" r="${r+3.5}" stroke="${p.f==='plan'?'var(--solar)':FSTK[p.f]}"/>
-      <circle cx="${X(p.lon)}" cy="${Y(p.lat)}" r="${r}" fill="${fill}" stroke="${p.f==='plan'?'var(--solar)':FSTK[p.f]}" ${dash} stroke-width="1.1"/>
+    s.push(`<g class="node" data-id="${p.id}" data-layer="${cls}" tabindex="0" role="button"
+        aria-label="${p.n.replace(/"/g,'')}${p.mw>0?', '+p.mw+' megawatts':''}">
+      <circle class="hit" data-r="${Math.max(r+9,13)}" cx="${X(p.lon)}" cy="${Y(p.lat)}" r="${Math.max(r+9,13)}"/>
+      <circle class="halo" data-r="${r+3.5}" cx="${X(p.lon)}" cy="${Y(p.lat)}" r="${r+3.5}" stroke="${p.f==='plan'?'var(--solar)':FSTK[p.f]}" vector-effect="non-scaling-stroke"/>
+      <circle data-r="${r}" cx="${X(p.lon)}" cy="${Y(p.lat)}" r="${r}" fill="${fill}" stroke="${p.f==='plan'?'var(--solar)':FSTK[p.f]}" ${dash} stroke-width="1.1" vector-effect="non-scaling-stroke"/>
       ${p.mw>=40?`<text x="${X(p.lon)}" y="${Y(p.lat)+2.6}">${p.mw}</text>`:''}
     </g>`);
   });
-  document.getElementById('map').innerHTML=s.join('');
+  const svg=document.getElementById('map');
+  svg.setAttribute('viewBox',`0 0 ${MW_} ${MH_}`);
+  svg.innerHTML=s.join('');
 }
 drawMap();
+
+/* ---- pan / zoom: the New Providence cluster is unreadable at full extent ---- */
+const svgEl=document.getElementById('map');
+const VB={x:0,y:0,w:MW_,h:MH_};
+const MINW=MW_/80;   // deep enough to separate co-located assets (Clifton Pier A vs legacy ≈1 km apart)
+function applyVB(){
+  VB.w=Math.min(MW_,Math.max(MINW,VB.w)); VB.h=VB.w*MH_/MW_;
+  VB.x=Math.min(MW_-VB.w,Math.max(0,VB.x)); VB.y=Math.min(MH_-VB.h,Math.max(0,VB.y));
+  svgEl.setAttribute('viewBox',`${VB.x} ${VB.y} ${VB.w} ${VB.h}`);
+  // markers and type hold constant screen size, so zooming actually separates
+  // overlapping clusters instead of magnifying the pile-up
+  const k=VB.w/MW_;
+  svgEl.style.setProperty('--k',k);
+  svgEl.querySelectorAll('.node circle[data-r]').forEach(c=>c.setAttribute('r',+c.dataset.r*k));
+  document.getElementById('zlab').textContent=(MW_/VB.w).toFixed(1)+'×';
+}
+function zoomAt(cx,cy,factor){          // cx,cy in client px
+  const r=svgEl.getBoundingClientRect();
+  const ux=VB.x+(cx-r.left)/r.width*VB.w, uy=VB.y+(cy-r.top)/r.height*VB.h;
+  const nw=Math.min(MW_,Math.max(MINW,VB.w/factor));
+  VB.x=ux-(ux-VB.x)*(nw/VB.w); VB.y=uy-(uy-VB.y)*(nw/VB.w); VB.w=nw; applyVB();
+}
+function centerOn(lon,lat,w){
+  VB.w=w??Math.max(MINW,MW_/14); VB.h=VB.w*MH_/MW_;
+  VB.x=X(lon)-VB.w/2; VB.y=Y(lat)-VB.h/2; applyVB();
+}
+svgEl.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,e.deltaY<0?1.18:1/1.18);},{passive:false});
+
+const pts=new Map(); let drag=null, pinch=null, moved=0;
+svgEl.addEventListener('pointerdown',e=>{
+  pts.set(e.pointerId,{x:e.clientX,y:e.clientY}); svgEl.setPointerCapture(e.pointerId);
+  if(pts.size===1){ drag={x:e.clientX,y:e.clientY}; moved=0; }
+  if(pts.size===2){ const[a,b]=[...pts.values()]; pinch=Math.hypot(a.x-b.x,a.y-b.y); drag=null; }
+});
+svgEl.addEventListener('pointermove',e=>{
+  if(!pts.has(e.pointerId))return;
+  pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pinch!=null && pts.size===2){
+    const[a,b]=[...pts.values()], d=Math.hypot(a.x-b.x,a.y-b.y);
+    if(pinch>0) zoomAt((a.x+b.x)/2,(a.y+b.y)/2,d/pinch);
+    pinch=d; return;
+  }
+  if(drag){
+    const r=svgEl.getBoundingClientRect();
+    const dx=(e.clientX-drag.x)/r.width*VB.w, dy=(e.clientY-drag.y)/r.height*VB.h;
+    moved+=Math.abs(e.clientX-drag.x)+Math.abs(e.clientY-drag.y);
+    VB.x-=dx; VB.y-=dy; drag={x:e.clientX,y:e.clientY}; applyVB();
+  }
+});
+function endPtr(e){ pts.delete(e.pointerId); if(pts.size<2)pinch=null; if(!pts.size)drag=null; }
+svgEl.addEventListener('pointerup',endPtr); svgEl.addEventListener('pointercancel',endPtr);
 
 const detail=document.getElementById('detail');
 function showPlant(id){
@@ -484,7 +609,32 @@ function showPlant(id){
     ${p.note?`<p class="note" style="margin-top:9px">${p.note}</p>`:''}`;
 }
 document.getElementById('map').addEventListener('click',e=>{
+  if(moved>6) return;                       // that was a pan, not a tap
   const g=e.target.closest('.node'); if(g) showPlant(g.dataset.id);
+});
+document.getElementById('map').addEventListener('keydown',e=>{
+  const g=e.target.closest?.('.node');
+  if(g && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); showPlant(g.dataset.id); }
+});
+
+/* ---- map controls ---- */
+document.getElementById('zin').onclick =()=>{const r=svgEl.getBoundingClientRect();zoomAt(r.left+r.width/2,r.top+r.height/2,1.6);};
+document.getElementById('zout').onclick=()=>{const r=svgEl.getBoundingClientRect();zoomAt(r.left+r.width/2,r.top+r.height/2,1/1.6);};
+document.getElementById('zrst').onclick=()=>{VB.x=0;VB.y=0;VB.w=MW_;applyVB();};
+
+/* ---- asset list: guarantees every station is reachable even where markers overlap ---- */
+const GORDER=[...new Set(PLANTS.map(p=>p.g))];
+document.getElementById('alist').innerHTML=GORDER.map(g=>{
+  const rows=PLANTS.filter(p=>p.g===g).map(p=>
+    `<button class="arow" data-id="${p.id}"><span class="adot" style="background:${p.f==='plan'?'transparent':FCOL[p.f]};border:1.5px ${p.f==='plan'?'dashed':'solid'} ${p.f==='plan'?'var(--solar)':FSTK[p.f]}"></span>
+     <span class="an">${p.n}</span><span class="amw">${p.mw>0?p.mw+' MW':'—'}</span></button>`).join('');
+  return `<div class="agrp"><div class="agh">${g}</div>${rows}</div>`;
+}).join('');
+document.getElementById('alist').addEventListener('click',e=>{
+  const b=e.target.closest('.arow'); if(!b)return;
+  const p=PLANTS.find(x=>x.id===b.dataset.id);
+  showPlant(p.id); centerOn(p.lon,p.lat);
+  document.getElementById('detail').scrollIntoView({behavior:'smooth',block:'center'});
 });
 document.querySelectorAll('.layers button').forEach(b=>{
   b.addEventListener('click',()=>{
