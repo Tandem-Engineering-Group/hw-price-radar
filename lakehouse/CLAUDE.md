@@ -20,8 +20,9 @@ Two concerns, one personal project (split later if either grows):
    Michigan lakehouse (SK-1 Stacked Chalet, SK-2 A + Bar, SK-3 Kicked Ridge). Static
    reference: deck, diagrams, render prompt pack. Nothing to build; this is design context
    for everything below.
-2. **Lot Radar** — automated weekly discovery + scoring of lakefront lots in northern
-   Michigan, published to a static GitHub Pages dashboard. The radar's job is to answer
+2. **Lot Radar** — automated weekly discovery + scoring of lakefront lots on Michigan
+   INTERIOR lakes statewide (northern tier + downstate; Great Lakes frontage out of
+   scope), published to a static GitHub Pages dashboard. The radar's job is to answer
    the open design question: **which parti does the land want?** SK-1 needs 8–10 ft of
    grade fall to the water; SK-2 wants a wide flat lot; SK-3 wants a view axis. The
    scoring engine encodes exactly that.
@@ -161,8 +162,8 @@ touching `site/**` triggers the host repo's deploy automatically.
 A weekly claude.ai Routine (Mondays, fresh session) does the judgment work no adapter
 can: re-verify each watchlist lot via WebSearch (listing pages are egress-blocked from
 the session — snippets only, facts never invented), update prices/Status/LastVerified,
-hunt replacements, keep exactly 10 Active lots, then run pytest + the pipeline and ship
-via PR. Conventions it must keep: FrontageFt is PRIVATE frontage only; ApproxLocation /
+hunt replacements, keep ~20 Active lots (statewide interior lakes — cover northern tier
+AND downstate each sweep), then run pytest + the pipeline and ship via PR. Conventions it must keep: FrontageFt is PRIVATE frontage only; ApproxLocation /
 SharedFrontage / NotWaterfront / WaterfrontUnverified / MayHaveStructure /
 PriceOnInquiry / IndexUrlOnly flags; bands per scoring.yml comments; lower price on
 conflicts, noted. The `lot-radar-weekly.yml` Action stays dispatch-only (rescore
