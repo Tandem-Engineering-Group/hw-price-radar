@@ -144,3 +144,12 @@
 {"date": "2026-08-15", "sku": "gmktec-evo-x2-128", "source": "gmktec", "price": 3499.99, "currency": "USD", "stock": null, "note": null}
 {"date": "2026-08-15", "sku": "gmktec-evo-x3-128", "source": "gmktec", "price": 3799.99, "currency": "USD", "stock": null, "note": null}
 {"date": "2026-08-15", "sku": "beelink-gtr9-pro-128", "source": "beelink", "price": 4349.0, "currency": "USD", "stock": null, "note": null}
+{"date": "2026-08-16", "sku": "ms-s1-max-128", "source": "minisforum", "price": 3719.0, "currency": "USD", "stock": null, "note": null}
+{"date": "2026-08-16", "sku": "ms-s1-max-128", "source": "microcenter", "price": null, "currency": "USD", "stock": null, "note": "error: HTTP Error 403: Forbidden"}
+{"date": "2026-08-16", "sku": "rtx-pro-5000-48", "source": "microcenter-pny", "price": null, "currency": "USD", "stock": null, "note": "error: HTTP Error 403: Forbidden"}
+{"date": "2026-08-16", "sku": "rtx-pro-5000-48", "source": "compsource", "price": null, "currency": "USD", "stock": null, "note": "error: no price matched"}
+{"date": "2026-08-16", "sku": "rtx-pro-5000-48", "source": "bh", "price": null, "currency": "USD", "stock": null, "note": "error: HTTP Error 403: Forbidden"}
+{"date": "2026-08-16", "sku": "proart-gr1x", "source": "asus", "price": null, "currency": "USD", "stock": "LISTED", "note": "listing_probe"}
+{"date": "2026-08-16", "sku": "gmktec-evo-x2-128", "source": "gmktec", "price": 3499.99, "currency": "USD", "stock": null, "note": null}
+{"date": "2026-08-16", "sku": "gmktec-evo-x3-128", "source": "gmktec", "price": 3799.99, "currency": "USD", "stock": null, "note": null}
+{"date": "2026-08-16", "sku": "beelink-gtr9-pro-128", "source": "beelink", "price": 4349.0, "currency": "USD", "stock": null, "note": null}
