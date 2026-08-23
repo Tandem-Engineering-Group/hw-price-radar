@@ -3,10 +3,10 @@
   "floor": 2299.0,
   "floor90": 3639.0,
   "median90": 3719.0,
-  "trend_month": 111.43,
+  "trend_month": 98.82,
   "proj30": {
-   "date": "2026-09-21",
-   "price": 3830.43
+   "date": "2026-09-22",
+   "price": 3817.82
   },
   "references": {
    "launch_price": 2299
@@ -46,12 +46,22 @@
  "beelink-gtr9-pro-128": {
   "floor": 4349.0,
   "floor90": 4349.0,
-  "median90": 4349.0
+  "median90": 4349.0,
+  "trend_month": 0.0,
+  "proj30": {
+   "date": "2026-09-22",
+   "price": 4349.0
+  }
  },
  "gmktec-evo-x2-128": {
   "floor": 3499.99,
   "floor90": 3499.99,
-  "median90": 3499.99
+  "median90": 3499.99,
+  "trend_month": 0.0,
+  "proj30": {
+   "date": "2026-09-22",
+   "price": 3499.99
+  }
  },
  "gmktec-evo-x3-128": {
   "floor": 3799.99,
