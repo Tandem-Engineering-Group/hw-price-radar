@@ -1,5 +1,5 @@
 {
- "as_of": "2026-08-25T14:03:09+00:00",
+ "as_of": "2026-08-26T14:03:13+00:00",
  "skus": {
   "ms-s1-max-128": {
    "name": "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)",
@@ -8,7 +8,7 @@
    "sources": [
     {
      "retailer": "minisforum",
-     "price": 3719.0,
+     "price": 3799.0,
      "stock": null,
      "url": "https://store.minisforum.com"
     },
@@ -26,7 +26,7 @@
     }
    ],
    "best": {
-    "price": 3719.0,
+    "price": 3799.0,
     "source": "minisforum"
    }
   },
