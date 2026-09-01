@@ -1,5 +1,5 @@
 {
- "as_of": "2026-08-31T19:29:50+00:00",
+ "as_of": "2026-09-01T17:19:09+00:00",
  "skus": {
   "ms-s1-max-128": {
    "name": "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)",
@@ -14,8 +14,8 @@
     },
     {
      "retailer": "microcenter",
-     "price": 3999.99,
-     "stock": "page-scan fallback \u2014 verify",
+     "price": null,
+     "stock": null,
      "url": "https://www.microcenter.com/product/702314/minisforum-ms-s1-max-next-gen-ai-workstation"
     },
     {
