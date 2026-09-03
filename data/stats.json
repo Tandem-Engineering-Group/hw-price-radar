@@ -3,10 +3,10 @@
   "floor": 2299.0,
   "floor90": 3639.0,
   "median90": 3719.0,
-  "trend_month": 157.54,
+  "trend_month": 155.31,
   "proj30": {
-   "date": "2026-10-02",
-   "price": 3956.54
+   "date": "2026-10-03",
+   "price": 3954.31
   },
   "references": {
    "launch_price": 2299
@@ -15,11 +15,11 @@
  "rtx-pro-5000-48": {
   "floor": 4199.0,
   "floor90": 4399.99,
-  "median90": 6223.34,
-  "trend_month": -3326.69,
+  "median90": 5999.99,
+  "trend_month": -2430.36,
   "proj30": {
-   "date": "2026-09-23",
-   "price": 1073.3
+   "date": "2026-10-03",
+   "price": 2069.63
   },
   "references": {
    "launch_price": 4199
@@ -49,7 +49,7 @@
   "median90": 4349.0,
   "trend_month": 0.0,
   "proj30": {
-   "date": "2026-10-02",
+   "date": "2026-10-03",
    "price": 4349.0
   }
  },
@@ -59,7 +59,7 @@
   "median90": 3499.99,
   "trend_month": 0.0,
   "proj30": {
-   "date": "2026-10-02",
+   "date": "2026-10-03",
    "price": 3499.99
   }
  },
@@ -69,7 +69,7 @@
   "median90": 3799.99,
   "trend_month": 0.0,
   "proj30": {
-   "date": "2026-10-02",
+   "date": "2026-10-03",
    "price": 3799.99
   }
  },
