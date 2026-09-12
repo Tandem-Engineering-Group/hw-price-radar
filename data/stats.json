@@ -2,11 +2,11 @@
  "ms-s1-max-128": {
   "floor": 2299.0,
   "floor90": 3639.0,
-  "median90": 3719.0,
-  "trend_month": 125.04,
+  "median90": 3759.0,
+  "trend_month": 121.08,
   "proj30": {
-   "date": "2026-10-11",
-   "price": 3924.04
+   "date": "2026-10-12",
+   "price": 3920.08
   },
   "references": {
    "launch_price": 2299
@@ -49,7 +49,7 @@
   "median90": 4349.0,
   "trend_month": 0.0,
   "proj30": {
-   "date": "2026-10-11",
+   "date": "2026-10-12",
    "price": 4349.0
   }
  },
@@ -59,7 +59,7 @@
   "median90": 3499.99,
   "trend_month": 0.0,
   "proj30": {
-   "date": "2026-10-11",
+   "date": "2026-10-12",
    "price": 3499.99
   }
  },
@@ -69,7 +69,7 @@
   "median90": 3799.99,
   "trend_month": 0.0,
   "proj30": {
-   "date": "2026-10-11",
+   "date": "2026-10-12",
    "price": 3799.99
   }
  },
