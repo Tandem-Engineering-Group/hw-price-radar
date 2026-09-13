@@ -1,5 +1,5 @@
 {
- "as_of": "2026-09-12T16:18:15+00:00",
+ "as_of": "2026-09-13T16:57:51+00:00",
  "skus": {
   "ms-s1-max-128": {
    "name": "Minisforum MS-S1 MAX 128GB (Ryzen AI Max+ 395, 2TB)",
@@ -14,8 +14,8 @@
     },
     {
      "retailer": "microcenter",
-     "price": null,
-     "stock": null,
+     "price": 3999.99,
+     "stock": "page-scan fallback \u2014 verify",
      "url": "https://www.microcenter.com/product/702314/minisforum-ms-s1-max-next-gen-ai-workstation"
     },
     {
@@ -43,7 +43,7 @@
     },
     {
      "retailer": "microcenter-pny",
-     "price": null,
+     "price": 4799.99,
      "stock": null,
      "url": "https://www.microcenter.com/product/697035/pny-nvidia-rtx-pro-5000-blackwell-single-fan-48gb-gddr7-pcie-50-graphics-card"
     },
@@ -66,7 +66,10 @@
      "url": null
     }
    ],
-   "best": null
+   "best": {
+    "price": 4799.99,
+    "source": "microcenter-pny"
+   }
   },
   "dgx-spark-fe": {
    "name": "NVIDIA DGX Spark Founders Edition (GB10, 128GB/4TB, DGX OS)",
