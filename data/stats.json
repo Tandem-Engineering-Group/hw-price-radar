@@ -3,10 +3,10 @@
   "floor": 2299.0,
   "floor90": 3639.0,
   "median90": 3799.0,
-  "trend_month": 3235.13,
+  "trend_month": 3015.66,
   "proj30": {
-   "date": "2026-11-03",
-   "price": 7034.13
+   "date": "2026-11-04",
+   "price": 6814.66
   },
   "references": {
    "launch_price": 2299
@@ -49,7 +49,7 @@
   "median90": 4349.0,
   "trend_month": 0.0,
   "proj30": {
-   "date": "2026-11-03",
+   "date": "2026-11-04",
    "price": 4349.0
   }
  },
@@ -59,7 +59,7 @@
   "median90": 3499.99,
   "trend_month": 0.0,
   "proj30": {
-   "date": "2026-11-03",
+   "date": "2026-11-04",
    "price": 3499.99
   }
  },
@@ -69,7 +69,7 @@
   "median90": 3799.99,
   "trend_month": 0.0,
   "proj30": {
-   "date": "2026-11-03",
+   "date": "2026-11-04",
    "price": 3799.99
   }
  },
